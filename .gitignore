@@ -23,9 +23,9 @@ env/
 *.pem
 *.key
 
-# Generated outputs
-outputs/
-output/
+# # Generated outputs
+# outputs/
+# output/
 
 # Logs
 *.log

@@ -1,0 +1,298 @@
+{
+  "source_file": "files/basic2.xlsx",
+  "ready_for_zerto_api": true,
+  "validations": {
+    "default_vpg_settings": {
+      "status": "passed",
+      "records": {
+        "protected_site": "Left",
+        "recovery_site": "Right",
+        "vpg_type": "Remote DR and Continuous Backup",
+        "priority": "Medium",
+        "journal_history": {
+          "value": 1,
+          "unit": "Days"
+        },
+        "target_rpo_alert": {
+          "value": 5,
+          "unit": "Minutes"
+        },
+        "test_reminder": "6 Months",
+        "journal_size_hard_limit": {
+          "value": 150.0,
+          "unit": "GiB"
+        },
+        "journal_size_warning": {
+          "value": 115.0,
+          "unit": "GiB"
+        },
+        "scratch_journal_size_hard_limit": {
+          "value": 300.0,
+          "unit": "GiB"
+        },
+        "scratch_journal_size_warning": {
+          "value": 225.0,
+          "unit": "GiB"
+        },
+        "wan_compression": "Yes"
+      }
+    },
+    "recovery_zvm_sites": {
+      "status": "passed",
+      "records": [
+        {
+          "recovery_zvm_site_name": "Right",
+          "vpg_type": "Data Mobility and Migration",
+          "priority": null,
+          "recovery_host_name": "Host 1",
+          "recovery_datastore_name": "Datastore 1",
+          "journal_history_value": null,
+          "journal_history_unit": null,
+          "target_rpo_alert_value": null,
+          "target_rpo_alert_unit": null,
+          "journal_datastore_name": null
+        }
+      ]
+    }
+  },
+  "reference_data": {
+    "zvm_sites": [
+      {
+        "site_name": "Left",
+        "protected": "Yes",
+        "recovery": "No"
+      },
+      {
+        "site_name": "Right",
+        "protected": "No",
+        "recovery": "Yes"
+      }
+    ],
+    "labels": {
+      "scopes": [
+        "Rehost"
+      ],
+      "waves": [
+        "Wave 01"
+      ],
+      "application_names": [
+        "Application #1"
+      ],
+      "application_environments": [
+        "DEV"
+      ],
+      "data_types": [
+        "Database"
+      ]
+    },
+    "recovery_scripts": [
+      "MyOnlyRecoveryScript"
+    ],
+    "boot_order_groups": [
+      {
+        "group_id": 1.0,
+        "meta_group_name": "3-Tier App",
+        "group_name": "Web Server",
+        "boot_delay_secs": 300.0
+      }
+    ],
+    "hypervisor": {
+      "protected_vms": [
+        {
+          "ID": 3,
+          "Protected ZVM Site Name": "Left",
+          "VM Name": "Microsoft 2022",
+          "CPU Count": null,
+          "Memory (GiB)": null,
+          "VM Identifier": "79e3f102-92c2-4c3a-9783-6367165e8c73.vm-1007"
+        }
+      ],
+      "protected_vm_volumes": [
+        {
+          "ID": 1,
+          "Protected ZVM Site Name": "Left",
+          "VM Name": "Microsoft 2022",
+          "Volume Location": "Disk A",
+          "Provisioned Size (GiB)": 10,
+          "Disk Identifier": null,
+          "Protected ZVM Site Name|VM Name": "Left|Microsoft 2022"
+        }
+      ],
+      "protected_vm_nics": [
+        {
+          "ID": 1,
+          "Protected ZVM Site Name": "Left",
+          "VM Name": "Microsoft 2022",
+          "NIC Name": "NIC 1",
+          "Network": "VM Network",
+          "NIC Identifier": null,
+          "Protected ZVM Site Name|VM Name": "Left|Microsoft 2022"
+        }
+      ],
+      "recovery_hosts": [
+        {
+          "ID": 1,
+          "Recovery ZVM Site Name": "Right",
+          "Host Name": "Host 1",
+          "CPU Count": null,
+          "Memory (GiB)": null,
+          "Host Identifier": "12fb5b13-8740-41f9-a76c-2740221b6006.host-18"
+        }
+      ],
+      "recovery_datastores": [
+        {
+          "ID": 1,
+          "Recovery ZVM Site Name": "Right",
+          "Datastore Name": "Datastore 1",
+          "Size (GiB)": null,
+          "Datastore Identifier": "12fb5b13-8740-41f9-a76c-2740221b6006.datastore-11"
+        }
+      ],
+      "recovery_folders": [
+        {
+          "ID": 1,
+          "Recovery ZVM Site Name": "Right",
+          "Folder Name": "/",
+          "Folder Identifier": null
+        }
+      ],
+      "recovery_networks": [
+        {
+          "ID": 1,
+          "Recovery ZVM Site Name": "Right",
+          "Network Name": "Network 1",
+          "Network Identifier": "12fb5b13-8740-41f9-a76c-2740221b6006.network-16"
+        }
+      ]
+    }
+  },
+  "api_candidate_payloads": {
+    "default_vpg_settings": {
+      "protected_site": "Left",
+      "recovery_site": "Right",
+      "vpg_type": "Remote DR and Continuous Backup",
+      "priority": "Medium",
+      "journal_history": {
+        "value": 1,
+        "unit": "Days"
+      },
+      "target_rpo_alert": {
+        "value": 5,
+        "unit": "Minutes"
+      },
+      "test_reminder": "6 Months",
+      "journal_size_hard_limit": {
+        "value": 150,
+        "unit": "GiB"
+      },
+      "journal_size_warning": {
+        "value": 115,
+        "unit": "GiB"
+      },
+      "scratch_journal_size_hard_limit": {
+        "value": 300,
+        "unit": "GiB"
+      },
+      "scratch_journal_size_warning": {
+        "value": 225,
+        "unit": "GiB"
+      },
+      "wan_compression": "Yes"
+    },
+    "recovery_zvm_sites": [
+      {
+        "ID": 1,
+        "Recovery ZVM Site Name": "Right",
+        "VPG Type": "Data Mobility and Migration",
+        "Recovery Host Name": "Host 1",
+        "Recovery Datastore Name": "Datastore 1",
+        "Failover Live / Move Network Name": "Network 3",
+        "Failover Test Network Name": "Network 3",
+        "Failover Live / Move - Subnet Mask": "255.255.255.99",
+        "Failover Test - Subnet Mask": "255.255.255.100",
+        "Recovery Site Name": "Right"
+      }
+    ],
+    "vpgs": [
+      {
+        "ID": 1,
+        "VPG Name": "test",
+        "Protected ZVM Site Name": "Right",
+        "Recovery ZVM Site Name": "Left",
+        "Boot Order Meta Group Name": "3-Tier App",
+        "Recovery Host Name": "Host 1",
+        "Recovery Datastore Name": "DS1",
+        "Journal History Value": 1,
+        "Journal History Unit": "Days",
+        "Target RPO Alert Value": 5,
+        "Target RPO Alert Unit": "Minutes",
+        "Test Reminder": "3 Months",
+        "Journal Datastore Name": "DS1",
+        "Scratch Journal Datastore Name": "DS1",
+        "Failover Live / Move - Network Name": "Network 3",
+        "Failover Test Network Name": "Network 3",
+        "Recovery Folder Name": "/",
+        "Pre-Recovery Script Name": "AnotherScript",
+        "Post-Recovery Script Name": "AnotherScript",
+        "Protected Site Name": "Right",
+        "Recovery Site Name": "Left"
+      }
+    ],
+    "vm_replication": [
+      {
+        "ID": 2.0,
+        "VPG Name": "test",
+        "VM Name": "VM 3",
+        "Boot Order Group Name": "Web Server",
+        "Protected Site Name": "Right",
+        "Recovery Site Name": "Left",
+        "Boot Order Meta Group Name": "3-Tier App"
+      }
+    ],
+    "vm_storage": [
+      {
+        "ID": 1,
+        "VPG Name": "test",
+        "VM Name": "VM 3",
+        "Protected Volume Location": "Disk C",
+        "Protected Site Name": "Right",
+        "Recovery Site Name": "Left",
+        "Protected ZVM Site Name | VM Name": "Right|VM 3"
+      }
+    ],
+    "vm_nics": [
+      {
+        "ID": 2.0,
+        "VPG Name": "test",
+        "VM Name": "VM 3",
+        "NIC Name": "NIC A",
+        "Failover Live / Move - Network Name": "VM Network",
+        "Failover Live / Move - Create new MAC address": "Yes",
+        "Failover Live / Move - Change vNIC IP Config": "Yes, Static",
+        "Failover Test - Network Name": "Network 3",
+        "Failover Test - Create new MAC address": "No",
+        "Failover Test - Change vNIC IP Config": "Yes, DHCP",
+        "Protected Site Name": "Right",
+        "Recovery Site Name": "Left",
+        "Protected Site Name|VM Name": "Right|VM 3"
+      }
+    ],
+    "extended_journal": [
+      {
+        "ID": 1,
+        "VPG Name": "Prod2DR",
+        "Extended Journal Repository Name": "SMB://repo4",
+        "Run At (HH:MI)": "14:15:00",
+        "Daily - Run Retention": "Yes",
+        "Daily - Keep For  Value": 30,
+        "Daily - Keep For Unit": "Days",
+        "Weekly - Run Retention": "Yes",
+        "Weekly - Type": "Incremental",
+        "Daily - Keep For (Days)": 30,
+        "Weekly - Keep For (Days)": 0,
+        "Monthly - Keep For (Days)": 0,
+        "Yearly - Keep For (Days)": 0
+      }
+    ]
+  }
+}
