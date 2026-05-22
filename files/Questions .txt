@@ -1,0 +1,38 @@
+18 May 2026
+
+Zerto data =========
+
+- how are we uploading scripts 
+
+- why did we name the first sheet zerto data. Zerto data is very generic. In this sheets its taking site name, VPG labels >> good 
+
+- where are VPG labels assigned to VPG in gui? 
+
+Hypervisor data ==========
+
+
+- wording for the table has to simplify, confusing atm. 
+
+Hypervisor_Data_Protected_ZVM_VMs: All VMs that need to be included in VPGs, per Protected ZVM Site. >>>> can we get rid of the long desc to short one -
+
+Protected VMs: All VMs that need to be included in VPGs 
+Protected Volumes: All volumes that are attached to the protected VMs 
+Protected NICs 
+
+- why do we need to be explicit about volumes? When you supply the VM it will pull >>>> need it in cases where they may use pre-seeded volume, if so, then why is it that it needs a VM specified, it does not need a VM correct for a presided volume? What happens when we don't give any volume? 
+
+- why do we need CPU count and memory? Even in GUI we dont ask it correct? 
+
+- in my view in this sheet the VM is driving the data hence the VM should be in the first column. 
+
+- go cell by cell in plain English how validation will look like 
+
+- what will happen if certain cell is left black? For example, recovery data store, if the cell is empty the xl sheet is still allowing it to be blank, which means the the program is checking it. 
+
+- all data needs to be centered aligned - some cells are left and some cells are right 
+
+- I will need to the password to put wrong data. 
+
+- again on the hypervisor data sheet - recovery host - the host details should be the first column 
+
+- so if the customers want to change the name for example of a datastore name, 
