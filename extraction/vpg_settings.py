@@ -74,8 +74,8 @@ def extract_default_vpg_settings(excel_file: str, print_output: bool = True) -> 
             data["wan_compression"] = value
 
     if print_output:
-        print("\nDefault VPG Settings (Structured)")
-        print("---------------------------------")
+        print("\nDefault VPG Settings")
+        print("--------------------")
         for k, v in data.items():
             print(f"{k}: {v}")
 

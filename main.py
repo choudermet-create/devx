@@ -23,7 +23,7 @@ def main():
     workbook = load_excel_workbook(excel_file)
     validate_required_sheets(workbook)
 
-    print("Workbook loaded successfully")
+    print("\nWorkbook loaded successfully")
 
     zerto_data = extract_zerto_data(excel_file)
     hypervisor_data = extract_hypervisor_data(excel_file)
