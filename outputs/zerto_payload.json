@@ -47,10 +47,164 @@
           "recovery_host_name": "Host 1",
           "recovery_datastore_name": "Datastore 1",
           "journal_history_value": null,
-          "journal_history_unit": null,
+          "journal_history_unit": "Days",
           "target_rpo_alert_value": null,
           "target_rpo_alert_unit": null,
-          "journal_datastore_name": null
+          "test_reminder": "3 Months",
+          "journal_datastore_name": "Datastore 1",
+          "journal_size_hard_limit_value": null,
+          "journal_size_hard_limit_unit": null,
+          "journal_size_warning_threshold_value": null,
+          "journal_size_warning_threshold_unit": null,
+          "scratch_journal_datastore_name": null,
+          "scratch_journal_size_hard_limit_value": null,
+          "scratch_journal_size_hard_limit_unit": null,
+          "scratch_journal_size_warning_threshold_value": null,
+          "scratch_journal_size_warning_threshold_unit": null,
+          "enable_wan_traffic_compression": null,
+          "disk_provisioning_override": null,
+          "failover_live_move_network_name": "Network 3",
+          "failover_test_network_name": "Network 3",
+          "recovery_folder_name": null,
+          "pre_recovery_script_name": null,
+          "pre_recovery_script_parameters": null,
+          "pre_recovery_script_execution_timeout_seconds": null,
+          "post_recovery_script_name": null,
+          "post_recovery_script_parameters": null,
+          "post_recovery_script_execution_timeout_seconds": null,
+          "failover_live_move_create_new_mac_address": null,
+          "failover_live_move_change_vnic_ip_config": null,
+          "failover_live_move_subnet_mask": "255.255.255.99",
+          "failover_live_move_default_gateway": null,
+          "failover_live_move_preferred_dns_server": null,
+          "failover_live_move_alternate_dns_server": null,
+          "failover_live_move_dns_suffix": null,
+          "failover_test_create_new_mac_address": null,
+          "failover_test_change_vnic_ip_config": null,
+          "failover_test_subnet_mask": "255.255.255.100",
+          "failover_test_default_gateway": null,
+          "failover_test_preferred_dns_server": null,
+          "failover_test_alternate_dns_server": null,
+          "failover_test_dns_suffix": null
+        }
+      ]
+    },
+    "vpgs": {
+      "status": "passed",
+      "records": [
+        {
+          "vpg_name": "test1",
+          "protected_zvm_site_name": "Left",
+          "recovery_zvm_site_name": "Right",
+          "vpg_type": null,
+          "priority": null,
+          "vpg_description": null,
+          "label_1": null,
+          "label_2": null,
+          "label_3": null,
+          "label_4": null,
+          "label_5": null,
+          "boot_order_meta_group_name": "3-Tier App",
+          "recovery_host_name": "Host 1",
+          "recovery_datastore_name": "Datastore 1",
+          "journal_history_unit": "Days",
+          "journal_history_value": 30,
+          "target_rpo_alert_value": 5,
+          "target_rpo_alert_unit": "Minutes",
+          "test_reminder": "3 Months",
+          "journal_datastore_name": "Datastore 1",
+          "journal_size_hard_limit_value": null,
+          "journal_size_hard_limit_unit": null,
+          "journal_size_warning_threshold_value": null,
+          "journal_size_warning_threshold_unit": null,
+          "scratch_journal_datastore_name": "Datastore 1",
+          "scratch_journal_size_hard_limit_value": null,
+          "scratch_journal_size_hard_limit_unit": null,
+          "scratch_journal_size_warning_threshold_value": null,
+          "scratch_journal_size_warning_threshold_unit": null,
+          "enable_wan_traffic_compression": null,
+          "disk_provisioning_override": null,
+          "failover_live_move_network_name": "Network 3",
+          "failover_test_network_name": "Network 3",
+          "recovery_folder_name": "/",
+          "pre_recovery_script_name": "AnotherScript",
+          "pre_recovery_script_parameters": null,
+          "pre_recovery_script_execution_timeout_seconds": null,
+          "post_recovery_script_name": "AnotherScript",
+          "post_recovery_script_parameters": null,
+          "post_recovery_script_execution_timeout_seconds": null
+        }
+      ]
+    },
+    "vm_replication": {
+      "status": "passed",
+      "records": [
+        {
+          "vpg_name": "test1",
+          "vm_name": "Microsoft 2022",
+          "label_1": null,
+          "label_2": null,
+          "label_3": null,
+          "label_4": null,
+          "label_5": null,
+          "boot_order_group_name": "Web Server",
+          "recovery_host_name": null,
+          "recovery_datastore_name": null,
+          "recovery_folder_name": null,
+          "journal_datastore_name": null,
+          "journal_size_hard_limit_value": null,
+          "journal_size_hard_limit_unit": null,
+          "journal_size_warning_threshold_value": null,
+          "journal_size_warning_threshold_unit": null,
+          "scratch_journal_datastore_name": null,
+          "scratch_journal_size_hard_limit_value": null,
+          "scratch_journal_size_hard_limit_unit": null,
+          "scratch_journal_size_warning_threshold_value": null,
+          "scratch_journal_size_warning_threshold_unit": null
+        }
+      ]
+    },
+    "vm_storage": {
+      "status": "passed",
+      "records": [
+        {
+          "vpg_name": "test1",
+          "vm_name": "Microsoft 2022",
+          "protected_volume_location": "Disk A",
+          "size_gib": 10,
+          "recovery_volume_location": null,
+          "recovery_raw_device_name": null,
+          "disk_provisioning_override": null,
+          "volume_sync_type": null
+        }
+      ]
+    },
+    "vm_nics": {
+      "status": "passed",
+      "records": [
+        {
+          "vpg_name": "test1",
+          "vm_name": "Microsoft 2022",
+          "nic_name": "NIC 1",
+          "protected_network_name": "VM Network",
+          "failover_live_move_network_name": "Network 3",
+          "failover_live_move_create_new_mac_address": "Yes",
+          "failover_live_move_change_vnic_ip_config": "Yes, Static",
+          "failover_live_move_ip_address": null,
+          "failover_live_move_subnet_mask": null,
+          "failover_live_move_default_gateway": null,
+          "failover_live_move_preferred_dns_server": null,
+          "failover_live_move_alternate_dns_server": null,
+          "failover_live_move_dns_suffix": null,
+          "failover_test_network_name": "Network 3",
+          "failover_test_create_new_mac_address": "No",
+          "failover_test_change_vnic_ip_config": "Yes, DHCP",
+          "failover_test_ip_address": null,
+          "failover_test_subnet_mask": null,
+          "failover_test_default_gateway": null,
+          "failover_test_preferred_dns_server": null,
+          "failover_test_alternate_dns_server": null,
+          "failover_test_dns_suffix": null
         }
       ]
     }
@@ -160,7 +314,7 @@
         {
           "ID": 1,
           "Recovery ZVM Site Name": "Right",
-          "Network Name": "Network 1",
+          "Network Name": "Network 3",
           "Network Identifier": "12fb5b13-8740-41f9-a76c-2740221b6006.network-16"
         }
       ]
@@ -206,6 +360,9 @@
         "VPG Type": "Data Mobility and Migration",
         "Recovery Host Name": "Host 1",
         "Recovery Datastore Name": "Datastore 1",
+        "Journal History Unit": "Days",
+        "Test Reminder": "3 Months",
+        "Journal Datastore Name": "Datastore 1",
         "Failover Live / Move Network Name": "Network 3",
         "Failover Test Network Name": "Network 3",
         "Failover Live / Move - Subnet Mask": "255.255.255.99",
@@ -216,65 +373,67 @@
     "vpgs": [
       {
         "ID": 1,
-        "VPG Name": "test",
-        "Protected ZVM Site Name": "Right",
-        "Recovery ZVM Site Name": "Left",
+        "VPG Name": "test1",
+        "Protected ZVM Site Name": "Left",
+        "Recovery ZVM Site Name": "Right",
         "Boot Order Meta Group Name": "3-Tier App",
         "Recovery Host Name": "Host 1",
-        "Recovery Datastore Name": "DS1",
-        "Journal History Value": 1,
+        "Recovery Datastore Name": "Datastore 1",
+        "Journal History Value": 30,
         "Journal History Unit": "Days",
         "Target RPO Alert Value": 5,
         "Target RPO Alert Unit": "Minutes",
         "Test Reminder": "3 Months",
-        "Journal Datastore Name": "DS1",
-        "Scratch Journal Datastore Name": "DS1",
+        "Journal Datastore Name": "Datastore 1",
+        "Scratch Journal Datastore Name": "Datastore 1",
         "Failover Live / Move - Network Name": "Network 3",
         "Failover Test Network Name": "Network 3",
         "Recovery Folder Name": "/",
         "Pre-Recovery Script Name": "AnotherScript",
         "Post-Recovery Script Name": "AnotherScript",
-        "Protected Site Name": "Right",
-        "Recovery Site Name": "Left"
+        "Protected Site Name": "Left",
+        "Recovery Site Name": "Right"
       }
     ],
     "vm_replication": [
       {
         "ID": 2.0,
-        "VPG Name": "test",
-        "VM Name": "VM 3",
+        "VPG Name": "test1",
+        "VM Name": "Microsoft 2022",
         "Boot Order Group Name": "Web Server",
-        "Protected Site Name": "Right",
-        "Recovery Site Name": "Left",
+        "Protected Site Name": "Left",
+        "Recovery Site Name": "Right",
         "Boot Order Meta Group Name": "3-Tier App"
       }
     ],
     "vm_storage": [
       {
         "ID": 1,
-        "VPG Name": "test",
-        "VM Name": "VM 3",
-        "Protected Volume Location": "Disk C",
-        "Protected Site Name": "Right",
-        "Recovery Site Name": "Left",
-        "Protected ZVM Site Name | VM Name": "Right|VM 3"
+        "VPG Name": "test1",
+        "VM Name": "Microsoft 2022",
+        "Protected Volume Location": "Disk A",
+        "Size (GiB)": 10,
+        "Protected Site Name": "Left",
+        "Recovery Site Name": "Right",
+        "Protected ZVM Site Name | VM Name": "Left|Microsoft 2022"
       }
     ],
     "vm_nics": [
       {
         "ID": 2.0,
-        "VPG Name": "test",
-        "VM Name": "VM 3",
-        "NIC Name": "NIC A",
-        "Failover Live / Move - Network Name": "VM Network",
+        "VPG Name": "test1",
+        "VM Name": "Microsoft 2022",
+        "NIC Name": "NIC 1",
+        "Protected Network Name": "VM Network",
+        "Failover Live / Move - Network Name": "Network 3",
         "Failover Live / Move - Create new MAC address": "Yes",
         "Failover Live / Move - Change vNIC IP Config": "Yes, Static",
         "Failover Test - Network Name": "Network 3",
         "Failover Test - Create new MAC address": "No",
         "Failover Test - Change vNIC IP Config": "Yes, DHCP",
-        "Protected Site Name": "Right",
-        "Recovery Site Name": "Left",
-        "Protected Site Name|VM Name": "Right|VM 3"
+        "Protected Site Name": "Left",
+        "Recovery Site Name": "Right",
+        "Protected Site Name|VM Name": "Left|Microsoft 2022"
       }
     ],
     "extended_journal": [

@@ -71,6 +71,33 @@ def load_hypervisor_data_into_config(tables: dict) -> None:
         if vm.get("VM Name")
     ]
 
+    config.protected_volume_locations_by_vm_name = {}
+    for volume in config.protected_vm_volumes:
+        vm_name = volume.get("VM Name")
+        volume_location = volume.get("Volume Location")
+
+        if vm_name and volume_location:
+            config.protected_volume_locations_by_vm_name.setdefault(
+                vm_name,
+                [],
+            ).append(volume_location)
+
+    config.protected_nic_names_by_vm_name = {}
+    config.protected_network_names_by_vm_nic = {}
+    for nic in config.protected_vm_nics:
+        vm_name = nic.get("VM Name")
+        nic_name = nic.get("NIC Name")
+        network_name = nic.get("Network")
+
+        if vm_name and nic_name:
+            config.protected_nic_names_by_vm_name.setdefault(
+                vm_name,
+                [],
+            ).append(nic_name)
+
+        if vm_name and nic_name and network_name:
+            config.protected_network_names_by_vm_nic[(vm_name, nic_name)] = network_name
+
     config.recovery_host_names = [
         host["Host Name"]
         for host in config.recovery_hosts

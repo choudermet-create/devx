@@ -132,3 +132,8 @@ def load_zerto_summary_into_config(summary: dict) -> None:
         group["group_name"]
         for group in summary["boot_order_groups"]
     ]
+
+    config.boot_order_meta_groups = [
+        group["meta_group_name"]
+        for group in summary["boot_order_groups"]
+    ]

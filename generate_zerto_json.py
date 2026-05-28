@@ -7,10 +7,16 @@ from extraction.hypervisor import extract_hypervisor_data
 from extraction.recovery_zvm_sites import extract_recovery_zvm_sites
 from extraction.tables import clean_value, extract_sheet_table
 from extraction.vpg_settings import extract_default_vpg_settings
+from extraction.vpgs import extract_vpgs
 from extraction.zerto_data import extract_zerto_data
 from ingestion.reader import load_excel_workbook, validate_required_sheets
 from validation.default_vpg_settings import validate_default_vpg_settings
+from validation.error_formatting import format_validation_errors
 from validation.recovery_zvm_sites import validate_recovery_zvm_sites
+from validation.vpgs import validate_vpgs
+from validation.vm_replication import validate_vm_replication
+from validation.vm_storage import validate_vm_storage
+from validation.vm_nics import validate_vm_nics
 
 
 EXCEL_FILE = "files/basic2.xlsx"
@@ -33,6 +39,10 @@ def generate_zerto_json(
     hypervisor_data = extract_hypervisor_data(excel_file)
     default_vpg_settings = extract_default_vpg_settings(excel_file, print_output=False)
     recovery_zvm_sites = extract_recovery_zvm_sites(excel_file)
+    vpgs = extract_vpgs(excel_file)
+    vm_replication = extract_sheet_table(excel_file, "VM Replication", "VPG Name")
+    vm_storage = extract_sheet_table(excel_file, "VM Storage", "VPG Name")
+    vm_nics = extract_sheet_table(excel_file, "VM NICs", "VPG Name")
 
     validations = {
         "default_vpg_settings": validate_section(
@@ -40,6 +50,18 @@ def generate_zerto_json(
         ),
         "recovery_zvm_sites": validate_section(
             lambda: validate_recovery_zvm_sites(recovery_zvm_sites),
+        ),
+        "vpgs": validate_section(
+            lambda: validate_vpgs(vpgs),
+        ),
+        "vm_replication": validate_section(
+            lambda: validate_vm_replication(vm_replication),
+        ),
+        "vm_storage": validate_section(
+            lambda: validate_vm_storage(vm_storage),
+        ),
+        "vm_nics": validate_section(
+            lambda: validate_vm_nics(vm_nics),
         ),
     }
 
@@ -60,10 +82,10 @@ def generate_zerto_json(
         "api_candidate_payloads": {
             "default_vpg_settings": default_vpg_settings,
             "recovery_zvm_sites": recovery_zvm_sites,
-            "vpgs": extract_sheet_table(excel_file, "VPGs", "VPG Name"),
-            "vm_replication": extract_sheet_table(excel_file, "VM Replication", "VPG Name"),
-            "vm_storage": extract_sheet_table(excel_file, "VM Storage", "VPG Name"),
-            "vm_nics": extract_sheet_table(excel_file, "VM NICs", "VPG Name"),
+            "vpgs": vpgs,
+            "vm_replication": vm_replication,
+            "vm_storage": vm_storage,
+            "vm_nics": vm_nics,
             "extended_journal": extract_sheet_table(excel_file, "Extended Journal", "VPG Name"),
         },
     }
@@ -84,6 +106,7 @@ def validate_section(validate):
     except ValidationError as error:
         return {
             "status": "failed",
+            "messages": format_validation_errors(error),
             "errors": error.errors(include_url=False),
         }
 
