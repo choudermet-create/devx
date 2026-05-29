@@ -1,0 +1,120 @@
+18 May 2026
+
+Zerto data =========
+
+- how are we uploading scripts 
+
+- why did we name the first sheet zerto data. Zerto data is very generic. In this sheets its taking site name, VPG labels >> good 
+
+- where are VPG labels assigned to VPG in gui? 
+
+Hypervisor data ==========
+
+
+- wording for the table has to simplify, confusing atm. 
+
+Hypervisor_Data_Protected_ZVM_VMs: All VMs that need to be included in VPGs, per Protected ZVM Site. >>>> can we get rid of the long desc to short one -
+
+Protected VMs: All VMs that need to be included in VPGs 
+Protected Volumes: All volumes that are attached to the protected VMs 
+Protected NICs 
+
+- why do we need to be explicit about volumes? When you supply the VM it will pull >>>> need it in cases where they may use pre-seeded volume, if so, then why is it that it needs a VM specified, it does not need a VM correct for a presided volume? What happens when we don't give any volume? 
+
+- why do we need CPU count and memory? Even in GUI we dont ask it correct? 
+
+- in my view in this sheet the VM is driving the data hence the VM should be in the first column. 
+
+- go cell by cell in plain English how validation will look like 
+
+- what will happen if certain cell is left black? For example, recovery data store, if the cell is empty the xl sheet is still allowing it to be blank, which means the the program is checking it. 
+
+- all data needs to be centered aligned - some cells are left and some cells are right 
+
+- I will need to the password to put wrong data. 
+
+- again on the hypervisor data sheet - recovery host - the host details should be the first column 
+
+- so if the customers want to change the name for example of a datastore name, 
+
+
+
+==== 27 May 2026 ====
+
+- what if the a cell is left blank. Is it an exception when a cell is left blank for example - WAN compression. In GUI only two states allowed - yes and no. what if the customer has left it blank. or is it that some cells blank cells are allowed and few cells not allowed? If so, which ones are they? 
+
+- example - 25. "Recovery Folder Name: Should be either from “Recovery Folder Name” from Default VPG Settings WS or user input?" What is the point of having a drop down here? Because the drop down is picking up from the Default VPG Settings and the purpose of this, in my view is, when the customer leaves it blank, default values are passed? Or is just telling user what hes picked visually when he actually wants a root folder? 
+
+But why is this logic of showing the default values as in the root folder in the dropdown, not carried to recovery script time out becuase the default value in the DVS ws is 300 seconds and there is no dropdown to pick this number 
+
+- "29. Post-Recovery Script Name" do we need this? GUI does not have it. User input / no check? 
+
+
+Recovery ZVM sites 
+
+- why are we defining VPG here when there is already a VPG sheet 
+
+
+
+
+VPG 
+
+- 77. Failover Live / Move - Network Name: Should be one of the network in “Hypervisor_Data_Recovery_ZVM_Networks: Available networks, per Recovery ZVM Site”
+
+78. Failover Test Network Name: Should be one of the network in “Hypervisor_Data_Recovery_ZVM_Networks: Available networks, per Recovery ZVM Site”
+
+ARE THE above to strictly what we decide in the hypervisor data sheet in the recovery tables 
+
+- 79. Recovery Folder Name: Should be either from “Recovery Folder Name” from Default VPG Settings WS or user input >>> check this? 
+
+
+VM Replication 
+
+- should it be "Boot Order Meta Group Name" like in the VPGs sheet 
+
+- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
