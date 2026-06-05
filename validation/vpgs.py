@@ -1,8 +1,20 @@
 from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field, ValidationInfo, field_validator
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    ValidationInfo,
+    field_validator,
+    model_validator,
+)
 
 import config
+from validation.error_formatting import (
+    WorkbookValidationError,
+    format_workbook_error,
+    validate_model_rows,
+)
 from validation.recovery_zvm_sites import (
     DiskProvisioningOverride,
     JournalHistoryUnit,
@@ -12,12 +24,15 @@ from validation.recovery_zvm_sites import (
     VPGType,
     YesNo,
     normalize_blank,
+    validate_journal_history,
+    validate_journal_size,
+    validate_site_scoped_value,
+    validate_target_rpo_alert,
 )
 
 
 TestReminder = Literal[
     "None",
-    "1 Month",
     "3 Months",
     "6 Months",
     "9 Months",
@@ -108,20 +123,16 @@ class VPG(BaseModel):
         default=None,
         validation_alias="Journal Datastore Name",
     )
-    journal_size_hard_limit_value: int | None = Field(
+    journal_size_hard_limit_value: float | None = Field(
         default=None,
-        ge=10,
-        le=99999,
         validation_alias="Journal Size Hard Limit Value",
     )
     journal_size_hard_limit_unit: JournalSizeUnit | None = Field(
         default=None,
         validation_alias="Journal Size Hard Limit Unit",
     )
-    journal_size_warning_threshold_value: int | None = Field(
+    journal_size_warning_threshold_value: float | None = Field(
         default=None,
-        ge=10,
-        le=99999,
         validation_alias="Journal Size Warning Threshold Value",
     )
     journal_size_warning_threshold_unit: JournalSizeUnit | None = Field(
@@ -132,20 +143,16 @@ class VPG(BaseModel):
         default=None,
         validation_alias="Scratch Journal Datastore Name",
     )
-    scratch_journal_size_hard_limit_value: int | None = Field(
+    scratch_journal_size_hard_limit_value: float | None = Field(
         default=None,
-        ge=10,
-        le=99999,
         validation_alias="Scratch Journal Size Hard Limit Value",
     )
     scratch_journal_size_hard_limit_unit: JournalSizeUnit | None = Field(
         default=None,
         validation_alias="Scratch Journal Size Hard Limit Unit",
     )
-    scratch_journal_size_warning_threshold_value: int | None = Field(
+    scratch_journal_size_warning_threshold_value: float | None = Field(
         default=None,
-        ge=10,
-        le=99999,
         validation_alias="Scratch Journal Size Warning Threshold Value",
     )
     scratch_journal_size_warning_threshold_unit: JournalSizeUnit | None = Field(
@@ -168,11 +175,11 @@ class VPG(BaseModel):
         default=None,
         validation_alias="Failover Test Network Name",
     )
-    recovery_folder_name: Any | None = Field(
+    recovery_folder_name: str | None = Field(
         default=None,
         validation_alias="Recovery Folder Name",
     )
-    pre_recovery_script_name: Any | None = Field(
+    pre_recovery_script_name: str | None = Field(
         default=None,
         validation_alias="Pre-Recovery Script Name",
     )
@@ -180,11 +187,11 @@ class VPG(BaseModel):
         default=None,
         validation_alias="Pre-Recovery Script Parameters",
     )
-    pre_recovery_script_execution_timeout_seconds: Any | None = Field(
+    pre_recovery_script_execution_timeout_seconds: int | None = Field(
         default=None,
         validation_alias="Pre-Recovery Script Execution Timeout (Seconds)",
     )
-    post_recovery_script_name: Any | None = Field(
+    post_recovery_script_name: str | None = Field(
         default=None,
         validation_alias="Post-Recovery Script Name",
     )
@@ -192,7 +199,7 @@ class VPG(BaseModel):
         default=None,
         validation_alias="Post-Recovery Script Parameters",
     )
-    post_recovery_script_execution_timeout_seconds: Any | None = Field(
+    post_recovery_script_execution_timeout_seconds: int | None = Field(
         default=None,
         validation_alias="Post-Recovery Script Execution Timeout (Seconds)",
     )
@@ -266,10 +273,14 @@ class VPG(BaseModel):
 
     @field_validator("recovery_host_name")
     @classmethod
-    def validate_recovery_host_name(cls, value):
-        return validate_config_value(
+    def validate_recovery_host_name(cls, value, info: ValidationInfo):
+        if value is None:
+            return value
+
+        return validate_site_scoped_value(
             value,
-            config.recovery_host_names,
+            info.data.get("recovery_zvm_site_name"),
+            config.recovery_host_names_by_site,
             "Recovery Host Name",
         )
 
@@ -279,48 +290,107 @@ class VPG(BaseModel):
         "scratch_journal_datastore_name",
     )
     @classmethod
-    def validate_recovery_datastore_name(cls, value):
-        return validate_config_value(
+    def validate_recovery_datastore_name(cls, value, info: ValidationInfo):
+        if value is None:
+            return value
+
+        return validate_site_scoped_value(
             value,
-            config.recovery_datastore_names,
+            info.data.get("recovery_zvm_site_name"),
+            config.recovery_datastore_names_by_site,
             "Recovery Datastore Name",
         )
 
     @field_validator("failover_live_move_network_name", "failover_test_network_name")
     @classmethod
-    def validate_recovery_network_name(cls, value):
-        return validate_config_value(
+    def validate_recovery_network_name(cls, value, info: ValidationInfo):
+        if value is None:
+            return value
+
+        return validate_site_scoped_value(
             value,
-            config.recovery_network_names,
+            info.data.get("recovery_zvm_site_name"),
+            config.recovery_network_names_by_site,
             "Recovery Network Name",
         )
 
-    @field_validator("journal_history_value")
+    @field_validator("recovery_folder_name")
     @classmethod
-    def validate_journal_history_value_range(cls, value, info: ValidationInfo):
-        journal_history_unit = info.data.get("journal_history_unit")
-        if value is None or journal_history_unit is None:
+    def validate_recovery_folder_name(cls, value, info: ValidationInfo):
+        if value is None:
             return value
 
-        if journal_history_unit == "Days":
-            validate_range(
-                value,
-                1,
-                30,
-                "Journal History Value",
-                "when Journal History Unit is Days",
-            )
+        return validate_site_scoped_value(
+            value,
+            info.data.get("recovery_zvm_site_name"),
+            config.recovery_folder_names_by_site,
+            "Recovery Folder Name",
+        )
 
-        if journal_history_unit == "Hours":
-            validate_range(
-                value,
-                1,
-                720,
-                "Journal History Value",
-                "when Journal History Unit is Hours",
+    @field_validator("pre_recovery_script_name", "post_recovery_script_name")
+    @classmethod
+    def validate_recovery_script_name(cls, value):
+        if value is None:
+            return value
+
+        if value not in config.recovery_scripts:
+            raise ValueError(
+                f"Recovery Script Name '{value}' is not valid. "
+                f"Allowed values: {config.recovery_scripts}"
             )
 
         return value
+
+    @field_validator(
+        "pre_recovery_script_execution_timeout_seconds",
+        "post_recovery_script_execution_timeout_seconds",
+    )
+    @classmethod
+    def validate_script_timeout(cls, value):
+        if value is None:
+            return value
+
+        validate_range(
+            value,
+            1,
+            900,
+            "Recovery Script Execution Timeout (Seconds)",
+            "",
+        )
+        return value
+
+    @model_validator(mode="after")
+    def validate_value_unit_pairs(self):
+        validate_journal_history(
+            self.journal_history_value,
+            self.journal_history_unit,
+        )
+        validate_target_rpo_alert(
+            self.target_rpo_alert_value,
+            self.target_rpo_alert_unit,
+        )
+        validate_journal_size(
+            self.journal_size_hard_limit_value,
+            self.journal_size_hard_limit_unit,
+            "Journal Size Hard Limit Value",
+        )
+        validate_journal_size(
+            self.journal_size_warning_threshold_value,
+            self.journal_size_warning_threshold_unit,
+            "Journal Size Warning Threshold Value",
+        )
+        validate_journal_size(
+            self.scratch_journal_size_hard_limit_value,
+            self.scratch_journal_size_hard_limit_unit,
+            "Scratch Journal Size Hard Limit Value",
+        )
+        validate_journal_size(
+            self.scratch_journal_size_warning_threshold_value,
+            self.scratch_journal_size_warning_threshold_unit,
+            "Scratch Journal Size Warning Threshold Value",
+        )
+
+        return self
 
 
 def validate_config_value(value, allowed_values: list, field_name: str):
@@ -351,4 +421,31 @@ def validate_vpg(data: dict) -> VPG:
 
 
 def validate_vpgs(data: list[dict]) -> list[VPG]:
-    return [validate_vpg(row) for row in data]
+    validated_rows = validate_model_rows(VPG, data)
+    validate_unique_vpg_names(data)
+    return validated_rows
+
+
+def validate_unique_vpg_names(data: list[dict]) -> None:
+    seen_rows = {}
+    messages = []
+
+    for row in data:
+        vpg_name = row.get("VPG Name")
+        if vpg_name is None:
+            continue
+
+        if vpg_name in seen_rows:
+            for duplicate_row in (seen_rows[vpg_name], row):
+                messages.append(format_workbook_error(
+                    duplicate_row,
+                    "VPG Name",
+                    vpg_name,
+                    "VPG Name must be unique.",
+                ))
+            continue
+
+        seen_rows[vpg_name] = row
+
+    if messages:
+        raise WorkbookValidationError(messages)

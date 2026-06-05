@@ -1,9 +1,22 @@
 from typing import Any
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    ValidationInfo,
+    field_validator,
+    model_validator,
+)
 
 import config
-from validation.recovery_zvm_sites import JournalSizeUnit, normalize_blank
+from validation.error_formatting import validate_model_rows
+from validation.recovery_zvm_sites import (
+    JournalSizeUnit,
+    normalize_blank,
+    validate_journal_size,
+    validate_site_scoped_value,
+)
 from validation.vpgs import validate_config_value
 
 
@@ -50,7 +63,7 @@ class VMReplication(BaseModel):
         default=None,
         validation_alias="Recovery Datastore Name",
     )
-    recovery_folder_name: Any | None = Field(
+    recovery_folder_name: str | None = Field(
         default=None,
         validation_alias="Recovery Folder Name",
     )
@@ -58,20 +71,16 @@ class VMReplication(BaseModel):
         default=None,
         validation_alias="Journal Datastore Name",
     )
-    journal_size_hard_limit_value: int | None = Field(
+    journal_size_hard_limit_value: float | None = Field(
         default=None,
-        ge=10,
-        le=99999,
         validation_alias="Journal Size Hard Limit Value",
     )
     journal_size_hard_limit_unit: JournalSizeUnit | None = Field(
         default=None,
         validation_alias="Journal Size Hard Limit Unit",
     )
-    journal_size_warning_threshold_value: int | None = Field(
+    journal_size_warning_threshold_value: float | None = Field(
         default=None,
-        ge=10,
-        le=99999,
         validation_alias="Journal Size Warning Threshold Value",
     )
     journal_size_warning_threshold_unit: JournalSizeUnit | None = Field(
@@ -82,20 +91,16 @@ class VMReplication(BaseModel):
         default=None,
         validation_alias="Scratch Journal Datastore Name",
     )
-    scratch_journal_size_hard_limit_value: int | None = Field(
+    scratch_journal_size_hard_limit_value: float | None = Field(
         default=None,
-        ge=10,
-        le=99999,
         validation_alias="Scratch Journal Size Hard Limit Value",
     )
     scratch_journal_size_hard_limit_unit: JournalSizeUnit | None = Field(
         default=None,
         validation_alias="Scratch Journal Size Hard Limit Unit",
     )
-    scratch_journal_size_warning_threshold_value: int | None = Field(
+    scratch_journal_size_warning_threshold_value: float | None = Field(
         default=None,
-        ge=10,
-        le=99999,
         validation_alias="Scratch Journal Size Warning Threshold Value",
     )
     scratch_journal_size_warning_threshold_unit: JournalSizeUnit | None = Field(
@@ -115,8 +120,31 @@ class VMReplication(BaseModel):
 
     @field_validator("vm_name")
     @classmethod
-    def validate_vm_name(cls, value):
-        return validate_config_value(value, config.protected_vm_names, "VM Name")
+    def validate_vm_name(cls, value, info: ValidationInfo):
+        if value is None:
+            return value
+
+        vpg_name = info.data.get("vpg_name")
+        protected_site_name = config.vpg_protected_site_names_by_vpg_name.get(vpg_name)
+        if protected_site_name is None:
+            raise ValueError(
+                f"VM Name '{value}' cannot be validated because VPG "
+                f"'{vpg_name}' does not have a Protected ZVM Site Name."
+            )
+
+        allowed_values = config.protected_vm_names_by_site.get(
+            protected_site_name,
+            [],
+        )
+
+        if value not in allowed_values:
+            raise ValueError(
+                f"VM Name '{value}' is not valid for VPG '{vpg_name}' "
+                f"with Protected ZVM Site Name '{protected_site_name}'. "
+                f"Allowed values: {allowed_values}"
+            )
+
+        return value
 
     @field_validator("label_1")
     @classmethod
@@ -145,19 +173,43 @@ class VMReplication(BaseModel):
 
     @field_validator("boot_order_group_name")
     @classmethod
-    def validate_boot_order_group_name(cls, value):
-        return validate_config_value(
-            value,
-            config.boot_order_groups,
-            "Boot Order Group Name",
+    def validate_boot_order_group_name(cls, value, info: ValidationInfo):
+        if value is None:
+            return value
+
+        vpg_name = info.data.get("vpg_name")
+        meta_group_name = config.vpg_boot_order_meta_group_names_by_vpg_name.get(
+            vpg_name,
         )
+        if meta_group_name is None:
+            raise ValueError(
+                f"Boot Order Group Name '{value}' cannot be validated because "
+                f"VPG '{vpg_name}' does not have a Boot Order Meta Group Name."
+            )
+
+        allowed_values = config.boot_order_groups_by_meta_group.get(
+            meta_group_name,
+            [],
+        )
+        if value not in allowed_values:
+            raise ValueError(
+                f"Boot Order Group Name '{value}' is not valid for VPG "
+                f"'{vpg_name}' with Boot Order Meta Group Name "
+                f"'{meta_group_name}'. Allowed values: {allowed_values}"
+            )
+
+        return value
 
     @field_validator("recovery_host_name")
     @classmethod
-    def validate_recovery_host_name(cls, value):
-        return validate_config_value(
+    def validate_recovery_host_name(cls, value, info: ValidationInfo):
+        if value is None:
+            return value
+
+        return validate_site_scoped_value(
             value,
-            config.recovery_host_names,
+            get_vpg_recovery_site_name(info.data.get("vpg_name")),
+            config.recovery_host_names_by_site,
             "Recovery Host Name",
         )
 
@@ -167,12 +219,54 @@ class VMReplication(BaseModel):
         "scratch_journal_datastore_name",
     )
     @classmethod
-    def validate_recovery_datastore_name(cls, value):
-        return validate_config_value(
+    def validate_recovery_datastore_name(cls, value, info: ValidationInfo):
+        if value is None:
+            return value
+
+        return validate_site_scoped_value(
             value,
-            config.recovery_datastore_names,
+            get_vpg_recovery_site_name(info.data.get("vpg_name")),
+            config.recovery_datastore_names_by_site,
             "Recovery Datastore Name",
         )
+
+    @field_validator("recovery_folder_name")
+    @classmethod
+    def validate_recovery_folder_name(cls, value, info: ValidationInfo):
+        if value is None:
+            return value
+
+        return validate_site_scoped_value(
+            value,
+            get_vpg_recovery_site_name(info.data.get("vpg_name")),
+            config.recovery_folder_names_by_site,
+            "Recovery Folder Name",
+        )
+
+    @model_validator(mode="after")
+    def validate_value_unit_pairs(self):
+        validate_journal_size(
+            self.journal_size_hard_limit_value,
+            self.journal_size_hard_limit_unit,
+            "Journal Size Hard Limit Value",
+        )
+        validate_journal_size(
+            self.journal_size_warning_threshold_value,
+            self.journal_size_warning_threshold_unit,
+            "Journal Size Warning Threshold Value",
+        )
+        validate_journal_size(
+            self.scratch_journal_size_hard_limit_value,
+            self.scratch_journal_size_hard_limit_unit,
+            "Scratch Journal Size Hard Limit Value",
+        )
+        validate_journal_size(
+            self.scratch_journal_size_warning_threshold_value,
+            self.scratch_journal_size_warning_threshold_unit,
+            "Scratch Journal Size Warning Threshold Value",
+        )
+
+        return self
 
 
 def validate_vm_replication_row(data: dict) -> VMReplication:
@@ -180,4 +274,8 @@ def validate_vm_replication_row(data: dict) -> VMReplication:
 
 
 def validate_vm_replication(data: list[dict]) -> list[VMReplication]:
-    return [validate_vm_replication_row(row) for row in data]
+    return validate_model_rows(VMReplication, data)
+
+
+def get_vpg_recovery_site_name(vpg_name: str | None) -> str | None:
+    return config.vpg_recovery_site_names_by_vpg_name.get(vpg_name)

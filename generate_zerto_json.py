@@ -11,7 +11,9 @@ from extraction.vpgs import extract_vpgs
 from extraction.zerto_data import extract_zerto_data
 from ingestion.reader import load_excel_workbook, validate_required_sheets
 from validation.default_vpg_settings import validate_default_vpg_settings
-from validation.error_formatting import format_validation_errors
+from validation.error_formatting import WorkbookValidationError, format_validation_errors
+from validation.hypervisor import validate_hypervisor_data
+from validation.zerto_data import validate_zerto_data
 from validation.recovery_zvm_sites import validate_recovery_zvm_sites
 from validation.vpgs import validate_vpgs
 from validation.vm_replication import validate_vm_replication
@@ -19,7 +21,7 @@ from validation.vm_storage import validate_vm_storage
 from validation.vm_nics import validate_vm_nics
 
 
-EXCEL_FILE = "files/basic2.xlsx"
+EXCEL_FILE = "files/VCA Data - 0.106.xlsx"
 OUTPUT_FILE = "outputs/zerto_payload.json"
 
 
@@ -40,11 +42,32 @@ def generate_zerto_json(
     default_vpg_settings = extract_default_vpg_settings(excel_file, print_output=False)
     recovery_zvm_sites = extract_recovery_zvm_sites(excel_file)
     vpgs = extract_vpgs(excel_file)
-    vm_replication = extract_sheet_table(excel_file, "VM Replication", "VPG Name")
-    vm_storage = extract_sheet_table(excel_file, "VM Storage", "VPG Name")
-    vm_nics = extract_sheet_table(excel_file, "VM NICs", "VPG Name")
+    vm_replication = extract_sheet_table(
+        excel_file,
+        "VM Replication",
+        "VPG Name",
+        table_name="VM_Replication",
+    )
+    vm_storage = extract_sheet_table(
+        excel_file,
+        "VM Storage",
+        "VPG Name",
+        table_name="VM_Storage",
+    )
+    vm_nics = extract_sheet_table(
+        excel_file,
+        "VM NICs",
+        "VPG Name",
+        table_name="VM_NICs",
+    )
 
     validations = {
+        "zerto_data": validate_section(
+            lambda: validate_zerto_data(zerto_data),
+        ),
+        "hypervisor_data": validate_section(
+            lambda: validate_hypervisor_data(hypervisor_data),
+        ),
         "default_vpg_settings": validate_section(
             lambda: validate_default_vpg_settings(default_vpg_settings),
         ),
@@ -86,7 +109,12 @@ def generate_zerto_json(
             "vm_replication": vm_replication,
             "vm_storage": vm_storage,
             "vm_nics": vm_nics,
-            "extended_journal": extract_sheet_table(excel_file, "Extended Journal", "VPG Name"),
+            "extended_journal": extract_sheet_table(
+                excel_file,
+                "Extended Journal",
+                "VPG Name",
+                table_name="Extended_Journal_Copies",
+            ),
         },
     }
 
@@ -103,11 +131,23 @@ def generate_zerto_json(
 def validate_section(validate):
     try:
         result = validate()
+    except WorkbookValidationError as error:
+        return {
+            "status": "failed",
+            "messages": error.messages,
+            "errors": [],
+        }
     except ValidationError as error:
         return {
             "status": "failed",
             "messages": format_validation_errors(error),
             "errors": error.errors(include_url=False),
+        }
+    except ValueError as error:
+        return {
+            "status": "failed",
+            "messages": [str(error)],
+            "errors": [],
         }
 
     return {
@@ -127,6 +167,7 @@ def make_json_safe(value):
         return {
             str(key): make_json_safe(item)
             for key, item in value.items()
+            if not str(key).startswith("__")
         }
 
     if hasattr(value, "model_dump"):

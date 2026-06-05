@@ -6,4 +6,5 @@ def extract_recovery_zvm_sites(excel_file: str) -> list[dict]:
         excel_file,
         sheet_name="Recovery ZVM Sites",
         required_header="Recovery ZVM Site Name",
+        table_name="Recovery_ZVM_Sites",
     )

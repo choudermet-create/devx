@@ -8,17 +8,19 @@ from extraction.recovery_zvm_sites import extract_recovery_zvm_sites
 from extraction.tables import extract_sheet_table
 from extraction.vpgs import extract_vpgs
 from validation.default_vpg_settings import validate_default_vpg_settings
+from validation.zerto_data import validate_zerto_data
+from validation.hypervisor import validate_hypervisor_data
 from validation.recovery_zvm_sites import validate_recovery_zvm_sites
 from validation.vpgs import validate_vpgs
 from validation.vm_replication import validate_vm_replication
 from validation.vm_storage import validate_vm_storage
 from validation.vm_nics import validate_vm_nics
-from validation.error_formatting import format_validation_errors
+from validation.error_formatting import WorkbookValidationError, format_validation_errors
 from generate_zerto_json import generate_zerto_json
 
 
 def main():
-    excel_file = "files/basic2.xlsx"
+    excel_file = "files/VCA Data - 0.106.xlsx"
 
     workbook = load_excel_workbook(excel_file)
     validate_required_sheets(workbook)
@@ -27,87 +29,142 @@ def main():
 
     zerto_data = extract_zerto_data(excel_file)
     hypervisor_data = extract_hypervisor_data(excel_file)
-    vpg_settings = extract_default_vpg_settings(excel_file)
+    vpg_settings = extract_default_vpg_settings(excel_file, print_output=False)
     recovery_zvm_sites = extract_recovery_zvm_sites(excel_file)
     vpgs = extract_vpgs(excel_file)
-    vm_replication = extract_sheet_table(excel_file, "VM Replication", "VPG Name")
-    vm_storage = extract_sheet_table(excel_file, "VM Storage", "VPG Name")
-    vm_nics = extract_sheet_table(excel_file, "VM NICs", "VPG Name")
-
-    print_zerto_summary(zerto_data["summary"])
-    print_hypervisor_summary(hypervisor_data)
+    vm_replication = extract_sheet_table(
+        excel_file,
+        "VM Replication",
+        "VPG Name",
+        table_name="VM_Replication",
+    )
+    vm_storage = extract_sheet_table(
+        excel_file,
+        "VM Storage",
+        "VPG Name",
+        table_name="VM_Storage",
+    )
+    vm_nics = extract_sheet_table(
+        excel_file,
+        "VM NICs",
+        "VPG Name",
+        table_name="VM_NICs",
+    )
 
     try:
-        validated_vpg_settings = validate_default_vpg_settings(vpg_settings)
+        validate_zerto_data(zerto_data)
+        print("\nZerto Data validation passed")
+        print("----------------------------")
+
+    except WorkbookValidationError as error:
+        print("\nZerto Data validation failed")
+        print("----------------------------")
+        print_validation_messages(error.messages)
+
+    try:
+        validate_hypervisor_data(hypervisor_data)
+        print("\nHypervisor Data validation passed")
+        print("---------------------------------")
+
+    except WorkbookValidationError as error:
+        print("\nHypervisor Data validation failed")
+        print("---------------------------------")
+        print_validation_messages(error.messages)
+
+    except ValidationError as error:
+        print("\nHypervisor Data validation failed")
+        print("---------------------------------")
+        print_validation_messages(format_validation_errors(error))
+
+    except ValueError as error:
+        print("\nHypervisor Data validation failed")
+        print("---------------------------------")
+        print(f"- {error}")
+
+    try:
+        validate_default_vpg_settings(vpg_settings)
         print("\nDefault VPG Settings validation passed")
         print("--------------------------------------")
-        print_default_vpg_settings_validation(validated_vpg_settings)
 
     except ValidationError as error:
         print("\nDefault VPG Settings validation failed")
         print("--------------------------------------")
-        for message in format_validation_errors(error):
-            print(f"- {message}")
+        print_validation_messages(format_validation_errors(error))
 
     try:
-        validated_recovery_zvm_sites = validate_recovery_zvm_sites(recovery_zvm_sites)
+        validate_recovery_zvm_sites(recovery_zvm_sites)
         print("\nRecovery ZVM Sites validation passed")
         print("------------------------------------")
-        print_recovery_zvm_sites_validation(validated_recovery_zvm_sites)
+
+    except WorkbookValidationError as error:
+        print("\nRecovery ZVM Sites validation failed")
+        print("------------------------------------")
+        print_validation_messages(error.messages)
 
     except ValidationError as error:
         print("\nRecovery ZVM Sites validation failed")
         print("------------------------------------")
-        for message in format_validation_errors(error):
-            print(f"- {message}")
+        print_validation_messages(format_validation_errors(error))
 
     try:
-        validated_vpgs = validate_vpgs(vpgs)
+        validate_vpgs(vpgs)
         print("\nVPGs validation passed")
         print("----------------------")
-        print_vpgs_validation(validated_vpgs)
+
+    except WorkbookValidationError as error:
+        print("\nVPGs validation failed")
+        print("----------------------")
+        print_validation_messages(error.messages)
 
     except ValidationError as error:
         print("\nVPGs validation failed")
         print("----------------------")
-        for message in format_validation_errors(error):
-            print(f"- {message}")
+        print_validation_messages(format_validation_errors(error))
 
     try:
-        validated_vm_replication = validate_vm_replication(vm_replication)
+        validate_vm_replication(vm_replication)
         print("\nVM Replication validation passed")
         print("--------------------------------")
-        print_vm_replication_validation(validated_vm_replication)
+
+    except WorkbookValidationError as error:
+        print("\nVM Replication validation failed")
+        print("--------------------------------")
+        print_validation_messages(error.messages)
 
     except ValidationError as error:
         print("\nVM Replication validation failed")
         print("--------------------------------")
-        for message in format_validation_errors(error):
-            print(f"- {message}")
+        print_validation_messages(format_validation_errors(error))
 
     try:
-        validated_vm_storage = validate_vm_storage(vm_storage)
+        validate_vm_storage(vm_storage)
         print("\nVM Storage validation passed")
         print("----------------------------")
-        print_vm_storage_validation(validated_vm_storage)
+
+    except WorkbookValidationError as error:
+        print("\nVM Storage validation failed")
+        print("----------------------------")
+        print_validation_messages(error.messages)
 
     except ValidationError as error:
         print("\nVM Storage validation failed")
         print("----------------------------")
-        for message in format_validation_errors(error):
-            print(f"- {message}")
+        print_validation_messages(format_validation_errors(error))
 
     try:
-        validated_vm_nics = validate_vm_nics(vm_nics)
+        validate_vm_nics(vm_nics)
         print("\nVM NICs validation passed")
         print("-------------------------")
-        print_vm_nics_validation(validated_vm_nics)
+
+    except WorkbookValidationError as error:
+        print("\nVM NICs validation failed")
+        print("-------------------------")
+        print_validation_messages(error.messages)
 
     except ValidationError as error:
         print("\nVM NICs validation failed")
         print("-------------------------")
-        for message in format_validation_errors(error):
-            print(f"- {message}")
+        print_validation_messages(format_validation_errors(error))
 
     output_path = generate_zerto_json(excel_file)
     print(f"\nJSON output written to {output_path}")
@@ -117,25 +174,32 @@ def print_zerto_summary(summary: dict) -> None:
     print("\nZerto Data Summary")
     print("------------------")
 
-    print("\nZVM Sites")
-    for site in summary["zvm_sites"]:
+    print_topic_heading("ZVM Sites")
+    for index, site in enumerate(summary["zvm_sites"]):
+        if index > 0:
+            print()
         print(f"- Site Name: {site['site_name']}")
         print(f"  Protected: {site['protected']}")
         print(f"  Recovery: {site['recovery']}")
 
-    print("\nLabels")
-    print(f"- Scopes: {summary['labels']['scopes']}")
-    print(f"- Waves: {summary['labels']['waves']}")
-    print(f"- Application Names: {summary['labels']['application_names']}")
-    print(f"- Application Environments: {summary['labels']['application_environments']}")
-    print(f"- Data Types: {summary['labels']['data_types']}")
+    print_topic_heading("Labels")
+    print_named_list("Scopes", summary["labels"]["scopes"])
+    print_named_list("Waves", summary["labels"]["waves"])
+    print_named_list("Application Names", summary["labels"]["application_names"])
+    print_named_list(
+        "Application Environments",
+        summary["labels"]["application_environments"],
+    )
+    print_named_list("Data Types", summary["labels"]["data_types"])
 
-    print("\nRecovery Scripts")
+    print_topic_heading("Recovery Scripts")
     for script in summary["recovery_scripts"]:
         print(f"- {script}")
 
-    print("\nBoot Order Groups")
-    for group in summary["boot_order_groups"]:
+    print_topic_heading("Boot Order Groups")
+    for index, group in enumerate(summary["boot_order_groups"]):
+        if index > 0:
+            print()
         print(f"- Meta Group: {group['meta_group_name']}")
         print(f"  Group ID: {group['group_id']}")
         print(f"  Group Name: {group['group_name']}")
@@ -146,45 +210,96 @@ def print_hypervisor_summary(hypervisor_data: dict) -> None:
     print("\nHypervisor Data Summary")
     print("-----------------------")
 
-    print("\nProtected VMs")
-    for vm in hypervisor_data["protected_vms"]:
+    print_topic_heading("Protected VMs")
+    for index, vm in enumerate(hypervisor_data["protected_vms"]):
+        if index > 0:
+            print()
         print(f"- Site: {vm.get('Protected ZVM Site Name')}")
         print(f"  VM Name: {vm.get('VM Name')}")
         print(f"  CPU Count: {vm.get('CPU Count')}")
         print(f"  Memory: {vm.get('Memory (GiB)')} GiB")
 
-    print("\nProtected VM Volumes")
-    for volume in hypervisor_data["protected_vm_volumes"]:
+    print_topic_heading("Protected VM Volumes")
+    for index, volume in enumerate(hypervisor_data["protected_vm_volumes"]):
+        if index > 0:
+            print()
         print(f"- VM: {volume.get('Protected ZVM Site Name')} | {volume.get('VM Name')}")
         print(f"  Volume: {volume.get('Volume Location')}")
         print(f"  Size: {volume.get('Provisioned Size (GiB)')} GiB")
 
-    print("\nProtected VM NICs")
-    for nic in hypervisor_data["protected_vm_nics"]:
+    print_topic_heading("Protected VM NICs")
+    for index, nic in enumerate(hypervisor_data["protected_vm_nics"]):
+        if index > 0:
+            print()
         print(f"- VM: {nic.get('Protected ZVM Site Name')} | {nic.get('VM Name')}")
         print(f"  NIC: {nic.get('NIC Name')}")
-        print(f"  Network: {nic.get('Network')}")
+        print(f"  Network: {nic.get('Network Name')}")
 
-    print("\nRecovery Hosts")
-    for host in hypervisor_data["recovery_hosts"]:
+    print_topic_heading("Recovery Hosts")
+    for index, host in enumerate(hypervisor_data["recovery_hosts"]):
+        if index > 0:
+            print()
         print(f"- Site: {host.get('Recovery ZVM Site Name')}")
         print(f"  Host: {host.get('Host Name')}")
 
-    print("\nRecovery Datastores")
-    for datastore in hypervisor_data["recovery_datastores"]:
+    print_topic_heading("Recovery Datastores")
+    for index, datastore in enumerate(hypervisor_data["recovery_datastores"]):
+        if index > 0:
+            print()
         print(f"- Site: {datastore.get('Recovery ZVM Site Name')}")
         print(f"  Datastore: {datastore.get('Datastore Name')}")
         print(f"  Size: {datastore.get('Size (GiB)')} GiB")
 
-    print("\nRecovery Folders")
-    for folder in hypervisor_data["recovery_folders"]:
+    print_topic_heading("Recovery Folders")
+    for index, folder in enumerate(hypervisor_data["recovery_folders"]):
+        if index > 0:
+            print()
         print(f"- Site: {folder.get('Recovery ZVM Site Name')}")
         print(f"  Folder: {folder.get('Folder Name')}")
 
-    print("\nRecovery Networks")
-    for network in hypervisor_data["recovery_networks"]:
+    print_topic_heading("Recovery Networks")
+    for index, network in enumerate(hypervisor_data["recovery_networks"]):
+        if index > 0:
+            print()
         print(f"- Site: {network.get('Recovery ZVM Site Name')}")
         print(f"  Network: {network.get('Network Name')}")
+
+
+def print_topic_heading(title: str) -> None:
+    print(f"\n{title}\n")
+
+
+def print_named_list(label: str, values: list) -> None:
+    print(f"- {label}:")
+
+    if not values:
+        print("  Not set")
+        print()
+        return
+
+    for value in values:
+        print(f"  - {value}")
+
+    print()
+
+
+def print_validation_messages(messages: list[str]) -> None:
+    for index, message in enumerate(messages):
+        if index > 0:
+            print()
+        print(f"- {message}")
+
+
+def print_hypervisor_validation(data: dict) -> None:
+    print_key_values({
+        "Protected VMs": len(data["protected_vms"]),
+        "Protected VM Volumes": len(data["protected_vm_volumes"]),
+        "Protected VM NICs": len(data["protected_vm_nics"]),
+        "Recovery Hosts": len(data["recovery_hosts"]),
+        "Recovery Datastores": len(data["recovery_datastores"]),
+        "Recovery Folders": len(data["recovery_folders"]),
+        "Recovery Networks": len(data["recovery_networks"]),
+    })
 
 
 def print_default_vpg_settings_validation(settings) -> None:

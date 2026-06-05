@@ -1,8 +1,20 @@
 from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    ValidationInfo,
+    field_validator,
+    model_validator,
+)
 
 import config
+from validation.error_formatting import (
+    WorkbookValidationError,
+    format_workbook_error,
+    validate_model_rows,
+)
 
 
 VPGType = Literal[
@@ -15,8 +27,8 @@ VPGType = Literal[
 Priority = Literal["Low", "Medium", "High"]
 JournalHistoryUnit = Literal["Days", "Hours"]
 TargetRPOAlertUnit = Literal["Seconds", "Minutes", "Hours"]
-TestReminder = Literal["3 Months", "6 Months", "9 Months", "12 Months"]
-JournalSizeUnit = Literal["TiB", "GiB", "%"]
+TestReminder = Literal["None", "3 Months", "6 Months", "9 Months", "12 Months"]
+JournalSizeUnit = Literal["GiB", "%", "Unlimited"]
 YesNo = Literal["Yes", "No"]
 DiskProvisioningOverride = Literal["As-is", "Thin", "Thick"]
 VnicIpConfigChange = Literal["No", "Yes, DHCP", "Yes, Static"]
@@ -193,7 +205,7 @@ class RecoveryZVMSite(BaseModel):
         default=None,
         validation_alias="Failover Test - Create new MAC address",
     )
-    failover_test_change_vnic_ip_config: Any | None = Field(
+    failover_test_change_vnic_ip_config: VnicIpConfigChange | None = Field(
         default=None,
         validation_alias="Failover Test - Change vNIC IP Config",
     )
@@ -236,17 +248,16 @@ class RecoveryZVMSite(BaseModel):
 
     @field_validator("recovery_host_name")
     @classmethod
-    def validate_recovery_host_name(cls, value):
+    def validate_recovery_host_name(cls, value, info: ValidationInfo):
         if value is None:
             return value
 
-        if value not in config.recovery_host_names:
-            raise ValueError(
-                f"Recovery Host Name '{value}' is not valid. "
-                f"Allowed values: {config.recovery_host_names}"
-            )
-
-        return value
+        return validate_site_scoped_value(
+            value,
+            info.data.get("recovery_zvm_site_name"),
+            config.recovery_host_names_by_site,
+            "Recovery Host Name",
+        )
 
     @field_validator(
         "recovery_datastore_name",
@@ -254,31 +265,107 @@ class RecoveryZVMSite(BaseModel):
         "scratch_journal_datastore_name",
     )
     @classmethod
-    def validate_recovery_datastore_name(cls, value):
+    def validate_recovery_datastore_name(cls, value, info: ValidationInfo):
         if value is None:
             return value
 
-        if value not in config.recovery_datastore_names:
-            raise ValueError(
-                f"Recovery Datastore Name '{value}' is not valid. "
-                f"Allowed values: {config.recovery_datastore_names}"
-            )
-
-        return value
+        return validate_site_scoped_value(
+            value,
+            info.data.get("recovery_zvm_site_name"),
+            config.recovery_datastore_names_by_site,
+            "Recovery Datastore Name",
+        )
 
     @field_validator("failover_live_move_network_name", "failover_test_network_name")
     @classmethod
-    def validate_recovery_network_name(cls, value):
+    def validate_recovery_network_name(cls, value, info: ValidationInfo):
         if value is None:
             return value
 
-        if value not in config.recovery_network_names:
+        return validate_site_scoped_value(
+            value,
+            info.data.get("recovery_zvm_site_name"),
+            config.recovery_network_names_by_site,
+            "Recovery Network Name",
+        )
+
+    @field_validator("recovery_folder_name")
+    @classmethod
+    def validate_recovery_folder_name(cls, value, info: ValidationInfo):
+        if value is None:
+            return value
+
+        return validate_site_scoped_value(
+            value,
+            info.data.get("recovery_zvm_site_name"),
+            config.recovery_folder_names_by_site,
+            "Recovery Folder Name",
+        )
+
+    @field_validator("pre_recovery_script_name", "post_recovery_script_name")
+    @classmethod
+    def validate_recovery_script_name(cls, value):
+        if value is None:
+            return value
+
+        if value not in config.recovery_scripts:
             raise ValueError(
-                f"Recovery Network Name '{value}' is not valid. "
-                f"Allowed values: {config.recovery_network_names}"
+                f"Recovery Script Name '{value}' is not valid. "
+                f"Allowed values: {config.recovery_scripts}"
             )
 
         return value
+
+    @field_validator(
+        "pre_recovery_script_execution_timeout_seconds",
+        "post_recovery_script_execution_timeout_seconds",
+    )
+    @classmethod
+    def validate_script_timeout(cls, value):
+        if value is None:
+            return value
+
+        validate_range(
+            value,
+            300,
+            6000,
+            "Recovery Script Execution Timeout (Seconds)",
+            "",
+        )
+        return value
+
+    @model_validator(mode="after")
+    def validate_value_unit_pairs(self):
+        validate_journal_history(
+            self.journal_history_value,
+            self.journal_history_unit,
+        )
+        validate_target_rpo_alert(
+            self.target_rpo_alert_value,
+            self.target_rpo_alert_unit,
+        )
+        validate_journal_size(
+            self.journal_size_hard_limit_value,
+            self.journal_size_hard_limit_unit,
+            "Journal Size Hard Limit Value",
+        )
+        validate_journal_size(
+            self.journal_size_warning_threshold_value,
+            self.journal_size_warning_threshold_unit,
+            "Journal Size Warning Threshold Value",
+        )
+        validate_journal_size(
+            self.scratch_journal_size_hard_limit_value,
+            self.scratch_journal_size_hard_limit_unit,
+            "Scratch Journal Size Hard Limit Value",
+        )
+        validate_journal_size(
+            self.scratch_journal_size_warning_threshold_value,
+            self.scratch_journal_size_warning_threshold_unit,
+            "Scratch Journal Size Warning Threshold Value",
+        )
+
+        return self
 
 
 def validate_recovery_zvm_site(data: dict) -> RecoveryZVMSite:
@@ -286,4 +373,129 @@ def validate_recovery_zvm_site(data: dict) -> RecoveryZVMSite:
 
 
 def validate_recovery_zvm_sites(data: list[dict]) -> list[RecoveryZVMSite]:
-    return [validate_recovery_zvm_site(row) for row in data]
+    validated_rows = validate_model_rows(RecoveryZVMSite, data)
+    validate_unique_recovery_zvm_site_names(data)
+    return validated_rows
+
+
+def validate_site_scoped_value(
+    value,
+    site_name: str | None,
+    values_by_site: dict,
+    field_name: str,
+):
+    if site_name is None:
+        raise ValueError(
+            f"{field_name} '{value}' cannot be validated because "
+            "Recovery ZVM Site Name is not valid."
+        )
+
+    allowed_values = values_by_site.get(site_name, [])
+    if value not in allowed_values:
+        raise ValueError(
+            f"{field_name} '{value}' is not valid for Recovery ZVM Site "
+            f"Name '{site_name}'. Allowed values: {allowed_values}"
+        )
+
+    return value
+
+
+def validate_journal_history(value, unit) -> None:
+    if value is None and unit is None:
+        return
+
+    if value is None or unit is None:
+        raise ValueError("Journal History Value and Unit must be provided together")
+
+    if unit == "Days":
+        validate_range(value, 1, 30, "Journal History Value", "when Unit is Days")
+
+    if unit == "Hours":
+        validate_range(value, 1, 720, "Journal History Value", "when Unit is Hours")
+
+
+def validate_target_rpo_alert(value, unit) -> None:
+    if value is None and unit is None:
+        return
+
+    if value is None or unit is None:
+        raise ValueError("Target RPO Alert Value and Unit must be provided together")
+
+    limits = {
+        "Seconds": (1, 2592000),
+        "Minutes": (1, 43200),
+        "Hours": (1, 720),
+    }
+    minimum, maximum = limits[unit]
+    validate_range(
+        value,
+        minimum,
+        maximum,
+        "Target RPO Alert Value",
+        f"when Unit is {unit}",
+    )
+
+
+def validate_journal_size(value, unit, field_name: str) -> None:
+    if value is None and unit is None:
+        return
+
+    if unit is None:
+        raise ValueError(f"{field_name} Unit must be provided when Value is set")
+
+    if unit == "Unlimited":
+        if value is not None:
+            raise ValueError(f"{field_name} must be empty when Unit is Unlimited")
+
+        return
+
+    if value is None:
+        raise ValueError(f"{field_name} is mandatory when Unit is {unit}")
+
+    if unit == "GiB":
+        validate_range(value, 10, 99999, field_name, "when Unit is GiB")
+
+    if unit == "%":
+        validate_range(value, 1, 1000, field_name, "when Unit is %")
+
+
+def validate_range(
+    value,
+    minimum: int,
+    maximum: int,
+    field_name: str,
+    context: str,
+) -> None:
+    if minimum <= value <= maximum:
+        return
+
+    suffix = f" {context}" if context else ""
+    raise ValueError(
+        f"{field_name} '{value:g}' is not valid{suffix}. "
+        f"Allowed range: {minimum}-{maximum}"
+    )
+
+
+def validate_unique_recovery_zvm_site_names(data: list[dict]) -> None:
+    seen_rows = {}
+    messages = []
+
+    for row in data:
+        site_name = row.get("Recovery ZVM Site Name")
+        if site_name is None:
+            continue
+
+        if site_name in seen_rows:
+            for duplicate_row in (seen_rows[site_name], row):
+                messages.append(format_workbook_error(
+                    duplicate_row,
+                    "Recovery ZVM Site Name",
+                    site_name,
+                    "Recovery ZVM Site Name must be unique.",
+                ))
+            continue
+
+        seen_rows[site_name] = row
+
+    if messages:
+        raise WorkbookValidationError(messages)

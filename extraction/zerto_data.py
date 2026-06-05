@@ -38,7 +38,17 @@ def extract_zerto_data(excel_file: str) -> dict:
     df = df.dropna(axis=1, how="all")
     df = df.where(pd.notnull(df), None)
 
-    records = clean_records(df.to_dict(orient="records"))
+    records = []
+    metadata = []
+
+    for index, row in df.iterrows():
+        records.append(row.to_dict())
+        metadata.append({
+            "__sheet_name": "Zerto Data",
+            "__excel_row": header_row_index + index + 2,
+        })
+
+    records = clean_records(records, metadata)
     summary = build_zerto_summary(records)
 
     load_zerto_summary_into_config(summary)
@@ -132,6 +142,16 @@ def load_zerto_summary_into_config(summary: dict) -> None:
         group["group_name"]
         for group in summary["boot_order_groups"]
     ]
+    config.boot_order_groups_by_meta_group = {}
+    for group in summary["boot_order_groups"]:
+        meta_group_name = group.get("meta_group_name")
+        group_name = group.get("group_name")
+
+        if meta_group_name and group_name:
+            config.boot_order_groups_by_meta_group.setdefault(
+                meta_group_name,
+                [],
+            ).append(group_name)
 
     config.boot_order_meta_groups = [
         group["meta_group_name"]

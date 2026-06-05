@@ -36,3 +36,64 @@ Protected NICs
 - again on the hypervisor data sheet - recovery host - the host details should be the first column 
 
 - so if the customers want to change the name for example of a datastore name, 
+
+
+
+04 June 2026 
+
+** zerto data ** 
+
+Boot order 
+- Boot order meta group name: 3 tier web app 
+- boot order group name: ex - web server 
+- so you are defining, in the table, a combination of meta group + group + the delay time 
+
+- what is the purpose of the 'group id' is it a combination id? 
+
+
+
+** hypervisor data ** 
+
+- why are VM on the protected site listed here in this sheet? Zerto does not need to know what VMs are there on the site it only needs to know which VMs are to be protected? 
+
+- All values in Default_VPG_Settings are mandatory. The only exceptions are the (Scratch) Journal Size hard Limit and Warning Threshold values, which must be empty if the respective Unit is set to Unlimited. >>> does it mean journal does not have unlimited and scratch journal can have it? >>>> got it both!
+
+- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

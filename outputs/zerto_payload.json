@@ -1,101 +1,72 @@
 {
-  "source_file": "files/basic2.xlsx",
-  "ready_for_zerto_api": true,
+  "source_file": "files/VCA Data - 0.106.xlsx",
+  "ready_for_zerto_api": false,
   "validations": {
-    "default_vpg_settings": {
-      "status": "passed",
-      "records": {
-        "protected_site": "Left",
-        "recovery_site": "Right",
-        "vpg_type": "Remote DR and Continuous Backup",
-        "priority": "Medium",
-        "journal_history": {
-          "value": 1,
-          "unit": "Days"
-        },
-        "target_rpo_alert": {
-          "value": 5,
-          "unit": "Minutes"
-        },
-        "test_reminder": "6 Months",
-        "journal_size_hard_limit": {
-          "value": 150.0,
-          "unit": "GiB"
-        },
-        "journal_size_warning": {
-          "value": 115.0,
-          "unit": "GiB"
-        },
-        "scratch_journal_size_hard_limit": {
-          "value": 300.0,
-          "unit": "GiB"
-        },
-        "scratch_journal_size_warning": {
-          "value": 225.0,
-          "unit": "GiB"
-        },
-        "wan_compression": "Yes"
-      }
+    "zerto_data": {
+      "status": "failed",
+      "messages": [
+        "Table: Zerto_Data_ZVM_Site_Names\n  Table Row ID: 5\n  Column: Protected? / Recovery?\n  Input value: 'blank / blank'\n  Error: At least one value must be 'Yes'."
+      ],
+      "errors": []
     },
-    "recovery_zvm_sites": {
-      "status": "passed",
-      "records": [
+    "hypervisor_data": {
+      "status": "failed",
+      "messages": [
+        "Table: Hypervisor_Data_Protected_ZVM_VM_Volumes\n  Table Row ID: 7\n  Column: VM Name\n  Input value: 'Bla'\n  Error: Valid values are: 'VM 2', 'VM 3', 'VM dada', 'BLA'.",
+        "Table: Hypervisor_Data_Protected_ZVM_VM_NICs\n  Table Row ID: 7\n  Column: VM Name\n  Input value: None\n  Error: Input should be a valid string",
+        "Table: Hypervisor_Data_Protected_ZVM_VM_NICs\n  Table Row ID: 7\n  Column: NIC Name\n  Input value: None\n  Error: Input should be a valid string"
+      ],
+      "errors": []
+    },
+    "default_vpg_settings": {
+      "status": "failed",
+      "messages": [
+        "Input value None for 'Failover Live / Move - DNS Suffix' is not valid. This value is mandatory",
+        "Input value None for 'Failover Test - DNS Suffix' is not valid. This value is mandatory"
+      ],
+      "errors": [
         {
-          "recovery_zvm_site_name": "Right",
-          "vpg_type": "Data Mobility and Migration",
-          "priority": null,
-          "recovery_host_name": "Host 1",
-          "recovery_datastore_name": "Datastore 1",
-          "journal_history_value": null,
-          "journal_history_unit": "Days",
-          "target_rpo_alert_value": null,
-          "target_rpo_alert_unit": null,
-          "test_reminder": "3 Months",
-          "journal_datastore_name": "Datastore 1",
-          "journal_size_hard_limit_value": null,
-          "journal_size_hard_limit_unit": null,
-          "journal_size_warning_threshold_value": null,
-          "journal_size_warning_threshold_unit": null,
-          "scratch_journal_datastore_name": null,
-          "scratch_journal_size_hard_limit_value": null,
-          "scratch_journal_size_hard_limit_unit": null,
-          "scratch_journal_size_warning_threshold_value": null,
-          "scratch_journal_size_warning_threshold_unit": null,
-          "enable_wan_traffic_compression": null,
-          "disk_provisioning_override": null,
-          "failover_live_move_network_name": "Network 3",
-          "failover_test_network_name": "Network 3",
-          "recovery_folder_name": null,
-          "pre_recovery_script_name": null,
-          "pre_recovery_script_parameters": null,
-          "pre_recovery_script_execution_timeout_seconds": null,
-          "post_recovery_script_name": null,
-          "post_recovery_script_parameters": null,
-          "post_recovery_script_execution_timeout_seconds": null,
-          "failover_live_move_create_new_mac_address": null,
-          "failover_live_move_change_vnic_ip_config": null,
-          "failover_live_move_subnet_mask": "255.255.255.99",
-          "failover_live_move_default_gateway": null,
-          "failover_live_move_preferred_dns_server": null,
-          "failover_live_move_alternate_dns_server": null,
-          "failover_live_move_dns_suffix": null,
-          "failover_test_create_new_mac_address": null,
-          "failover_test_change_vnic_ip_config": null,
-          "failover_test_subnet_mask": "255.255.255.100",
-          "failover_test_default_gateway": null,
-          "failover_test_preferred_dns_server": null,
-          "failover_test_alternate_dns_server": null,
-          "failover_test_dns_suffix": null
+          "type": "value_error",
+          "loc": [
+            "failover_live_move_dns_suffix"
+          ],
+          "msg": "Value error, This value is mandatory",
+          "input": null,
+          "ctx": {
+            "error": "This value is mandatory"
+          }
+        },
+        {
+          "type": "value_error",
+          "loc": [
+            "failover_test_dns_suffix"
+          ],
+          "msg": "Value error, This value is mandatory",
+          "input": null,
+          "ctx": {
+            "error": "This value is mandatory"
+          }
         }
       ]
+    },
+    "recovery_zvm_sites": {
+      "status": "failed",
+      "messages": [
+        "Table: Recovery_ZVM_Sites\n  Table Row ID: 2\n  Column: Recovery ZVM Site Name\n  Input value: None\n  Error: Input should be a valid string",
+        "Table: Recovery_ZVM_Sites\n  Table Row ID: 2\n  Column: Recovery Host Name\n  Input value: 'Cluster'\n  Error: Recovery Host Name 'Cluster' cannot be validated because Recovery ZVM Site Name is not valid.",
+        "Table: Recovery_ZVM_Sites\n  Table Row ID: 2\n  Column: Recovery Datastore Name\n  Input value: 'Datastore 1'\n  Error: Recovery Datastore Name 'Datastore 1' cannot be validated because Recovery ZVM Site Name is not valid.",
+        "Table: Recovery_ZVM_Sites\n  Table Row ID: 2\n  Column: Failover Live / Move Network Name\n  Input value: 'Network 1'\n  Error: Recovery Network Name 'Network 1' cannot be validated because Recovery ZVM Site Name is not valid.",
+        "Table: Recovery_ZVM_Sites\n  Table Row ID: 2\n  Column: Failover Test Network Name\n  Input value: 'Network 2'\n  Error: Recovery Network Name 'Network 2' cannot be validated because Recovery ZVM Site Name is not valid."
+      ],
+      "errors": []
     },
     "vpgs": {
       "status": "passed",
       "records": [
         {
-          "vpg_name": "test1",
-          "protected_zvm_site_name": "Left",
-          "recovery_zvm_site_name": "Right",
+          "vpg_name": "test",
+          "protected_zvm_site_name": "Right",
+          "recovery_zvm_site_name": "Left",
           "vpg_type": null,
           "priority": null,
           "vpg_description": null,
@@ -106,18 +77,18 @@
           "label_5": null,
           "boot_order_meta_group_name": "3-Tier App",
           "recovery_host_name": "Host 1",
-          "recovery_datastore_name": "Datastore 1",
+          "recovery_datastore_name": "DS1",
           "journal_history_unit": "Days",
-          "journal_history_value": 30,
-          "target_rpo_alert_value": 5,
+          "journal_history_value": 1,
+          "target_rpo_alert_value": 5.0,
           "target_rpo_alert_unit": "Minutes",
           "test_reminder": "3 Months",
-          "journal_datastore_name": "Datastore 1",
+          "journal_datastore_name": "DS1",
           "journal_size_hard_limit_value": null,
           "journal_size_hard_limit_unit": null,
           "journal_size_warning_threshold_value": null,
           "journal_size_warning_threshold_unit": null,
-          "scratch_journal_datastore_name": "Datastore 1",
+          "scratch_journal_datastore_name": "DS1",
           "scratch_journal_size_hard_limit_value": null,
           "scratch_journal_size_hard_limit_unit": null,
           "scratch_journal_size_warning_threshold_value": null,
@@ -133,24 +104,69 @@
           "post_recovery_script_name": "AnotherScript",
           "post_recovery_script_parameters": null,
           "post_recovery_script_execution_timeout_seconds": null
-        }
-      ]
-    },
-    "vm_replication": {
-      "status": "passed",
-      "records": [
+        },
         {
-          "vpg_name": "test1",
-          "vm_name": "Microsoft 2022",
+          "vpg_name": "Test2",
+          "protected_zvm_site_name": "Left",
+          "recovery_zvm_site_name": "Right",
+          "vpg_type": null,
+          "priority": null,
+          "vpg_description": null,
           "label_1": null,
           "label_2": null,
           "label_3": null,
           "label_4": null,
           "label_5": null,
-          "boot_order_group_name": "Web Server",
+          "boot_order_meta_group_name": "Two-Tier App",
           "recovery_host_name": null,
+          "recovery_datastore_name": "Datastore 1",
+          "journal_history_unit": null,
+          "journal_history_value": null,
+          "target_rpo_alert_value": null,
+          "target_rpo_alert_unit": null,
+          "test_reminder": null,
+          "journal_datastore_name": "Datastore 1",
+          "journal_size_hard_limit_value": null,
+          "journal_size_hard_limit_unit": null,
+          "journal_size_warning_threshold_value": null,
+          "journal_size_warning_threshold_unit": null,
+          "scratch_journal_datastore_name": "DataStore 2",
+          "scratch_journal_size_hard_limit_value": null,
+          "scratch_journal_size_hard_limit_unit": null,
+          "scratch_journal_size_warning_threshold_value": null,
+          "scratch_journal_size_warning_threshold_unit": null,
+          "enable_wan_traffic_compression": null,
+          "disk_provisioning_override": null,
+          "failover_live_move_network_name": "Network 1",
+          "failover_test_network_name": "Network 2",
+          "recovery_folder_name": "/MyFolder",
+          "pre_recovery_script_name": "MyOnlyRecoveryScript",
+          "pre_recovery_script_parameters": null,
+          "pre_recovery_script_execution_timeout_seconds": null,
+          "post_recovery_script_name": "MyOnlyRecoveryScript",
+          "post_recovery_script_parameters": null,
+          "post_recovery_script_execution_timeout_seconds": null
+        },
+        {
+          "vpg_name": "Prod2DR",
+          "protected_zvm_site_name": "Prod",
+          "recovery_zvm_site_name": "DR",
+          "vpg_type": null,
+          "priority": null,
+          "vpg_description": null,
+          "label_1": null,
+          "label_2": null,
+          "label_3": null,
+          "label_4": null,
+          "label_5": null,
+          "boot_order_meta_group_name": null,
+          "recovery_host_name": "Cluster",
           "recovery_datastore_name": null,
-          "recovery_folder_name": null,
+          "journal_history_unit": null,
+          "journal_history_value": null,
+          "target_rpo_alert_value": null,
+          "target_rpo_alert_unit": null,
+          "test_reminder": null,
           "journal_datastore_name": null,
           "journal_size_hard_limit_value": null,
           "journal_size_hard_limit_unit": null,
@@ -160,18 +176,184 @@
           "scratch_journal_size_hard_limit_value": null,
           "scratch_journal_size_hard_limit_unit": null,
           "scratch_journal_size_warning_threshold_value": null,
-          "scratch_journal_size_warning_threshold_unit": null
+          "scratch_journal_size_warning_threshold_unit": null,
+          "enable_wan_traffic_compression": null,
+          "disk_provisioning_override": null,
+          "failover_live_move_network_name": null,
+          "failover_test_network_name": null,
+          "recovery_folder_name": null,
+          "pre_recovery_script_name": null,
+          "pre_recovery_script_parameters": null,
+          "pre_recovery_script_execution_timeout_seconds": null,
+          "post_recovery_script_name": null,
+          "post_recovery_script_parameters": null,
+          "post_recovery_script_execution_timeout_seconds": null
+        },
+        {
+          "vpg_name": "Lange naam voor een VPG die lang is",
+          "protected_zvm_site_name": null,
+          "recovery_zvm_site_name": null,
+          "vpg_type": null,
+          "priority": null,
+          "vpg_description": null,
+          "label_1": null,
+          "label_2": null,
+          "label_3": null,
+          "label_4": null,
+          "label_5": null,
+          "boot_order_meta_group_name": null,
+          "recovery_host_name": null,
+          "recovery_datastore_name": null,
+          "journal_history_unit": null,
+          "journal_history_value": null,
+          "target_rpo_alert_value": null,
+          "target_rpo_alert_unit": null,
+          "test_reminder": null,
+          "journal_datastore_name": null,
+          "journal_size_hard_limit_value": null,
+          "journal_size_hard_limit_unit": null,
+          "journal_size_warning_threshold_value": null,
+          "journal_size_warning_threshold_unit": null,
+          "scratch_journal_datastore_name": null,
+          "scratch_journal_size_hard_limit_value": null,
+          "scratch_journal_size_hard_limit_unit": null,
+          "scratch_journal_size_warning_threshold_value": null,
+          "scratch_journal_size_warning_threshold_unit": null,
+          "enable_wan_traffic_compression": null,
+          "disk_provisioning_override": null,
+          "failover_live_move_network_name": null,
+          "failover_test_network_name": null,
+          "recovery_folder_name": null,
+          "pre_recovery_script_name": null,
+          "pre_recovery_script_parameters": null,
+          "pre_recovery_script_execution_timeout_seconds": null,
+          "post_recovery_script_name": null,
+          "post_recovery_script_parameters": null,
+          "post_recovery_script_execution_timeout_seconds": null
+        },
+        {
+          "vpg_name": "Name of VPG",
+          "protected_zvm_site_name": null,
+          "recovery_zvm_site_name": null,
+          "vpg_type": null,
+          "priority": null,
+          "vpg_description": null,
+          "label_1": null,
+          "label_2": null,
+          "label_3": null,
+          "label_4": null,
+          "label_5": null,
+          "boot_order_meta_group_name": null,
+          "recovery_host_name": null,
+          "recovery_datastore_name": null,
+          "journal_history_unit": null,
+          "journal_history_value": null,
+          "target_rpo_alert_value": null,
+          "target_rpo_alert_unit": null,
+          "test_reminder": null,
+          "journal_datastore_name": null,
+          "journal_size_hard_limit_value": null,
+          "journal_size_hard_limit_unit": null,
+          "journal_size_warning_threshold_value": null,
+          "journal_size_warning_threshold_unit": null,
+          "scratch_journal_datastore_name": null,
+          "scratch_journal_size_hard_limit_value": null,
+          "scratch_journal_size_hard_limit_unit": null,
+          "scratch_journal_size_warning_threshold_value": null,
+          "scratch_journal_size_warning_threshold_unit": null,
+          "enable_wan_traffic_compression": null,
+          "disk_provisioning_override": null,
+          "failover_live_move_network_name": null,
+          "failover_test_network_name": null,
+          "recovery_folder_name": null,
+          "pre_recovery_script_name": null,
+          "pre_recovery_script_parameters": null,
+          "pre_recovery_script_execution_timeout_seconds": null,
+          "post_recovery_script_name": null,
+          "post_recovery_script_parameters": null,
+          "post_recovery_script_execution_timeout_seconds": null
+        },
+        {
+          "vpg_name": "New VPG",
+          "protected_zvm_site_name": null,
+          "recovery_zvm_site_name": null,
+          "vpg_type": null,
+          "priority": null,
+          "vpg_description": null,
+          "label_1": null,
+          "label_2": null,
+          "label_3": null,
+          "label_4": null,
+          "label_5": null,
+          "boot_order_meta_group_name": null,
+          "recovery_host_name": null,
+          "recovery_datastore_name": null,
+          "journal_history_unit": null,
+          "journal_history_value": null,
+          "target_rpo_alert_value": null,
+          "target_rpo_alert_unit": null,
+          "test_reminder": null,
+          "journal_datastore_name": null,
+          "journal_size_hard_limit_value": null,
+          "journal_size_hard_limit_unit": null,
+          "journal_size_warning_threshold_value": null,
+          "journal_size_warning_threshold_unit": null,
+          "scratch_journal_datastore_name": null,
+          "scratch_journal_size_hard_limit_value": null,
+          "scratch_journal_size_hard_limit_unit": null,
+          "scratch_journal_size_warning_threshold_value": null,
+          "scratch_journal_size_warning_threshold_unit": null,
+          "enable_wan_traffic_compression": null,
+          "disk_provisioning_override": null,
+          "failover_live_move_network_name": null,
+          "failover_test_network_name": null,
+          "recovery_folder_name": null,
+          "pre_recovery_script_name": null,
+          "pre_recovery_script_parameters": null,
+          "pre_recovery_script_execution_timeout_seconds": null,
+          "post_recovery_script_name": null,
+          "post_recovery_script_parameters": null,
+          "post_recovery_script_execution_timeout_seconds": null
         }
       ]
+    },
+    "vm_replication": {
+      "status": "failed",
+      "messages": [
+        "Table: VM_Replication\n  Table Row ID: 5\n  Column: Boot Order Group Name\n  Input value: 'DB'\n  Error: Valid values are: 'Web Server', 'App Server', 'DB Server'.",
+        "Table: VM_Replication\n  Table Row ID: 6\n  Column: VM Name\n  Input value: 'VM 2'\n  Error: Valid values are: 'Z-VRA-192.168.111.2', 'Microsoft 2022', 'ZVM-Left', 'ZVML-Left', 'Ubuntu 22.4', 'Microsoft 2023'.",
+        "Table: VM_Replication\n  Table Row ID: 6\n  Column: Boot Order Group Name\n  Input value: 'Web Server'\n  Error: Valid values are: 'Higher Tier', 'Lower Tier'."
+      ],
+      "errors": []
     },
     "vm_storage": {
       "status": "passed",
       "records": [
         {
-          "vpg_name": "test1",
+          "vpg_name": "test",
+          "vm_name": "VM 3",
+          "protected_volume_location": "Disk C",
+          "size_gib": 0.0,
+          "recovery_volume_location": null,
+          "recovery_raw_device_name": null,
+          "disk_provisioning_override": null,
+          "volume_sync_type": null
+        },
+        {
+          "vpg_name": "Test2",
           "vm_name": "Microsoft 2022",
           "protected_volume_location": "Disk A",
-          "size_gib": 10,
+          "size_gib": 10.0,
+          "recovery_volume_location": null,
+          "recovery_raw_device_name": null,
+          "disk_provisioning_override": null,
+          "volume_sync_type": null
+        },
+        {
+          "vpg_name": "Test2",
+          "vm_name": "Z-VRA-192.168.111.2",
+          "protected_volume_location": null,
+          "size_gib": null,
           "recovery_volume_location": null,
           "recovery_raw_device_name": null,
           "disk_provisioning_override": null,
@@ -180,33 +362,11 @@
       ]
     },
     "vm_nics": {
-      "status": "passed",
-      "records": [
-        {
-          "vpg_name": "test1",
-          "vm_name": "Microsoft 2022",
-          "nic_name": "NIC 1",
-          "protected_network_name": "VM Network",
-          "failover_live_move_network_name": "Network 3",
-          "failover_live_move_create_new_mac_address": "Yes",
-          "failover_live_move_change_vnic_ip_config": "Yes, Static",
-          "failover_live_move_ip_address": null,
-          "failover_live_move_subnet_mask": null,
-          "failover_live_move_default_gateway": null,
-          "failover_live_move_preferred_dns_server": null,
-          "failover_live_move_alternate_dns_server": null,
-          "failover_live_move_dns_suffix": null,
-          "failover_test_network_name": "Network 3",
-          "failover_test_create_new_mac_address": "No",
-          "failover_test_change_vnic_ip_config": "Yes, DHCP",
-          "failover_test_ip_address": null,
-          "failover_test_subnet_mask": null,
-          "failover_test_default_gateway": null,
-          "failover_test_preferred_dns_server": null,
-          "failover_test_alternate_dns_server": null,
-          "failover_test_dns_suffix": null
-        }
-      ]
+      "status": "failed",
+      "messages": [
+        "Table: VM_NICs\n  Table Row ID: 1\n  Column: NIC Name\n  Input value: 'NIC 1'\n  Error: Valid values are: 'NIC A', 'Nic Veel'."
+      ],
+      "errors": []
     }
   },
   "reference_data": {
@@ -214,33 +374,74 @@
       {
         "site_name": "Left",
         "protected": "Yes",
-        "recovery": "No"
+        "recovery": "Yes"
       },
       {
         "site_name": "Right",
+        "protected": "Yes",
+        "recovery": "Yes"
+      },
+      {
+        "site_name": "DR",
         "protected": "No",
         "recovery": "Yes"
+      },
+      {
+        "site_name": "Prod",
+        "protected": "Yes",
+        "recovery": "No"
+      },
+      {
+        "site_name": "Naam van recovery site die dus lang is",
+        "protected": null,
+        "recovery": null
       }
     ],
     "labels": {
       "scopes": [
-        "Rehost"
+        "Rehost",
+        "Rehost + Protect",
+        "Not in scope"
       ],
       "waves": [
-        "Wave 01"
+        "Wave 01",
+        "Wave 02",
+        "Wave 03",
+        "Wave 04",
+        "Wave 05",
+        "Wave 06",
+        "Wave 07",
+        "Wave 08",
+        "Wave 09",
+        "Wave 10"
       ],
       "application_names": [
-        "Application #1"
+        "Application #1",
+        "Application #2",
+        "Application #3"
       ],
       "application_environments": [
-        "DEV"
+        "DEV",
+        "TST",
+        "ACT",
+        "UAT",
+        "PROD",
+        "TRN"
       ],
       "data_types": [
-        "Database"
+        "Database",
+        "Email",
+        "File share",
+        "Media",
+        "VDI (Non-persistent)",
+        "VDI (Persistent)",
+        "Other",
+        "Non-Reducible"
       ]
     },
     "recovery_scripts": [
-      "MyOnlyRecoveryScript"
+      "MyOnlyRecoveryScript",
+      "AnotherScript"
     ],
     "boot_order_groups": [
       {
@@ -248,17 +449,110 @@
         "meta_group_name": "3-Tier App",
         "group_name": "Web Server",
         "boot_delay_secs": 300.0
+      },
+      {
+        "group_id": 2.0,
+        "meta_group_name": "3-Tier App",
+        "group_name": "App Server",
+        "boot_delay_secs": 60.0
+      },
+      {
+        "group_id": 3.0,
+        "meta_group_name": "3-Tier App",
+        "group_name": "DB Server",
+        "boot_delay_secs": 45.0
+      },
+      {
+        "group_id": 1.0,
+        "meta_group_name": "Two-Tier App",
+        "group_name": "Higher Tier",
+        "boot_delay_secs": 60.0
+      },
+      {
+        "group_id": 2.0,
+        "meta_group_name": "Two-Tier App",
+        "group_name": "Lower Tier",
+        "boot_delay_secs": 60.0
       }
     ],
     "hypervisor": {
       "protected_vms": [
         {
           "ID": 3,
+          "Protected ZVM Site Name": "Right",
+          "VM Name": "VM 2",
+          "CPU Count": null,
+          "Memory (GiB)": null
+        },
+        {
+          "ID": 4,
+          "Protected ZVM Site Name": "Right",
+          "VM Name": "VM 3",
+          "CPU Count": null,
+          "Memory (GiB)": null
+        },
+        {
+          "ID": 5,
+          "Protected ZVM Site Name": "Right",
+          "VM Name": "VM dada",
+          "CPU Count": null,
+          "Memory (GiB)": null
+        },
+        {
+          "ID": 7,
+          "Protected ZVM Site Name": "Left",
+          "VM Name": "Z-VRA-192.168.111.2",
+          "CPU Count": 1,
+          "Memory (GiB)": 3
+        },
+        {
+          "ID": 8,
           "Protected ZVM Site Name": "Left",
           "VM Name": "Microsoft 2022",
+          "CPU Count": 2,
+          "Memory (GiB)": 4
+        },
+        {
+          "ID": 9,
+          "Protected ZVM Site Name": "Left",
+          "VM Name": "ZVM-Left",
+          "CPU Count": 2,
+          "Memory (GiB)": 4
+        },
+        {
+          "ID": 10,
+          "Protected ZVM Site Name": "Left",
+          "VM Name": "ZVML-Left",
+          "CPU Count": 6,
+          "Memory (GiB)": 16
+        },
+        {
+          "ID": 11,
+          "Protected ZVM Site Name": "Left",
+          "VM Name": "Ubuntu 22.4",
+          "CPU Count": 1,
+          "Memory (GiB)": 2
+        },
+        {
+          "ID": 12,
+          "Protected ZVM Site Name": "Prod",
+          "VM Name": "Z-VRA-192.168.111.1",
+          "CPU Count": 1,
+          "Memory (GiB)": 3
+        },
+        {
+          "ID": 13,
+          "Protected ZVM Site Name": "Right",
+          "VM Name": "BLA",
           "CPU Count": null,
-          "Memory (GiB)": null,
-          "VM Identifier": "79e3f102-92c2-4c3a-9783-6367165e8c73.vm-1007"
+          "Memory (GiB)": null
+        },
+        {
+          "ID": 14,
+          "Protected ZVM Site Name": "Left",
+          "VM Name": "Microsoft 2023",
+          "CPU Count": null,
+          "Memory (GiB)": null
         }
       ],
       "protected_vm_volumes": [
@@ -268,8 +562,55 @@
           "VM Name": "Microsoft 2022",
           "Volume Location": "Disk A",
           "Provisioned Size (GiB)": 10,
-          "Disk Identifier": null,
           "Protected ZVM Site Name|VM Name": "Left|Microsoft 2022"
+        },
+        {
+          "ID": 2,
+          "Protected ZVM Site Name": "Left",
+          "VM Name": "Ubuntu 22.4",
+          "Volume Location": "[DS_VM_Left]:Ubuntu 22.4/Ubuntu 22.4.vmdk",
+          "Provisioned Size (GiB)": 16,
+          "Protected ZVM Site Name|VM Name": "Left|Ubuntu 22.4"
+        },
+        {
+          "ID": 3,
+          "Protected ZVM Site Name": "Right",
+          "VM Name": "VM 3",
+          "Volume Location": "Disk C",
+          "Provisioned Size (GiB)": null,
+          "Protected ZVM Site Name|VM Name": "Right|VM 3"
+        },
+        {
+          "ID": 4,
+          "Protected ZVM Site Name": "Right",
+          "VM Name": "VM 3",
+          "Volume Location": "Disk D",
+          "Provisioned Size (GiB)": null,
+          "Protected ZVM Site Name|VM Name": "Right|VM 3"
+        },
+        {
+          "ID": 5,
+          "Protected ZVM Site Name": "Prod",
+          "VM Name": "Z-VRA-192.168.111.1",
+          "Volume Location": "Disk Een",
+          "Provisioned Size (GiB)": 500,
+          "Protected ZVM Site Name|VM Name": "Prod|Z-VRA-192.168.111.1"
+        },
+        {
+          "ID": 6,
+          "Protected ZVM Site Name": "Prod",
+          "VM Name": "Z-VRA-192.168.111.1",
+          "Volume Location": "Disk Twee",
+          "Provisioned Size (GiB)": 750,
+          "Protected ZVM Site Name|VM Name": "Prod|Z-VRA-192.168.111.1"
+        },
+        {
+          "ID": 7,
+          "Protected ZVM Site Name": "Right",
+          "VM Name": "Bla",
+          "Volume Location": "Zachte Disk",
+          "Provisioned Size (GiB)": null,
+          "Protected ZVM Site Name|VM Name": "Right|Bla"
         }
       ],
       "protected_vm_nics": [
@@ -278,19 +619,107 @@
           "Protected ZVM Site Name": "Left",
           "VM Name": "Microsoft 2022",
           "NIC Name": "NIC 1",
-          "Network": "VM Network",
-          "NIC Identifier": null,
+          "Network Name": "VM Network",
           "Protected ZVM Site Name|VM Name": "Left|Microsoft 2022"
+        },
+        {
+          "ID": 2,
+          "Protected ZVM Site Name": "Right",
+          "VM Name": "VM 3",
+          "NIC Name": "NIC A",
+          "Network Name": "MyNetwork #A",
+          "Protected ZVM Site Name|VM Name": "Right|VM 3"
+        },
+        {
+          "ID": 3,
+          "Protected ZVM Site Name": "Left",
+          "VM Name": "Ubuntu 22.4",
+          "NIC Name": "NIC A",
+          "Network Name": "VM network #1",
+          "Protected ZVM Site Name|VM Name": "Left|Ubuntu 22.4"
+        },
+        {
+          "ID": 4,
+          "Protected ZVM Site Name": "Prod",
+          "VM Name": "Z-VRA-192.168.111.1",
+          "NIC Name": "NIC Een",
+          "Network Name": "VM Network",
+          "Protected ZVM Site Name|VM Name": "Prod|Z-VRA-192.168.111.1"
+        },
+        {
+          "ID": 5,
+          "Protected ZVM Site Name": "Left",
+          "VM Name": "Ubuntu 22.4",
+          "NIC Name": "Nic Veel",
+          "Network Name": "Network Veel",
+          "Protected ZVM Site Name|VM Name": "Left|Ubuntu 22.4"
+        },
+        {
+          "ID": 6,
+          "Protected ZVM Site Name": "Left",
+          "VM Name": "Microsoft 2022",
+          "NIC Name": "NIC 2",
+          "Network Name": null,
+          "Protected ZVM Site Name|VM Name": "Left|Microsoft 2022"
+        },
+        {
+          "ID": 7,
+          "Protected ZVM Site Name": "Left",
+          "VM Name": null,
+          "NIC Name": null,
+          "Network Name": null,
+          "Protected ZVM Site Name|VM Name": "Left|"
         }
       ],
       "recovery_hosts": [
         {
           "ID": 1,
-          "Recovery ZVM Site Name": "Right",
+          "Recovery ZVM Site Name": "Left",
           "Host Name": "Host 1",
           "CPU Count": null,
-          "Memory (GiB)": null,
-          "Host Identifier": "12fb5b13-8740-41f9-a76c-2740221b6006.host-18"
+          "Memory (GiB)": null
+        },
+        {
+          "ID": 2,
+          "Recovery ZVM Site Name": "Right",
+          "Host Name": "Host 2",
+          "CPU Count": null,
+          "Memory (GiB)": null
+        },
+        {
+          "ID": 3,
+          "Recovery ZVM Site Name": "Right",
+          "Host Name": "Host 3",
+          "CPU Count": null,
+          "Memory (GiB)": null
+        },
+        {
+          "ID": 4,
+          "Recovery ZVM Site Name": "Left",
+          "Host Name": "Host 4",
+          "CPU Count": null,
+          "Memory (GiB)": null
+        },
+        {
+          "ID": 5,
+          "Recovery ZVM Site Name": "Left",
+          "Host Name": "Cluster",
+          "CPU Count": null,
+          "Memory (GiB)": null
+        },
+        {
+          "ID": 6,
+          "Recovery ZVM Site Name": "Right",
+          "Host Name": "Cluster",
+          "CPU Count": null,
+          "Memory (GiB)": null
+        },
+        {
+          "ID": 7,
+          "Recovery ZVM Site Name": "DR",
+          "Host Name": "Cluster",
+          "CPU Count": 25,
+          "Memory (GiB)": 256
         }
       ],
       "recovery_datastores": [
@@ -298,24 +727,64 @@
           "ID": 1,
           "Recovery ZVM Site Name": "Right",
           "Datastore Name": "Datastore 1",
-          "Size (GiB)": null,
-          "Datastore Identifier": "12fb5b13-8740-41f9-a76c-2740221b6006.datastore-11"
+          "Size (GiB)": null
+        },
+        {
+          "ID": 2,
+          "Recovery ZVM Site Name": "Right",
+          "Datastore Name": "DataStore 2",
+          "Size (GiB)": null
+        },
+        {
+          "ID": 3,
+          "Recovery ZVM Site Name": "Left",
+          "Datastore Name": "DS1",
+          "Size (GiB)": 200
+        },
+        {
+          "ID": 4,
+          "Recovery ZVM Site Name": "Left",
+          "Datastore Name": "DS2",
+          "Size (GiB)": 500
         }
       ],
       "recovery_folders": [
         {
           "ID": 1,
           "Recovery ZVM Site Name": "Right",
-          "Folder Name": "/",
-          "Folder Identifier": null
+          "Folder Name": "/"
+        },
+        {
+          "ID": 2,
+          "Recovery ZVM Site Name": "Right",
+          "Folder Name": "/MyFolder"
+        },
+        {
+          "ID": 3,
+          "Recovery ZVM Site Name": "Left",
+          "Folder Name": "/"
         }
       ],
       "recovery_networks": [
         {
           "ID": 1,
           "Recovery ZVM Site Name": "Right",
-          "Network Name": "Network 3",
-          "Network Identifier": "12fb5b13-8740-41f9-a76c-2740221b6006.network-16"
+          "Network Name": "Network 1"
+        },
+        {
+          "ID": 2,
+          "Recovery ZVM Site Name": "Right",
+          "Network Name": "Network 2"
+        },
+        {
+          "ID": 3,
+          "Recovery ZVM Site Name": "Left",
+          "Network Name": "Network 3"
+        },
+        {
+          "ID": 4,
+          "Recovery ZVM Site Name": "Left",
+          "Network Name": "VM Network"
         }
       ]
     }
@@ -340,7 +809,7 @@
         "unit": "GiB"
       },
       "journal_size_warning": {
-        "value": 115,
+        "value": 112.5,
         "unit": "GiB"
       },
       "scratch_journal_size_hard_limit": {
@@ -351,86 +820,347 @@
         "value": 225,
         "unit": "GiB"
       },
-      "wan_compression": "Yes"
+      "wan_compression": "Yes",
+      "disk_provisioning_override": "As-is",
+      "recovery_folder_name": "/",
+      "volume_sync_type": "Continuous Sync",
+      "pre_recovery_script_execution_timeout_seconds": 300,
+      "post_recovery_script_execution_timeout_seconds": 300,
+      "failover_live_move_create_new_mac_address": "No",
+      "failover_test_create_new_mac_address": "No",
+      "failover_live_move_change_vnic_ip_config": "No",
+      "failover_test_change_vnic_ip_config": "No",
+      "failover_live_move_subnet_mask": "255.255.255.0",
+      "failover_test_subnet_mask": "255.255.254.0",
+      "failover_live_move_default_gateway": "192.168.0.254",
+      "failover_test_default_gateway": "192.168.1.254",
+      "failover_live_move_preferred_dns_server": "1.1.1.1",
+      "failover_test_preferred_dns_server": "2.2.2.2",
+      "failover_live_move_alternate_dns_server": "8.8.8.8",
+      "failover_test_alternate_dns_server": "9.9.9.9",
+      "failover_live_move_dns_suffix": null,
+      "failover_test_dns_suffix": null,
+      "extended_journal_run_at": "03:00:00",
+      "extended_journal_retry_count": 3,
+      "extended_journal_wait_between_retries_minutes": 10
     },
     "recovery_zvm_sites": [
       {
         "ID": 1,
-        "Recovery ZVM Site Name": "Right",
+        "Recovery ZVM Site Name": "Left",
         "VPG Type": "Data Mobility and Migration",
-        "Recovery Host Name": "Host 1",
-        "Recovery Datastore Name": "Datastore 1",
-        "Journal History Unit": "Days",
-        "Test Reminder": "3 Months",
-        "Journal Datastore Name": "Datastore 1",
+        "Recovery Host Name": "Cluster",
+        "Recovery Datastore Name": "DS1",
         "Failover Live / Move Network Name": "Network 3",
         "Failover Test Network Name": "Network 3",
+        "Pre-Recovery Script Name": null,
+        "Post-Recovery Script Name": null,
         "Failover Live / Move - Subnet Mask": "255.255.255.99",
         "Failover Test - Subnet Mask": "255.255.255.100",
+        "Recovery Site Name": "Left"
+      },
+      {
+        "ID": 2,
+        "Recovery ZVM Site Name": null,
+        "VPG Type": null,
+        "Recovery Host Name": "Cluster",
+        "Recovery Datastore Name": "Datastore 1",
+        "Failover Live / Move Network Name": "Network 1",
+        "Failover Test Network Name": "Network 2",
+        "Pre-Recovery Script Name": "MyOnlyRecoveryScript",
+        "Post-Recovery Script Name": "MyOnlyRecoveryScript",
+        "Failover Live / Move - Subnet Mask": null,
+        "Failover Test - Subnet Mask": "255.255.255.100",
+        "Recovery Site Name": "Right"
+      },
+      {
+        "ID": 3,
+        "Recovery ZVM Site Name": "Right",
+        "VPG Type": null,
+        "Recovery Host Name": null,
+        "Recovery Datastore Name": null,
+        "Failover Live / Move Network Name": null,
+        "Failover Test Network Name": null,
+        "Pre-Recovery Script Name": null,
+        "Post-Recovery Script Name": null,
+        "Failover Live / Move - Subnet Mask": null,
+        "Failover Test - Subnet Mask": null,
         "Recovery Site Name": "Right"
       }
     ],
     "vpgs": [
       {
         "ID": 1,
-        "VPG Name": "test1",
-        "Protected ZVM Site Name": "Left",
-        "Recovery ZVM Site Name": "Right",
+        "VPG Name": "test",
+        "Protected ZVM Site Name": "Right",
+        "Recovery ZVM Site Name": "Left",
         "Boot Order Meta Group Name": "3-Tier App",
         "Recovery Host Name": "Host 1",
-        "Recovery Datastore Name": "Datastore 1",
-        "Journal History Value": 30,
+        "Recovery Datastore Name": "DS1",
+        "Journal History Value": 1.0,
         "Journal History Unit": "Days",
-        "Target RPO Alert Value": 5,
+        "Target RPO Alert Value": 5.0,
         "Target RPO Alert Unit": "Minutes",
         "Test Reminder": "3 Months",
-        "Journal Datastore Name": "Datastore 1",
-        "Scratch Journal Datastore Name": "Datastore 1",
+        "Journal Datastore Name": "DS1",
+        "Scratch Journal Datastore Name": "DS1",
         "Failover Live / Move - Network Name": "Network 3",
         "Failover Test Network Name": "Network 3",
         "Recovery Folder Name": "/",
         "Pre-Recovery Script Name": "AnotherScript",
         "Post-Recovery Script Name": "AnotherScript",
+        "Protected Site Name": "Right",
+        "Recovery Site Name": "Left"
+      },
+      {
+        "ID": 2,
+        "VPG Name": "Test2",
+        "Protected ZVM Site Name": "Left",
+        "Recovery ZVM Site Name": "Right",
+        "Boot Order Meta Group Name": "Two-Tier App",
+        "Recovery Host Name": null,
+        "Recovery Datastore Name": "Datastore 1",
+        "Journal History Value": null,
+        "Journal History Unit": null,
+        "Target RPO Alert Value": null,
+        "Target RPO Alert Unit": null,
+        "Test Reminder": null,
+        "Journal Datastore Name": "Datastore 1",
+        "Scratch Journal Datastore Name": "DataStore 2",
+        "Failover Live / Move - Network Name": "Network 1",
+        "Failover Test Network Name": "Network 2",
+        "Recovery Folder Name": "/MyFolder",
+        "Pre-Recovery Script Name": "MyOnlyRecoveryScript",
+        "Post-Recovery Script Name": "MyOnlyRecoveryScript",
+        "Protected Site Name": "Left",
+        "Recovery Site Name": "Right"
+      },
+      {
+        "ID": 3,
+        "VPG Name": "Prod2DR",
+        "Protected ZVM Site Name": "Prod",
+        "Recovery ZVM Site Name": "DR",
+        "Boot Order Meta Group Name": null,
+        "Recovery Host Name": "Cluster",
+        "Recovery Datastore Name": null,
+        "Journal History Value": null,
+        "Journal History Unit": null,
+        "Target RPO Alert Value": null,
+        "Target RPO Alert Unit": null,
+        "Test Reminder": null,
+        "Journal Datastore Name": null,
+        "Scratch Journal Datastore Name": null,
+        "Failover Live / Move - Network Name": null,
+        "Failover Test Network Name": null,
+        "Recovery Folder Name": null,
+        "Pre-Recovery Script Name": null,
+        "Post-Recovery Script Name": null,
+        "Protected Site Name": "Prod",
+        "Recovery Site Name": "DR"
+      },
+      {
+        "ID": 4,
+        "VPG Name": "Lange naam voor een VPG die lang is",
+        "Protected ZVM Site Name": null,
+        "Recovery ZVM Site Name": null,
+        "Boot Order Meta Group Name": null,
+        "Recovery Host Name": null,
+        "Recovery Datastore Name": null,
+        "Journal History Value": null,
+        "Journal History Unit": null,
+        "Target RPO Alert Value": null,
+        "Target RPO Alert Unit": null,
+        "Test Reminder": null,
+        "Journal Datastore Name": null,
+        "Scratch Journal Datastore Name": null,
+        "Failover Live / Move - Network Name": null,
+        "Failover Test Network Name": null,
+        "Recovery Folder Name": null,
+        "Pre-Recovery Script Name": null,
+        "Post-Recovery Script Name": null,
+        "Protected Site Name": "Left",
+        "Recovery Site Name": "Right"
+      },
+      {
+        "ID": 5,
+        "VPG Name": "Name of VPG",
+        "Protected ZVM Site Name": null,
+        "Recovery ZVM Site Name": null,
+        "Boot Order Meta Group Name": null,
+        "Recovery Host Name": null,
+        "Recovery Datastore Name": null,
+        "Journal History Value": null,
+        "Journal History Unit": null,
+        "Target RPO Alert Value": null,
+        "Target RPO Alert Unit": null,
+        "Test Reminder": null,
+        "Journal Datastore Name": null,
+        "Scratch Journal Datastore Name": null,
+        "Failover Live / Move - Network Name": null,
+        "Failover Test Network Name": null,
+        "Recovery Folder Name": null,
+        "Pre-Recovery Script Name": null,
+        "Post-Recovery Script Name": null,
+        "Protected Site Name": "Left",
+        "Recovery Site Name": "Right"
+      },
+      {
+        "ID": 6,
+        "VPG Name": "New VPG",
+        "Protected ZVM Site Name": null,
+        "Recovery ZVM Site Name": null,
+        "Boot Order Meta Group Name": null,
+        "Recovery Host Name": null,
+        "Recovery Datastore Name": null,
+        "Journal History Value": null,
+        "Journal History Unit": null,
+        "Target RPO Alert Value": null,
+        "Target RPO Alert Unit": null,
+        "Test Reminder": null,
+        "Journal Datastore Name": null,
+        "Scratch Journal Datastore Name": null,
+        "Failover Live / Move - Network Name": null,
+        "Failover Test Network Name": null,
+        "Recovery Folder Name": null,
+        "Pre-Recovery Script Name": null,
+        "Post-Recovery Script Name": null,
         "Protected Site Name": "Left",
         "Recovery Site Name": "Right"
       }
     ],
     "vm_replication": [
       {
-        "ID": 2.0,
-        "VPG Name": "test1",
+        "ID": 1,
+        "VPG Name": "Test2",
         "VM Name": "Microsoft 2022",
+        "Boot Order Group Name": "Higher Tier",
+        "Protected Site Name": "Left",
+        "Recovery Site Name": "Right",
+        "Boot Order Meta Group Name": "Two-Tier App"
+      },
+      {
+        "ID": 2,
+        "VPG Name": "test",
+        "VM Name": "VM 3",
+        "Boot Order Group Name": "Web Server",
+        "Protected Site Name": "Right",
+        "Recovery Site Name": "Left",
+        "Boot Order Meta Group Name": "3-Tier App"
+      },
+      {
+        "ID": 3,
+        "VPG Name": "Test2",
+        "VM Name": "ZVML-Left",
+        "Boot Order Group Name": "Lower Tier",
+        "Protected Site Name": "Left",
+        "Recovery Site Name": "Right",
+        "Boot Order Meta Group Name": "Two-Tier App"
+      },
+      {
+        "ID": 4,
+        "VPG Name": "test",
+        "VM Name": "BLA",
+        "Boot Order Group Name": "App Server",
+        "Protected Site Name": "Right",
+        "Recovery Site Name": "Left",
+        "Boot Order Meta Group Name": "3-Tier App"
+      },
+      {
+        "ID": 5,
+        "VPG Name": "test",
+        "VM Name": "VM dada",
+        "Boot Order Group Name": "DB",
+        "Protected Site Name": "Right",
+        "Recovery Site Name": "Left",
+        "Boot Order Meta Group Name": "3-Tier App"
+      },
+      {
+        "ID": 6,
+        "VPG Name": "Test2",
+        "VM Name": "VM 2",
         "Boot Order Group Name": "Web Server",
         "Protected Site Name": "Left",
         "Recovery Site Name": "Right",
-        "Boot Order Meta Group Name": "3-Tier App"
+        "Boot Order Meta Group Name": "Two-Tier App"
       }
     ],
     "vm_storage": [
       {
         "ID": 1,
-        "VPG Name": "test1",
+        "VPG Name": "test",
+        "VM Name": "VM 3",
+        "Protected Volume Location": "Disk C",
+        "Size (GiB)": 0.0,
+        "Protected Site Name": "Right",
+        "Recovery Site Name": "Left",
+        "Protected ZVM Site Name | VM Name": "Right|VM 3"
+      },
+      {
+        "ID": 2,
+        "VPG Name": "Test2",
         "VM Name": "Microsoft 2022",
         "Protected Volume Location": "Disk A",
-        "Size (GiB)": 10,
+        "Size (GiB)": 10.0,
         "Protected Site Name": "Left",
         "Recovery Site Name": "Right",
         "Protected ZVM Site Name | VM Name": "Left|Microsoft 2022"
+      },
+      {
+        "ID": 3,
+        "VPG Name": "Test2",
+        "VM Name": "Z-VRA-192.168.111.2",
+        "Protected Volume Location": null,
+        "Size (GiB)": null,
+        "Protected Site Name": "Left",
+        "Recovery Site Name": "Right",
+        "Protected ZVM Site Name | VM Name": "Left|Z-VRA-192.168.111.2"
       }
     ],
     "vm_nics": [
       {
-        "ID": 2.0,
-        "VPG Name": "test1",
-        "VM Name": "Microsoft 2022",
+        "ID": 1,
+        "VPG Name": "Test2",
+        "VM Name": "Ubuntu 22.4",
         "NIC Name": "NIC 1",
-        "Protected Network Name": "VM Network",
-        "Failover Live / Move - Network Name": "Network 3",
+        "Protected Network Name": null,
+        "Failover Live / Move - Network Name": null,
+        "Failover Live / Move - Create new MAC address": null,
+        "Failover Live / Move - Change vNIC IP Config": null,
+        "Failover Test - Network Name": null,
+        "Failover Test - Create new MAC address": null,
+        "Failover Test - Change vNIC IP Config": null,
+        "Protected Site Name": "Left",
+        "Recovery Site Name": "Right",
+        "Protected Site Name|VM Name": "Left|Ubuntu 22.4"
+      },
+      {
+        "ID": 2,
+        "VPG Name": "test",
+        "VM Name": "VM 3",
+        "NIC Name": "NIC A",
+        "Protected Network Name": "MyNetwork #A",
+        "Failover Live / Move - Network Name": "VM Network",
         "Failover Live / Move - Create new MAC address": "Yes",
         "Failover Live / Move - Change vNIC IP Config": "Yes, Static",
         "Failover Test - Network Name": "Network 3",
         "Failover Test - Create new MAC address": "No",
         "Failover Test - Change vNIC IP Config": "Yes, DHCP",
+        "Protected Site Name": "Right",
+        "Recovery Site Name": "Left",
+        "Protected Site Name|VM Name": "Right|VM 3"
+      },
+      {
+        "ID": 3,
+        "VPG Name": "Test2",
+        "VM Name": "Microsoft 2022",
+        "NIC Name": "NIC 1",
+        "Protected Network Name": "VM Network",
+        "Failover Live / Move - Network Name": null,
+        "Failover Live / Move - Create new MAC address": null,
+        "Failover Live / Move - Change vNIC IP Config": null,
+        "Failover Test - Network Name": null,
+        "Failover Test - Create new MAC address": null,
+        "Failover Test - Change vNIC IP Config": null,
         "Protected Site Name": "Left",
         "Recovery Site Name": "Right",
         "Protected Site Name|VM Name": "Left|Microsoft 2022"

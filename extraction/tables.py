@@ -8,6 +8,7 @@ def extract_sheet_table(
     excel_file: str,
     sheet_name: str,
     required_header: str,
+    table_name: str | None = None,
 ) -> list[dict]:
     raw_df = pd.read_excel(
         excel_file,
@@ -28,8 +29,19 @@ def extract_sheet_table(
     df = df.dropna(how="all")
     df = df.dropna(axis=1, how="all")
 
-    records = df.to_dict(orient="records")
-    return clean_records(records)
+    records = []
+    metadata = []
+    resolved_table_name = table_name or sheet_name
+
+    for index, row in df.iterrows():
+        records.append(row.to_dict())
+        metadata.append({
+            "__sheet_name": sheet_name,
+            "__table_name": resolved_table_name,
+            "__excel_row": header_row_index + index + 2,
+        })
+
+    return clean_records(records, metadata)
 
 
 def find_header_row(df: pd.DataFrame, required_text: str) -> int:
@@ -46,10 +58,13 @@ def find_header_row(df: pd.DataFrame, required_text: str) -> int:
     raise ValueError(f"Could not find header row containing '{required_text}'")
 
 
-def clean_records(records: list[dict]) -> list[dict]:
+def clean_records(
+    records: list[dict],
+    metadata: list[dict] | None = None,
+) -> list[dict]:
     cleaned_records = []
 
-    for record in records:
+    for index, record in enumerate(records):
         cleaned_record = {
             str(key).strip(): clean_value(value)
             for key, value in record.items()
@@ -57,6 +72,14 @@ def clean_records(records: list[dict]) -> list[dict]:
         }
 
         if any(value is not None for value in cleaned_record.values()):
+            if metadata:
+                cleaned_record.update(metadata[index])
+
+            cleaned_record.setdefault(
+                "__table_row_id",
+                cleaned_record.get("ID") or len(cleaned_records) + 1,
+            )
+
             cleaned_records.append(cleaned_record)
 
     return cleaned_records
