@@ -19,7 +19,6 @@ from validation.vpgs import validate_vpgs
 from validation.vm_replication import validate_vm_replication
 from validation.vm_storage import validate_vm_storage
 from validation.vm_nics import validate_vm_nics
-s
 
 EXCEL_FILE = "files/VCA Data - 0.106.xlsx"
 OUTPUT_FILE = "outputs/vca_check_dump.json"
@@ -168,6 +167,7 @@ def write_zerto_json_dump(
     write_zerto_api_payload(
         resolved_api_candidate_payloads,
         zerto_data["summary"]["boot_order_groups"],
+        validation_status,
     )
 
     return output_path
@@ -176,6 +176,7 @@ def write_zerto_json_dump(
 def write_zerto_api_payload(
     resolved_api_candidate_payloads: dict,
     boot_order_groups: list[dict],
+    validation_status: str,
     output_file: str = API_PAYLOAD_OUTPUT_FILE,
 ) -> Path:
     output_path = Path(output_file)
@@ -186,6 +187,7 @@ def write_zerto_api_payload(
                 build_zerto_api_payload(
                     resolved_api_candidate_payloads,
                     boot_order_groups,
+                    validation_status,
                 ),
             ),
             indent=2,
@@ -239,6 +241,7 @@ def build_resolved_api_candidate_payloads(
 def build_zerto_api_payload(
     resolved_api_candidate_payloads: dict,
     boot_order_groups: list[dict],
+    validation_status: str,
 ) -> dict:
     vpgs = resolved_api_candidate_payloads["vpgs"]
     vm_replication = resolved_api_candidate_payloads["vm_replication"]
@@ -246,6 +249,7 @@ def build_zerto_api_payload(
     vm_nics = resolved_api_candidate_payloads["vm_nics"]
 
     return {
+        "validationStatus": validation_status,
         "vpgSettings": [
             build_vpg_payload(
                 row,
