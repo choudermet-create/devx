@@ -1,3 +1,6 @@
+import logging
+from pathlib import Path
+
 from pydantic import ValidationError
 
 from ingestion.reader import load_excel_workbook, validate_required_sheets
@@ -16,17 +19,27 @@ from validation.vm_replication import validate_vm_replication
 from validation.vm_storage import validate_vm_storage
 from validation.vm_nics import validate_vm_nics
 from validation.error_formatting import WorkbookValidationError, format_validation_errors
-from generate_zerto_json import generate_zerto_json
+from json_output import API_PAYLOAD_OUTPUT_FILE, make_json_safe, write_zerto_json_dump
+
+
+LOG_FILE = Path("outputs/vca_check.log")
 
 
 def main():
-    excel_file = "files/VCA Data - 0.106.xlsx"
+    setup_logging()
 
+    excel_file = "files/VCA Data - 0.106.xlsx"
+    logging.info("Starting VCA workbook validation run")
+    logging.info("Source workbook: %s", excel_file)
+
+    logging.info("Loading workbook")
     workbook = load_excel_workbook(excel_file)
     validate_required_sheets(workbook)
 
     print("\nWorkbook loaded successfully")
+    logging.info("Workbook loaded successfully")
 
+    logging.info("Extracting workbook data")
     zerto_data = extract_zerto_data(excel_file)
     hypervisor_data = extract_hypervisor_data(excel_file)
     vpg_settings = extract_default_vpg_settings(excel_file, print_output=False)
@@ -50,124 +63,232 @@ def main():
         "VPG Name",
         table_name="VM_NICs",
     )
+    extended_journal = extract_sheet_table(
+        excel_file,
+        "Extended Journal",
+        "VPG Name",
+        table_name="Extended_Journal_Copies",
+    )
+    log_extraction_summary(
+        zerto_data,
+        hypervisor_data,
+        recovery_zvm_sites,
+        vpgs,
+        vm_replication,
+        vm_storage,
+        vm_nics,
+    )
+    validations = {}
 
     try:
-        validate_zerto_data(zerto_data)
+        result = validate_zerto_data(zerto_data)
+        validations["zerto_data"] = validation_passed(result)
         print("\nZerto Data validation passed")
         print("----------------------------")
+        log_validation_passed("Zerto Data")
 
     except WorkbookValidationError as error:
         print("\nZerto Data validation failed")
         print("----------------------------")
         print_validation_messages(error.messages)
+        log_validation_failed("Zerto Data", error.messages)
+        validations["zerto_data"] = validation_failed(error.messages)
 
     try:
-        validate_hypervisor_data(hypervisor_data)
+        result = validate_hypervisor_data(hypervisor_data)
+        validations["hypervisor_data"] = validation_passed(result)
         print("\nHypervisor Data validation passed")
         print("---------------------------------")
+        log_validation_passed("Hypervisor Data")
 
     except WorkbookValidationError as error:
         print("\nHypervisor Data validation failed")
         print("---------------------------------")
         print_validation_messages(error.messages)
+        log_validation_failed("Hypervisor Data", error.messages)
+        validations["hypervisor_data"] = validation_failed(error.messages)
 
     except ValidationError as error:
+        messages = format_validation_errors(error)
         print("\nHypervisor Data validation failed")
         print("---------------------------------")
-        print_validation_messages(format_validation_errors(error))
+        print_validation_messages(messages)
+        log_validation_failed("Hypervisor Data", messages)
+        validations["hypervisor_data"] = validation_failed(
+            messages,
+            error.errors(include_url=False),
+        )
 
     except ValueError as error:
         print("\nHypervisor Data validation failed")
         print("---------------------------------")
         print(f"- {error}")
+        log_validation_failed("Hypervisor Data", [str(error)])
+        validations["hypervisor_data"] = validation_failed([str(error)])
 
     try:
-        validate_default_vpg_settings(vpg_settings)
+        result = validate_default_vpg_settings(vpg_settings)
+        validations["default_vpg_settings"] = validation_passed(result)
         print("\nDefault VPG Settings validation passed")
         print("--------------------------------------")
+        log_validation_passed("Default VPG Settings")
 
     except ValidationError as error:
+        messages = format_validation_errors(error)
         print("\nDefault VPG Settings validation failed")
         print("--------------------------------------")
-        print_validation_messages(format_validation_errors(error))
+        print_validation_messages(messages)
+        log_validation_failed("Default VPG Settings", messages)
+        validations["default_vpg_settings"] = validation_failed(
+            messages,
+            error.errors(include_url=False),
+        )
 
     try:
-        validate_recovery_zvm_sites(recovery_zvm_sites)
+        result = validate_recovery_zvm_sites(recovery_zvm_sites)
+        validations["recovery_zvm_sites"] = validation_passed(result)
         print("\nRecovery ZVM Sites validation passed")
         print("------------------------------------")
+        log_validation_passed("Recovery ZVM Sites")
 
     except WorkbookValidationError as error:
         print("\nRecovery ZVM Sites validation failed")
         print("------------------------------------")
         print_validation_messages(error.messages)
+        log_validation_failed("Recovery ZVM Sites", error.messages)
+        validations["recovery_zvm_sites"] = validation_failed(error.messages)
 
     except ValidationError as error:
+        messages = format_validation_errors(error)
         print("\nRecovery ZVM Sites validation failed")
         print("------------------------------------")
-        print_validation_messages(format_validation_errors(error))
+        print_validation_messages(messages)
+        log_validation_failed("Recovery ZVM Sites", messages)
+        validations["recovery_zvm_sites"] = validation_failed(
+            messages,
+            error.errors(include_url=False),
+        )
 
     try:
-        validate_vpgs(vpgs)
+        result = validate_vpgs(vpgs)
+        validations["vpgs"] = validation_passed(result)
         print("\nVPGs validation passed")
         print("----------------------")
+        log_validation_passed("VPGs")
 
     except WorkbookValidationError as error:
         print("\nVPGs validation failed")
         print("----------------------")
         print_validation_messages(error.messages)
+        log_validation_failed("VPGs", error.messages)
+        validations["vpgs"] = validation_failed(error.messages)
 
     except ValidationError as error:
+        messages = format_validation_errors(error)
         print("\nVPGs validation failed")
         print("----------------------")
-        print_validation_messages(format_validation_errors(error))
+        print_validation_messages(messages)
+        log_validation_failed("VPGs", messages)
+        validations["vpgs"] = validation_failed(
+            messages,
+            error.errors(include_url=False),
+        )
 
     try:
-        validate_vm_replication(vm_replication)
+        result = validate_vm_replication(vm_replication)
+        validations["vm_replication"] = validation_passed(result)
         print("\nVM Replication validation passed")
         print("--------------------------------")
+        log_validation_passed("VM Replication")
 
     except WorkbookValidationError as error:
         print("\nVM Replication validation failed")
         print("--------------------------------")
         print_validation_messages(error.messages)
+        log_validation_failed("VM Replication", error.messages)
+        validations["vm_replication"] = validation_failed(error.messages)
 
     except ValidationError as error:
+        messages = format_validation_errors(error)
         print("\nVM Replication validation failed")
         print("--------------------------------")
-        print_validation_messages(format_validation_errors(error))
+        print_validation_messages(messages)
+        log_validation_failed("VM Replication", messages)
+        validations["vm_replication"] = validation_failed(
+            messages,
+            error.errors(include_url=False),
+        )
 
     try:
-        validate_vm_storage(vm_storage)
+        result = validate_vm_storage(vm_storage)
+        validations["vm_storage"] = validation_passed(result)
         print("\nVM Storage validation passed")
         print("----------------------------")
+        log_validation_passed("VM Storage")
 
     except WorkbookValidationError as error:
         print("\nVM Storage validation failed")
         print("----------------------------")
         print_validation_messages(error.messages)
+        log_validation_failed("VM Storage", error.messages)
+        validations["vm_storage"] = validation_failed(error.messages)
 
     except ValidationError as error:
+        messages = format_validation_errors(error)
         print("\nVM Storage validation failed")
         print("----------------------------")
-        print_validation_messages(format_validation_errors(error))
+        print_validation_messages(messages)
+        log_validation_failed("VM Storage", messages)
+        validations["vm_storage"] = validation_failed(
+            messages,
+            error.errors(include_url=False),
+        )
 
     try:
-        validate_vm_nics(vm_nics)
+        result = validate_vm_nics(vm_nics)
+        validations["vm_nics"] = validation_passed(result)
         print("\nVM NICs validation passed")
         print("-------------------------")
+        log_validation_passed("VM NICs")
 
     except WorkbookValidationError as error:
         print("\nVM NICs validation failed")
         print("-------------------------")
         print_validation_messages(error.messages)
+        log_validation_failed("VM NICs", error.messages)
+        validations["vm_nics"] = validation_failed(error.messages)
 
     except ValidationError as error:
+        messages = format_validation_errors(error)
         print("\nVM NICs validation failed")
         print("-------------------------")
-        print_validation_messages(format_validation_errors(error))
+        print_validation_messages(messages)
+        log_validation_failed("VM NICs", messages)
+        validations["vm_nics"] = validation_failed(
+            messages,
+            error.errors(include_url=False),
+        )
 
-    output_path = generate_zerto_json(excel_file)
+    logging.info("Generating JSON output")
+    output_path = write_zerto_json_dump(
+        excel_file=excel_file,
+        zerto_data=zerto_data,
+        hypervisor_data=hypervisor_data,
+        default_vpg_settings=vpg_settings,
+        recovery_zvm_sites=recovery_zvm_sites,
+        vpgs=vpgs,
+        vm_replication=vm_replication,
+        vm_storage=vm_storage,
+        vm_nics=vm_nics,
+        extended_journal=extended_journal,
+        validations=validations,
+    )
     print(f"\nJSON output written to {output_path}")
+    print(f"Zerto API payload written to {API_PAYLOAD_OUTPUT_FILE}")
+    logging.info("JSON output written to %s", output_path)
+    logging.info("Zerto API payload written to %s", API_PAYLOAD_OUTPUT_FILE)
+    logging.info("Run complete")
+    print(f"Detailed log written to {LOG_FILE}")
 
 
 def print_zerto_summary(summary: dict) -> None:
@@ -269,6 +390,63 @@ def print_topic_heading(title: str) -> None:
     print(f"\n{title}\n")
 
 
+def setup_logging() -> None:
+    LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
+    logging.basicConfig(
+        filename=LOG_FILE,
+        filemode="a",
+        level=logging.INFO,
+        format="%(asctime)s %(levelname)s %(message)s",
+    )
+    logging.info("")
+    logging.info("============================================================")
+
+
+def log_extraction_summary(
+    zerto_data: dict,
+    hypervisor_data: dict,
+    recovery_zvm_sites: list,
+    vpgs: list,
+    vm_replication: list,
+    vm_storage: list,
+    vm_nics: list,
+) -> None:
+    logging.info("Extraction complete")
+    logging.info(
+        "Zerto Data: %s sites, %s recovery scripts, %s boot order groups",
+        len(zerto_data["summary"]["zvm_sites"]),
+        len(zerto_data["summary"]["recovery_scripts"]),
+        len(zerto_data["summary"]["boot_order_groups"]),
+    )
+    logging.info(
+        "Hypervisor Data: %s protected VMs, %s volumes, %s NICs, "
+        "%s recovery hosts, %s datastores, %s folders, %s networks",
+        len(hypervisor_data["protected_vms"]),
+        len(hypervisor_data["protected_vm_volumes"]),
+        len(hypervisor_data["protected_vm_nics"]),
+        len(hypervisor_data["recovery_hosts"]),
+        len(hypervisor_data["recovery_datastores"]),
+        len(hypervisor_data["recovery_folders"]),
+        len(hypervisor_data["recovery_networks"]),
+    )
+    logging.info("Recovery ZVM Sites rows: %s", len(recovery_zvm_sites))
+    logging.info("VPG rows: %s", len(vpgs))
+    logging.info("VM Replication rows: %s", len(vm_replication))
+    logging.info("VM Storage rows: %s", len(vm_storage))
+    logging.info("VM NIC rows: %s", len(vm_nics))
+
+
+def log_validation_passed(section_name: str) -> None:
+    logging.info("%s validation passed", section_name)
+
+
+def log_validation_failed(section_name: str, messages: list[str]) -> None:
+    logging.warning("%s validation failed with %s error(s)", section_name, len(messages))
+
+    for message in messages:
+        logging.warning("%s validation error:\n%s", section_name, message)
+
+
 def print_named_list(label: str, values: list) -> None:
     print(f"- {label}:")
 
@@ -288,6 +466,21 @@ def print_validation_messages(messages: list[str]) -> None:
         if index > 0:
             print()
         print(f"- {message}")
+
+
+def validation_passed(result) -> dict:
+    return {
+        "status": "passed",
+        "records": make_json_safe(result),
+    }
+
+
+def validation_failed(messages: list[str], errors: list | None = None) -> dict:
+    return {
+        "status": "failed",
+        "messages": messages,
+        "errors": errors or [],
+    }
 
 
 def print_hypervisor_validation(data: dict) -> None:

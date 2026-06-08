@@ -62,11 +62,63 @@ Boot order
 
 
 
+17 June - Wed - Welcome day - 5:30 to 7:00 
+
+- frist preloved session 17th june - becs we may not be intrested park walled 
+- ⁠sports kit testing 17th June 
+
+24th June - Wed - Transition day - all day 
+
+- Pre-Loved Uniform Shop from 3.30pm - 4.30pm - transition day - 24th June 
+- ⁠⁠submit transition day RSVP >>>>>>> Done 
+
+10th July - Fri - Welcome Picnic - 3:45 to 5:30 pm 
+ 
+- Selling hoodies 
+- RSVP >>>>>>>>> Done 
+
+TTD 
+
+- Get a notepad and pens 
+- music lessions 
+- Summer reading challenge 
 
 
+Q
+- where to buy brand new school uniform 
+- transition day agreed point who is going to give us the point 
+- what is ICT inductions on the first day of school on 3rd sep 
 
 
+======================================================================
 
+Rename the JSON output to an honest handoff name like vca_check_dump.json.
+
+Keep validation_status at the top so the API program can stop if it is not passed.
+
+Resolve workbook defaults before dumping so blank Excel fields become effective values.
+
+Shape the JSON around future creation objects instead of raw workbook tabs.
+
+Keep literal names, but always include enough context around them.
+
+Add identifier placeholders like "id": null for fields the API program must resolve.
+
+Separate reference data from objects-to-create data.
+
+Add a clear creation order for the API team.
+
+Add source traceability with sheet, table, and table row ID.
+
+Add a name-resolution policy that says not found and multiple matches must fail.
+
+Create a JSON contract document explaining every field.
+
+Create one golden passing workbook and JSON dump as the API team’s test fixture.
+
+Add a contract version at the top of the JSON.
+
+Keep raw extracted workbook data only as debug/reference, not as the main API handoff section.
 
 
 

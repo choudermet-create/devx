@@ -1,0 +1,246 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2759
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww25400\viewh14820\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 1. Zerto Data - Zerto_Data_ZVM_Site_Names: ZVM Site Name must be unique.\
+2. Zerto Data - Zerto_Data_ZVM_Site_Names: Protected? must be Yes or No.\
+3. Zerto Data - Zerto_Data_ZVM_Site_Names: Recovery? must be Yes or No.\
+4. Zerto Data - Zerto_Data_ZVM_Site_Names: each site must be Protected and/or Recovery; at least one of Protected? or Recovery? must be Yes.\
+5. Zerto Data - Zerto_Data_Label_1: Label 1 values must be unique.\
+6. Zerto Data - Zerto_Data_Label_2: Label 2 values must be unique.\
+7. Zerto Data - Zerto_Data_Label_3: Label 3 values must be unique.\
+8. Zerto Data - Zerto_Data_Label_4: Label 4 values must be unique.\
+9. Zerto Data - Zerto_Data_Label_5: Label 5 values must be unique.\
+10. Zerto Data - Zerto_Data_Boot_Order_Groups: Meta Group Name + Group Name combination must be unique.\
+11. Zerto Data - Zerto_Data_Boot_Order_Groups: Boot Delay (Secs) must be between 1 and 999.\
+12. Hypervisor Data - Hypervisor_Data_Protected_ZVM_VMs: Protected ZVM Site Name must be one of the protected ZVM sites from Zerto Data.\
+13. Hypervisor Data - Hypervisor_Data_Protected_ZVM_VMs: VM Name must be unique per Protected ZVM Site Name.\
+14. Hypervisor Data - Hypervisor_Data_Protected_ZVM_VMs: CPU Count, if provided, must be between 1 and 256.\
+15. Hypervisor Data - Hypervisor_Data_Protected_ZVM_VMs: Memory (GiB), if provided, must be between 1 and 4096.\
+16. Hypervisor Data - Hypervisor_Data_Protected_ZVM_VM_Volumes: Protected ZVM Site Name must be one of the protected ZVM sites from Zerto Data.\
+17. Hypervisor Data - Hypervisor_Data_Protected_ZVM_VM_Volumes: VM Name must belong to the selected Protected ZVM Site Name.\
+18. Hypervisor Data - Hypervisor_Data_Protected_ZVM_VM_Volumes: Protected ZVM Site Name + VM Name + Volume Location combination must be unique.\
+19. Hypervisor Data - Hypervisor_Data_Protected_ZVM_VM_Volumes: Provisioned Size (GiB), if provided, must be between 1 and 65536.\
+20. Hypervisor Data - Hypervisor_Data_Protected_ZVM_VM_NICs: Protected ZVM Site Name must be one of the protected ZVM sites from Zerto Data.\
+21. Hypervisor Data - Hypervisor_Data_Protected_ZVM_VM_NICs: VM Name must belong to the selected Protected ZVM Site Name.\
+22. Hypervisor Data - Hypervisor_Data_Protected_ZVM_VM_NICs: Protected ZVM Site Name + VM Name + NIC Name combination must be unique.\
+23. Hypervisor Data - Hypervisor_Data_Recovery_ZVM_Hosts: Recovery ZVM Site Name must be one of the recovery ZVM sites from Zerto Data.\
+24. Hypervisor Data - Hypervisor_Data_Recovery_ZVM_Hosts: Recovery ZVM Site Name + Host Name combination must be unique.\
+25. Hypervisor Data - Hypervisor_Data_Recovery_ZVM_Hosts: CPU Count, if provided, must be between 1 and 256.\
+26. Hypervisor Data - Hypervisor_Data_Recovery_ZVM_Hosts: Memory (GiB), if provided, must be between 1 and 4096.\
+27. Hypervisor Data - Hypervisor_Data_Recovery_ZVM_Datastores: Recovery ZVM Site Name must be one of the recovery ZVM sites from Zerto Data.\
+28. Hypervisor Data - Hypervisor_Data_Recovery_ZVM_Datastores: Recovery ZVM Site Name + Datastore Name combination must be unique.\
+29. Hypervisor Data - Hypervisor_Data_Recovery_ZVM_Datastores: Size (GiB), if provided, must be between 1 and 65536.\
+30. Hypervisor Data - Hypervisor_Data_Recovery_ZVM_Folders: Recovery ZVM Site Name must be one of the recovery ZVM sites from Zerto Data.\
+31. Hypervisor Data - Hypervisor_Data_Recovery_ZVM_Folders: Recovery ZVM Site Name + Folder Name combination must be unique.\
+32. Hypervisor Data - Hypervisor_Data_Recovery_ZVM_Networks: Recovery ZVM Site Name must be one of the recovery ZVM sites from Zerto Data.\
+33. Hypervisor Data - Hypervisor_Data_Recovery_ZVM_Networks: Recovery ZVM Site Name + Network Name combination must be unique.\
+34. Default VPG Settings: Protected Site must be one of the protected ZVM sites from Zerto Data.\
+35. Default VPG Settings: Recovery Site must be one of the recovery ZVM sites from Zerto Data.\
+36. Default VPG Settings: VPG Type must be one of: Remote DR and Continuous Backup, Cyber Recovery, Local Continuous Backup, Data Mobility and Migration.\
+37. Default VPG Settings: Priority must be one of: Low, Medium, High.\
+38. Default VPG Settings: Journal History Value/Unit must be provided together.\
+39. Default VPG Settings: Journal History Unit must be Hours or Days.\
+40. Default VPG Settings: Journal History Value must be 1-30 when Unit is Days.\
+41. Default VPG Settings: Journal History Value must be 1-720 when Unit is Hours.\
+42. Default VPG Settings: Target RPO Alert Value/Unit must be provided together.\
+43. Default VPG Settings: Target RPO Alert Unit must be Seconds, Minutes, or Hours.\
+44. Default VPG Settings: Target RPO Alert Value must be 1-2592000 when Unit is Seconds.\
+45. Default VPG Settings: Target RPO Alert Value must be 1-43200 when Unit is Minutes.\
+46. Default VPG Settings: Target RPO Alert Value must be 1-720 when Unit is Hours.\
+47. Default VPG Settings: Test Reminder must be one of: None, 3 Months, 6 Months, 9 Months, 12 Months.\
+48. Default VPG Settings: Journal Size Hard Limit Unit must be GiB, %, or Unlimited.\
+49. Default VPG Settings: Journal Size Hard Limit Value must be 10-99999 when Unit is GiB.\
+50. Default VPG Settings: Journal Size Hard Limit Value must be 1-1000 when Unit is %.\
+51. Default VPG Settings: Journal Size Hard Limit Value must be blank when Unit is Unlimited.\
+52. Default VPG Settings: Journal Size Warning Threshold Unit must be GiB, %, or Unlimited.\
+53. Default VPG Settings: Journal Size Warning Threshold Value must be 10-99999 when Unit is GiB.\
+54. Default VPG Settings: Journal Size Warning Threshold Value must be 1-1000 when Unit is %.\
+55. Default VPG Settings: Journal Size Warning Threshold Value must be blank when Unit is Unlimited.\
+56. Default VPG Settings: Scratch Journal Size Hard Limit Unit must be GiB, %, or Unlimited.\
+57. Default VPG Settings: Scratch Journal Size Hard Limit Value must be 10-99999 when Unit is GiB.\
+58. Default VPG Settings: Scratch Journal Size Hard Limit Value must be 1-1000 when Unit is %.\
+59. Default VPG Settings: Scratch Journal Size Hard Limit Value must be blank when Unit is Unlimited.\
+60. Default VPG Settings: Scratch Journal Size Warning Threshold Unit must be GiB, %, or Unlimited.\
+61. Default VPG Settings: Scratch Journal Size Warning Threshold Value must be 10-99999 when Unit is GiB.\
+62. Default VPG Settings: Scratch Journal Size Warning Threshold Value must be 1-1000 when Unit is %.\
+63. Default VPG Settings: Scratch Journal Size Warning Threshold Value must be blank when Unit is Unlimited.\
+64. Default VPG Settings: Enable WAN Traffic Compression must be Yes or No.\
+65. Default VPG Settings: Disk Provisioning Override must be As-is, Thin, or Thick.\
+66. Default VPG Settings: Recovery Folder Name must be one of the recovery folders from Hypervisor Data.\
+67. Default VPG Settings: Volume Sync Type must be Continuous Sync, Initial Sync Only, or No Sync (Empty Disk).\
+68. Default VPG Settings: Pre-Recovery Script Execution Timeout (Seconds) must be between 300 and 6000.\
+69. Default VPG Settings: Post-Recovery Script Execution Timeout (Seconds) must be between 300 and 6000.\
+70. Default VPG Settings: Failover Live / Move - Create new MAC address must be Yes or No.\
+71. Default VPG Settings: Failover Live / Move - Change vNIC IP Config must be No, Yes, DHCP, or Yes, Static.\
+72. Default VPG Settings: Failover Live / Move - Subnet Mask is currently mandatory.\
+73. Default VPG Settings: Failover Live / Move - Default Gateway is currently mandatory.\
+74. Default VPG Settings: Failover Live / Move - Preferred DNS Server is currently mandatory.\
+75. Default VPG Settings: Failover Live / Move - Alternate DNS Server is currently mandatory.\
+76. Default VPG Settings: Failover Live / Move - DNS Suffix is currently mandatory.\
+77. Default VPG Settings: Failover Test - Create new MAC address must be Yes or No.\
+78. Default VPG Settings: Failover Test - Change vNIC IP Config must be No, Yes, DHCP, or Yes, Static.\
+79. Default VPG Settings: Failover Test - Subnet Mask is currently mandatory.\
+80. Default VPG Settings: Failover Test - Default Gateway is currently mandatory.\
+81. Default VPG Settings: Failover Test - Preferred DNS Server is currently mandatory.\
+82. Default VPG Settings: Failover Test - Alternate DNS Server is currently mandatory.\
+83. Default VPG Settings: Failover Test - DNS Suffix is currently mandatory.\
+84. Default VPG Settings: Extended Journal - Run at (HH:MI), if provided, must be a valid time.\
+85. Default VPG Settings: Extended Journal - Number of automatic retry commands, if provided, must be between 0 and 10.\
+86. Default VPG Settings: Extended Journal - Wait time between retries (minutes), if provided, must be between 10 and 60.\
+87. Recovery ZVM Sites: Recovery ZVM Site Name must be one of the recovery ZVM sites from Zerto Data.\
+88. Recovery ZVM Sites: Recovery ZVM Site Name must be unique.\
+89. Recovery ZVM Sites: VPG Type must be one of: Remote DR and Continuous Backup, Cyber Recovery, Local Continuous Backup, Data Mobility and Migration.\
+90. Recovery ZVM Sites: Priority must be Low, Medium, or High.\
+91. Recovery ZVM Sites: Recovery Host Name must be one of the hosts for that Recovery ZVM Site Name.\
+92. Recovery ZVM Sites: Recovery Datastore Name must be one of the datastores for that Recovery ZVM Site Name.\
+93. Recovery ZVM Sites: Journal History Value/Unit must be provided together.\
+94. Recovery ZVM Sites: Journal History Unit must be Hours or Days.\
+95. Recovery ZVM Sites: Journal History Value must be 1-30 when Unit is Days.\
+96. Recovery ZVM Sites: Journal History Value must be 1-720 when Unit is Hours.\
+97. Recovery ZVM Sites: Target RPO Alert Value/Unit must be provided together.\
+98. Recovery ZVM Sites: Target RPO Alert Unit must be Seconds, Minutes, or Hours.\
+99. Recovery ZVM Sites: Target RPO Alert Value must be 1-2592000 when Unit is Seconds.\
+100. Recovery ZVM Sites: Target RPO Alert Value must be 1-43200 when Unit is Minutes.\
+101. Recovery ZVM Sites: Target RPO Alert Value must be 1-720 when Unit is Hours.\
+102. Recovery ZVM Sites: Test Reminder must be one of: None, 3 Months, 6 Months, 9 Months, 12 Months.\
+103. Recovery ZVM Sites: Journal Datastore Name must be one of the datastores for that Recovery ZVM Site Name.\
+104. Recovery ZVM Sites: Journal Size Hard Limit Unit must be GiB, %, or Unlimited.\
+105. Recovery ZVM Sites: Journal Size Hard Limit Value must be 10-99999 when Unit is GiB.\
+106. Recovery ZVM Sites: Journal Size Hard Limit Value must be 1-1000 when Unit is %.\
+107. Recovery ZVM Sites: Journal Size Hard Limit Value must be blank when Unit is Unlimited.\
+108. Recovery ZVM Sites: Journal Size Warning Threshold Unit must be GiB, %, or Unlimited.\
+109. Recovery ZVM Sites: Journal Size Warning Threshold Value must be 10-99999 when Unit is GiB.\
+110. Recovery ZVM Sites: Journal Size Warning Threshold Value must be 1-1000 when Unit is %.\
+111. Recovery ZVM Sites: Journal Size Warning Threshold Value must be blank when Unit is Unlimited.\
+112. Recovery ZVM Sites: Scratch Journal Datastore Name must be one of the datastores for that Recovery ZVM Site Name.\
+113. Recovery ZVM Sites: Scratch Journal Size Hard Limit Unit must be GiB, %, or Unlimited.\
+114. Recovery ZVM Sites: Scratch Journal Size Hard Limit Value must be 10-99999 when Unit is GiB.\
+115. Recovery ZVM Sites: Scratch Journal Size Hard Limit Value must be 1-1000 when Unit is %.\
+116. Recovery ZVM Sites: Scratch Journal Size Hard Limit Value must be blank when Unit is Unlimited.\
+117. Recovery ZVM Sites: Scratch Journal Size Warning Threshold Unit must be GiB, %, or Unlimited.\
+118. Recovery ZVM Sites: Scratch Journal Size Warning Threshold Value must be 10-99999 when Unit is GiB.\
+119. Recovery ZVM Sites: Scratch Journal Size Warning Threshold Value must be 1-1000 when Unit is %.\
+120. Recovery ZVM Sites: Scratch Journal Size Warning Threshold Value must be blank when Unit is Unlimited.\
+121. Recovery ZVM Sites: Enable WAN Traffic Compression must be Yes or No.\
+122. Recovery ZVM Sites: Disk Provisioning Override must be As-is, Thin, or Thick.\
+123. Recovery ZVM Sites: Failover Live / Move Network Name must be one of the networks for that Recovery ZVM Site Name.\
+124. Recovery ZVM Sites: Failover Test Network Name must be one of the networks for that Recovery ZVM Site Name.\
+125. Recovery ZVM Sites: Recovery Folder Name must be one of the folders for that Recovery ZVM Site Name.\
+126. Recovery ZVM Sites: Pre-Recovery Script Name, if provided, must be one of the recovery scripts from Zerto Data.\
+127. Recovery ZVM Sites: Pre-Recovery Script Execution Timeout (Seconds), if provided, must be between 300 and 6000.\
+128. Recovery ZVM Sites: Post-Recovery Script Name, if provided, must be one of the recovery scripts from Zerto Data.\
+129. Recovery ZVM Sites: Post-Recovery Script Execution Timeout (Seconds), if provided, must be between 300 and 6000.\
+130. Recovery ZVM Sites: Failover Live / Move - Create new MAC address must be Yes or No.\
+131. Recovery ZVM Sites: Failover Live / Move - Change vNIC IP Config must be No, Yes, DHCP, or Yes, Static.\
+132. Recovery ZVM Sites: Failover Test - Create new MAC address must be Yes or No.\
+133. Recovery ZVM Sites: Failover Test - Change vNIC IP Config must be No, Yes, DHCP, or Yes, Static.\
+134. VPGs: VPG Name must be unique.\
+135. VPGs: Protected ZVM Site Name, if provided, must be one of the protected ZVM sites from Zerto Data.\
+136. VPGs: Recovery ZVM Site Name, if provided, must be one of the recovery ZVM sites from Zerto Data.\
+137. VPGs: VPG Type must be one of: Remote DR and Continuous Backup, Cyber Recovery, Local Continuous Backup, Data Mobility and Migration.\
+138. VPGs: Priority must be Low, Medium, or High.\
+139. VPGs: Label 1 must be one of the Label 1 values from Zerto Data.\
+140. VPGs: Label 2 must be one of the Label 2 values from Zerto Data.\
+141. VPGs: Label 3 must be one of the Label 3 values from Zerto Data.\
+142. VPGs: Label 4 must be one of the Label 4 values from Zerto Data.\
+143. VPGs: Label 5 must be one of the Label 5 values from Zerto Data.\
+144. VPGs: Boot Order Meta Group Name must be one of the boot order meta groups from Zerto Data.\
+145. VPGs: Recovery Host Name must be one of the hosts for that VPG\'92s Recovery ZVM Site Name.\
+146. VPGs: Recovery Datastore Name must be one of the datastores for that VPG\'92s Recovery ZVM Site Name.\
+147. VPGs: Journal History Value/Unit must be provided together.\
+148. VPGs: Journal History Unit must be Hours or Days.\
+149. VPGs: Journal History Value must be 1-30 when Unit is Days.\
+150. VPGs: Journal History Value must be 1-720 when Unit is Hours.\
+151. VPGs: Target RPO Alert Value/Unit must be provided together.\
+152. VPGs: Target RPO Alert Unit must be Seconds, Minutes, or Hours.\
+153. VPGs: Target RPO Alert Value must be 1-2592000 when Unit is Seconds.\
+154. VPGs: Target RPO Alert Value must be 1-43200 when Unit is Minutes.\
+155. VPGs: Target RPO Alert Value must be 1-720 when Unit is Hours.\
+156. VPGs: Test Reminder must be one of: None, 3 Months, 6 Months, 9 Months, 12 Months.\
+157. VPGs: Journal Datastore Name must be one of the datastores for that VPG\'92s Recovery ZVM Site Name.\
+158. VPGs: Journal Size Hard Limit Unit must be GiB, %, or Unlimited.\
+159. VPGs: Journal Size Hard Limit Value must be 10-99999 when Unit is GiB.\
+160. VPGs: Journal Size Hard Limit Value must be 1-1000 when Unit is %.\
+161. VPGs: Journal Size Hard Limit Value must be blank when Unit is Unlimited.\
+162. VPGs: Journal Size Warning Threshold Unit must be GiB, %, or Unlimited.\
+163. VPGs: Journal Size Warning Threshold Value must be 10-99999 when Unit is GiB.\
+164. VPGs: Journal Size Warning Threshold Value must be 1-1000 when Unit is %.\
+165. VPGs: Journal Size Warning Threshold Value must be blank when Unit is Unlimited.\
+166. VPGs: Scratch Journal Datastore Name must be one of the datastores for that VPG\'92s Recovery ZVM Site Name.\
+167. VPGs: Scratch Journal Size Hard Limit Unit must be GiB, %, or Unlimited.\
+168. VPGs: Scratch Journal Size Hard Limit Value must be 10-99999 when Unit is GiB.\
+169. VPGs: Scratch Journal Size Hard Limit Value must be 1-1000 when Unit is %.\
+170. VPGs: Scratch Journal Size Hard Limit Value must be blank when Unit is Unlimited.\
+171. VPGs: Scratch Journal Size Warning Threshold Unit must be GiB, %, or Unlimited.\
+172. VPGs: Scratch Journal Size Warning Threshold Value must be 10-99999 when Unit is GiB.\
+173. VPGs: Scratch Journal Size Warning Threshold Value must be 1-1000 when Unit is %.\
+174. VPGs: Scratch Journal Size Warning Threshold Value must be blank when Unit is Unlimited.\
+175. VPGs: Enable WAN Traffic Compression must be Yes or No.\
+176. VPGs: Disk Provisioning Override must be As-is, Thin, or Thick.\
+177. VPGs: Failover Live / Move - Network Name must be one of the networks for that VPG\'92s Recovery ZVM Site Name.\
+178. VPGs: Failover Test Network Name must be one of the networks for that VPG\'92s Recovery ZVM Site Name.\
+179. VPGs: Recovery Folder Name must be one of the folders for that VPG\'92s Recovery ZVM Site Name.\
+180. VPGs: Pre-Recovery Script Name, if provided, must be one of the recovery scripts from Zerto Data.\
+181. VPGs: Pre-Recovery Script Execution Timeout (Seconds), if provided, must be between 1 and 900.\
+182. VPGs: Post-Recovery Script Name, if provided, must be one of the recovery scripts from Zerto Data.\
+183. VPGs: Post-Recovery Script Execution Timeout (Seconds), if provided, must be between 1 and 900.\
+184. VM Replication: VPG Name must be one of the VPG names from the VPGs sheet.\
+185. VM Replication: VM Name must belong to the protected site for that VPG.\
+186. VM Replication: Label 1 must be one of the Label 1 values from Zerto Data.\
+187. VM Replication: Label 2 must be one of the Label 2 values from Zerto Data.\
+188. VM Replication: Label 3 must be one of the Label 3 values from Zerto Data.\
+189. VM Replication: Label 4 must be one of the Label 4 values from Zerto Data.\
+190. VM Replication: Label 5 must be one of the Label 5 values from Zerto Data.\
+191. VM Replication: Boot Order Group Name must belong to the Boot Order Meta Group selected on that VPG.\
+192. VM Replication: Recovery Host Name must be one of the hosts for that VPG\'92s Recovery ZVM Site Name.\
+193. VM Replication: Recovery Datastore Name must be one of the datastores for that VPG\'92s Recovery ZVM Site Name.\
+194. VM Replication: Recovery Folder Name must be one of the folders for that VPG\'92s Recovery ZVM Site Name.\
+195. VM Replication: Journal Datastore Name must be one of the datastores for that VPG\'92s Recovery ZVM Site Name.\
+196. VM Replication: Journal Size Hard Limit Unit must be GiB, %, or Unlimited.\
+197. VM Replication: Journal Size Hard Limit Value must be 10-99999 when Unit is GiB.\
+198. VM Replication: Journal Size Hard Limit Value must be 1-1000 when Unit is %.\
+199. VM Replication: Journal Size Hard Limit Value must be blank when Unit is Unlimited.\
+200. VM Replication: Journal Size Warning Threshold Unit must be GiB, %, or Unlimited.\
+201. VM Replication: Journal Size Warning Threshold Value must be 10-99999 when Unit is GiB.\
+202. VM Replication: Journal Size Warning Threshold Value must be 1-1000 when Unit is %.\
+203. VM Replication: Journal Size Warning Threshold Value must be blank when Unit is Unlimited.\
+204. VM Replication: Scratch Journal Datastore Name must be one of the datastores for that VPG\'92s Recovery ZVM Site Name.\
+205. VM Replication: Scratch Journal Size Hard Limit Unit must be GiB, %, or Unlimited.\
+206. VM Replication: Scratch Journal Size Hard Limit Value must be 10-99999 when Unit is GiB.\
+207. VM Replication: Scratch Journal Size Hard Limit Value must be 1-1000 when Unit is %.\
+208. VM Replication: Scratch Journal Size Hard Limit Value must be blank when Unit is Unlimited.\
+209. VM Replication: Scratch Journal Size Warning Threshold Unit must be GiB, %, or Unlimited.\
+210. VM Replication: Scratch Journal Size Warning Threshold Value must be 10-99999 when Unit is GiB.\
+211. VM Replication: Scratch Journal Size Warning Threshold Value must be 1-1000 when Unit is %.\
+212. VM Replication: Scratch Journal Size Warning Threshold Value must be blank when Unit is Unlimited.\
+213. VM Storage: VPG Name must be one of the VPG names from the VPGs sheet.\
+214. VM Storage: VM Name must belong to the protected site for that VPG.\
+215. VM Storage: Protected Volume Location must belong to the selected VM and protected site.\
+216. VM Storage: VPG Name + VM Name + Protected Volume Location combination must be unique.\
+217. VM Storage: Disk Provisioning Override must be As-is, Thin, or Thick.\
+218. VM Storage: Volume Sync Type must be Continuous Sync, Initial Sync Only, or No Sync (Empty Disk).\
+219. VM NICs: VPG Name must be one of the VPG names from the VPGs sheet.\
+220. VM NICs: VM Name must belong to the protected site for that VPG.\
+221. VM NICs: NIC Name must belong to the selected VM and protected site.\
+222. VM NICs: Protected Network Name must match the protected network for that VM/NIC.\
+223. VM NICs: VPG Name + VM Name + NIC Name combination must be unique.\
+224. VM NICs: Failover Live / Move - Network Name must be one of the networks for that VPG\'92s Recovery ZVM Site Name.\
+225. VM NICs: Failover Live / Move - Create new MAC address must be Yes or No.\
+226. VM NICs: Failover Live / Move - Change vNIC IP Config must be No, Yes, DHCP, or Yes, Static.\
+227. VM NICs: Failover Live / Move - IP Address, if provided, must be a valid IPv4 address.\
+228. VM NICs: Failover Live / Move - Subnet Mask, if provided, must be a valid IPv4 subnet mask.\
+229. VM NICs: Failover Live / Move - Default Gateway, if provided, must be a valid IPv4 address.\
+230. VM NICs: Failover Live / Move - Preferred DNS Server, if provided, must be a valid IPv4 address.\
+231. VM NICs: Failover Live / Move - Alternate DNS Server, if provided, must be a valid IPv4 address.\
+232. VM NICs: Failover Test - Network Name must be one of the networks for that VPG\'92s Recovery ZVM Site Name.\
+233. VM NICs: Failover Test - Create new MAC address must be Yes or No.\
+234. VM NICs: Failover Test - Change vNIC IP Config must be No, Yes, DHCP, or Yes, Static.\
+235. VM NICs: Failover Test - IP Address, if provided, must be a valid IPv4 address.\
+236. VM NICs: Failover Test - Subnet Mask, if provided, must be a valid IPv4 subnet mask.\
+237. VM NICs: Failover Test - Default Gateway, if provided, must be a valid IPv4 address.\
+238. VM NICs: Failover Test - Preferred DNS Server, if provided, must be a valid IPv4 address.\
+239. VM NICs: Failover Test - Alternate DNS Server, if provided, must be a valid IPv4 address.}
