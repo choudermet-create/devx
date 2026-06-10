@@ -28,7 +28,7 @@ LOG_FILE = Path("outputs/vca_check.log")
 def main():
     setup_logging()
 
-    excel_file = "files/VCA Data - 0.106.xlsx"
+    excel_file = "files/API Sample - VCA Data - 0.106.xlsx"
     logging.info("Starting VCA workbook validation run")
     logging.info("Source workbook: %s", excel_file)
 

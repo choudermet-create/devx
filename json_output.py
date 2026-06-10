@@ -20,7 +20,7 @@ from validation.vm_replication import validate_vm_replication
 from validation.vm_storage import validate_vm_storage
 from validation.vm_nics import validate_vm_nics
 
-EXCEL_FILE = "files/VCA Data - 0.106.xlsx"
+EXCEL_FILE = "files/API Sample - VCA Data - 0.106.xlsx"
 OUTPUT_FILE = "outputs/vca_check_dump.json"
 API_PAYLOAD_OUTPUT_FILE = "outputs/zerto_api_payload.json"
 

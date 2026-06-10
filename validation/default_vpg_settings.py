@@ -121,8 +121,8 @@ class DefaultVPGSettings(BaseModel):
     failover_test_preferred_dns_server: Any
     failover_live_move_alternate_dns_server: Any
     failover_test_alternate_dns_server: Any
-    failover_live_move_dns_suffix: Any
-    failover_test_dns_suffix: Any
+    failover_live_move_dns_suffix: Any | None = None
+    failover_test_dns_suffix: Any | None = None
 
     extended_journal_run_at: time
     extended_journal_retry_count: int
@@ -168,8 +168,6 @@ class DefaultVPGSettings(BaseModel):
         "failover_test_preferred_dns_server",
         "failover_live_move_alternate_dns_server",
         "failover_test_alternate_dns_server",
-        "failover_live_move_dns_suffix",
-        "failover_test_dns_suffix",
     )
     @classmethod
     def validate_mandatory_value(cls, value):

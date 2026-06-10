@@ -1,5 +1,5 @@
 {
-  "validationStatus": "failed",
+  "validationStatus": "passed",
   "vpgSettings": [
     {
       "basic": {
@@ -163,7 +163,7 @@
             "datastoreIdentifier": "DS1",
             "folderIdentifier": "/"
           },
-          "bootGroupIdentifier": "DB",
+          "bootGroupIdentifier": "DB Server",
           "journal": {
             "limitation": {
               "hardLimitInMB": 153600,
@@ -247,12 +247,34 @@
       },
       "vms": [
         {
+          "vmIdentifier": "ZVM-Left",
+          "recovery": {
+            "datastoreIdentifier": "Datastore 1",
+            "folderIdentifier": "/MyFolder"
+          },
+          "bootGroupIdentifier": "Lower Tier",
+          "journal": {
+            "limitation": {
+              "hardLimitInMB": 153600,
+              "warningThresholdInMB": 115200
+            },
+            "datastoreIdentifier": "Datastore 1"
+          },
+          "scratch": {
+            "limitation": {
+              "hardLimitInMB": 307200,
+              "warningThresholdInMB": 230400
+            },
+            "datastoreIdentifier": "DataStore 2"
+          }
+        },
+        {
           "vmIdentifier": "Microsoft 2022",
           "recovery": {
             "datastoreIdentifier": "Datastore 1",
             "folderIdentifier": "/MyFolder"
           },
-          "bootGroupIdentifier": "Higher Tier",
+          "bootGroupIdentifier": "Lower Tier",
           "journal": {
             "limitation": {
               "hardLimitInMB": 153600,
@@ -306,50 +328,6 @@
           ]
         },
         {
-          "vmIdentifier": "ZVML-Left",
-          "recovery": {
-            "datastoreIdentifier": "Datastore 1",
-            "folderIdentifier": "/MyFolder"
-          },
-          "bootGroupIdentifier": "Lower Tier",
-          "journal": {
-            "limitation": {
-              "hardLimitInMB": 153600,
-              "warningThresholdInMB": 115200
-            },
-            "datastoreIdentifier": "Datastore 1"
-          },
-          "scratch": {
-            "limitation": {
-              "hardLimitInMB": 307200,
-              "warningThresholdInMB": 230400
-            },
-            "datastoreIdentifier": "DataStore 2"
-          }
-        },
-        {
-          "vmIdentifier": "VM 2",
-          "recovery": {
-            "datastoreIdentifier": "Datastore 1",
-            "folderIdentifier": "/MyFolder"
-          },
-          "bootGroupIdentifier": "Web Server",
-          "journal": {
-            "limitation": {
-              "hardLimitInMB": 153600,
-              "warningThresholdInMB": 115200
-            },
-            "datastoreIdentifier": "Datastore 1"
-          },
-          "scratch": {
-            "limitation": {
-              "hardLimitInMB": 307200,
-              "warningThresholdInMB": 230400
-            },
-            "datastoreIdentifier": "DataStore 2"
-          }
-        },
-        {
           "vmIdentifier": "Z-VRA-192.168.111.2",
           "volumes": [
             {
@@ -361,7 +339,7 @@
           "vmIdentifier": "Ubuntu 22.4",
           "nics": [
             {
-              "nicIdentifier": "NIC 1",
+              "nicIdentifier": "Nic Veel",
               "failover": {
                 "hypervisor": {
                   "networkIdentifier": "Network 1",
@@ -407,9 +385,11 @@
       },
       "scripting": {
         "preRecovery": {
+          "command": "MyOnlyRecoveryScript",
           "timeoutInSeconds": 300
         },
         "postRecovery": {
+          "command": "MyOnlyRecoveryScript",
           "timeoutInSeconds": 300
         }
       },
@@ -450,6 +430,22 @@
           "timeoutInSeconds": 300
         }
       },
+      "bootGroups": {
+        "bootGroups": [
+          {
+            "name": "Web Server",
+            "bootDelayInSeconds": 300.0
+          },
+          {
+            "name": "App Server",
+            "bootDelayInSeconds": 60.0
+          },
+          {
+            "name": "DB Server",
+            "bootDelayInSeconds": 45.0
+          }
+        ]
+      },
       "journal": {
         "limitation": {
           "hardLimitInMB": 153600,
@@ -464,7 +460,28 @@
       },
       "recovery": {
         "defaultFolderIdentifier": "/"
-      }
+      },
+      "vms": [
+        {
+          "vmIdentifier": "Ubuntu 22.4",
+          "recovery": {
+            "folderIdentifier": "/"
+          },
+          "bootGroupIdentifier": "Web Server",
+          "journal": {
+            "limitation": {
+              "hardLimitInMB": 153600,
+              "warningThresholdInMB": 115200
+            }
+          },
+          "scratch": {
+            "limitation": {
+              "hardLimitInMB": 307200,
+              "warningThresholdInMB": 230400
+            }
+          }
+        }
+      ]
     },
     {
       "basic": {

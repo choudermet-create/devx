@@ -82,7 +82,7 @@ json_output.py
 Current pattern:
 
 ```python
-excel_file = "files/VCA Data - 0.106.xlsx"
+excel_file = "files/API Sample - VCA Data - 0.106.xlsx"
 ```
 
 ## Output
