@@ -1,4 +1,4 @@
-# VCA Workbook Validator
+# VCA Check
 
 This project reads a VCA Excel workbook, validates the workbook data, and generates a JSON payload that can be used as the starting point for Zerto API automation.
 
@@ -85,13 +85,13 @@ Current pattern:
 excel_file = "files/API Sample - VCA Data - Master.xlsx"
 ```
 
-## VM NICs Validation
+## Validation Defaults and Inheritance
 
-The `VM NICs` sheet is validated after workbook defaults are applied. Blank NIC-level failover values can inherit from the matching VPG, `Recovery ZVM Sites`, and then `Default VPG Settings`.
+Some workbook values are validated after defaults are applied. Blank row-level values can inherit from a more specific default layer before falling back to the workbook-level defaults.
 
-Because of this, a validation error may be reported against a `VM_NICs` table row even when the visible cell on the `VM NICs` sheet is blank. In that case, check the inherited value in the VPG's recovery site row on `Recovery ZVM Sites`, or in `Default VPG Settings`.
+For example, VPG rows can inherit values from `Recovery ZVM Sites` and `Default VPG Settings`. VM-level rows can inherit effective values from their VPG. Because of this, a validation error may be reported against a table row even when the visible cell on that sheet is blank. In that case, check the resolved candidate payload in `outputs/vca_check_dump.json`, then check the inherited source rows in the workbook.
 
-NIC failover settings are validated as two parallel groups:
+NIC failover settings use this same effective-value validation. They are checked as two parallel groups:
 
 - `Failover Live / Move`
 - `Failover Test`
