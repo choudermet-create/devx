@@ -209,7 +209,7 @@ class VMReplication(BaseModel):
         return validate_site_scoped_value(
             value,
             get_vpg_recovery_site_name(info.data.get("vpg_name")),
-            config.recovery_host_names_by_site,
+            config.recovery_host_or_cluster_names_by_site,
             "Recovery Host Name",
         )
 

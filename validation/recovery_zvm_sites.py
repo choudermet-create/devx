@@ -255,7 +255,7 @@ class RecoveryZVMSite(BaseModel):
         return validate_site_scoped_value(
             value,
             info.data.get("recovery_zvm_site_name"),
-            config.recovery_host_names_by_site,
+            config.recovery_host_or_cluster_names_by_site,
             "Recovery Host Name",
         )
 
@@ -368,14 +368,58 @@ class RecoveryZVMSite(BaseModel):
         return self
 
 
-def validate_recovery_zvm_site(data: dict) -> RecoveryZVMSite:
-    return RecoveryZVMSite(**data)
+def validate_recovery_zvm_site(
+    data: dict,
+    default_vpg_settings: dict | None = None,
+) -> RecoveryZVMSite:
+    return RecoveryZVMSite(
+        **apply_default_recovery_zvm_site_name(data, default_vpg_settings),
+    )
 
 
-def validate_recovery_zvm_sites(data: list[dict]) -> list[RecoveryZVMSite]:
-    validated_rows = validate_model_rows(RecoveryZVMSite, data)
-    validate_unique_recovery_zvm_site_names(data)
+def validate_recovery_zvm_sites(
+    data: list[dict],
+    default_vpg_settings: dict | None = None,
+) -> list[RecoveryZVMSite]:
+    effective_data = [
+        apply_default_recovery_zvm_site_name(row, default_vpg_settings)
+        for row in data
+    ]
+    messages = []
+    validated_rows = []
+
+    try:
+        validated_rows = validate_model_rows(RecoveryZVMSite, effective_data)
+    except WorkbookValidationError as error:
+        messages.extend(error.messages)
+
+    try:
+        validate_unique_recovery_zvm_site_names(effective_data)
+    except WorkbookValidationError as error:
+        messages.extend(error.messages)
+
+    if messages:
+        raise WorkbookValidationError(messages)
+
     return validated_rows
+
+
+def apply_default_recovery_zvm_site_name(
+    row: dict,
+    default_vpg_settings: dict | None,
+) -> dict:
+    effective_row = dict(row)
+    if normalize_blank(effective_row.get("Recovery ZVM Site Name")) is not None:
+        return effective_row
+
+    recovery_site_name = normalize_blank(effective_row.get("Recovery Site Name"))
+    if recovery_site_name is None and default_vpg_settings:
+        recovery_site_name = normalize_blank(default_vpg_settings.get("recovery_site"))
+
+    if recovery_site_name is not None:
+        effective_row["Recovery ZVM Site Name"] = recovery_site_name
+
+    return effective_row
 
 
 def validate_site_scoped_value(

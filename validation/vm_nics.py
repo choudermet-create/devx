@@ -1,7 +1,15 @@
 import ipaddress
 from typing import Any
 
-from pydantic import AliasChoices, BaseModel, ConfigDict, Field, ValidationInfo, field_validator
+from pydantic import (
+    AliasChoices,
+    BaseModel,
+    ConfigDict,
+    Field,
+    ValidationInfo,
+    field_validator,
+    model_validator,
+)
 
 from validation.recovery_zvm_sites import (
     VnicIpConfigChange,
@@ -9,7 +17,7 @@ from validation.recovery_zvm_sites import (
     normalize_blank,
     validate_site_scoped_value,
 )
-from validation.vpgs import validate_config_value
+from validation.vpgs import apply_vpg_defaults, first_value, validate_config_value
 import config
 from validation.error_formatting import (
     WorkbookValidationError,
@@ -46,7 +54,10 @@ class VMNIC(BaseModel):
     )
     failover_live_move_create_new_mac_address: YesNo | None = Field(
         default=None,
-        validation_alias="Failover Live / Move - Create new MAC address",
+        validation_alias=AliasChoices(
+            "Failover Live / Move - Create new MAC address",
+            "Failover Live / Move - Create new MAC Address",
+        ),
     )
     failover_live_move_change_vnic_ip_config: VnicIpConfigChange | None = Field(
         default=None,
@@ -54,7 +65,10 @@ class VMNIC(BaseModel):
     )
     failover_live_move_ip_address: Any | None = Field(
         default=None,
-        validation_alias="Failover Live / Move - IP Address",
+        validation_alias=AliasChoices(
+            "Failover Live / Move - IP Address",
+            "Failover Live / Move IP Address",
+        ),
     )
     failover_live_move_subnet_mask: Any | None = Field(
         default=None,
@@ -78,11 +92,17 @@ class VMNIC(BaseModel):
     )
     failover_test_network_name: str | None = Field(
         default=None,
-        validation_alias="Failover Test - Network Name",
+        validation_alias=AliasChoices(
+            "Failover Test - Network Name",
+            "Failover Test Network Name",
+        ),
     )
     failover_test_create_new_mac_address: YesNo | None = Field(
         default=None,
-        validation_alias="Failover Test - Create new MAC address",
+        validation_alias=AliasChoices(
+            "Failover Test - Create new MAC address",
+            "Failover Test - Create new MAC Address",
+        ),
     )
     failover_test_change_vnic_ip_config: VnicIpConfigChange | None = Field(
         default=None,
@@ -90,7 +110,10 @@ class VMNIC(BaseModel):
     )
     failover_test_ip_address: Any | None = Field(
         default=None,
-        validation_alias="Failover Test - IP Address",
+        validation_alias=AliasChoices(
+            "Failover Test - IP Address",
+            "Failover Test IP Address",
+        ),
     )
     failover_test_subnet_mask: Any | None = Field(
         default=None,
@@ -260,15 +283,137 @@ class VMNIC(BaseModel):
 
         return value
 
+    @model_validator(mode="after")
+    def validate_ip_config_rules(self):
+        validate_nic_ip_config_group(
+            prefix="Failover Live / Move",
+            change_vnic_ip_config=self.failover_live_move_change_vnic_ip_config,
+            ip_address=self.failover_live_move_ip_address,
+            subnet_mask=self.failover_live_move_subnet_mask,
+            default_gateway=self.failover_live_move_default_gateway,
+            preferred_dns_server=self.failover_live_move_preferred_dns_server,
+            alternate_dns_server=self.failover_live_move_alternate_dns_server,
+            dns_suffix=self.failover_live_move_dns_suffix,
+        )
+        validate_nic_ip_config_group(
+            prefix="Failover Test",
+            change_vnic_ip_config=self.failover_test_change_vnic_ip_config,
+            ip_address=self.failover_test_ip_address,
+            subnet_mask=self.failover_test_subnet_mask,
+            default_gateway=self.failover_test_default_gateway,
+            preferred_dns_server=self.failover_test_preferred_dns_server,
+            alternate_dns_server=self.failover_test_alternate_dns_server,
+            dns_suffix=self.failover_test_dns_suffix,
+        )
 
-def validate_vm_nic(data: dict) -> VMNIC:
-    return VMNIC(**data)
+        return self
 
 
-def validate_vm_nics(data: list[dict]) -> list[VMNIC]:
-    validated_rows = validate_model_rows(VMNIC, data)
+def validate_vm_nic(
+    data: dict,
+    default_vpg_settings: dict | None = None,
+    recovery_zvm_sites: list[dict] | None = None,
+    vpgs: list[dict] | None = None,
+) -> VMNIC:
+    return VMNIC(**apply_vm_nic_defaults(
+        data,
+        build_vpg_defaults(default_vpg_settings, recovery_zvm_sites, vpgs),
+    ))
+
+
+def validate_vm_nics(
+    data: list[dict],
+    default_vpg_settings: dict | None = None,
+    recovery_zvm_sites: list[dict] | None = None,
+    vpgs: list[dict] | None = None,
+) -> list[VMNIC]:
+    vpg_defaults = build_vpg_defaults(
+        default_vpg_settings,
+        recovery_zvm_sites,
+        vpgs,
+    )
+    effective_data = [
+        apply_vm_nic_defaults(row, vpg_defaults)
+        for row in data
+    ]
+    validated_rows = validate_model_rows(VMNIC, effective_data)
     validate_unique_vm_nic_rows(data)
     return validated_rows
+
+
+def build_vpg_defaults(
+    default_vpg_settings: dict | None,
+    recovery_zvm_sites: list[dict] | None,
+    vpgs: list[dict] | None,
+) -> dict:
+    return {
+        vpg["VPG Name"]: apply_vpg_defaults(
+            vpg,
+            default_vpg_settings,
+            recovery_zvm_sites,
+        )
+        for vpg in vpgs or []
+        if vpg.get("VPG Name")
+    }
+
+
+def apply_vm_nic_defaults(row: dict, vpg_defaults: dict) -> dict:
+    effective_row = dict(row)
+    vpg = vpg_defaults.get(row.get("VPG Name"), {})
+
+    for field_name, vpg_field_name in (
+        ("Failover Live / Move - Network Name", "Failover Live / Move - Network Name"),
+        (
+            "Failover Live / Move - Create new MAC address",
+            "Failover Live / Move - Create new MAC address",
+        ),
+        (
+            "Failover Live / Move - Change vNIC IP Config",
+            "Failover Live / Move - Change vNIC IP Config",
+        ),
+        ("Failover Live / Move - IP Address", "Failover Live / Move - IP Address"),
+        ("Failover Live / Move - Subnet Mask", "Failover Live / Move - Subnet Mask"),
+        (
+            "Failover Live / Move - Default Gateway",
+            "Failover Live / Move - Default Gateway",
+        ),
+        (
+            "Failover Live / Move - Preferred DNS Server",
+            "Failover Live / Move - Preferred DNS Server",
+        ),
+        (
+            "Failover Live / Move - Alternate DNS Server",
+            "Failover Live / Move - Alternate DNS Server",
+        ),
+        ("Failover Live / Move - DNS Suffix", "Failover Live / Move - DNS Suffix"),
+        ("Failover Test - Network Name", "Failover Test Network Name"),
+        (
+            "Failover Test - Create new MAC address",
+            "Failover Test - Create new MAC address",
+        ),
+        (
+            "Failover Test - Change vNIC IP Config",
+            "Failover Test - Change vNIC IP Config",
+        ),
+        ("Failover Test - IP Address", "Failover Test - IP Address"),
+        ("Failover Test - Subnet Mask", "Failover Test - Subnet Mask"),
+        ("Failover Test - Default Gateway", "Failover Test - Default Gateway"),
+        (
+            "Failover Test - Preferred DNS Server",
+            "Failover Test - Preferred DNS Server",
+        ),
+        (
+            "Failover Test - Alternate DNS Server",
+            "Failover Test - Alternate DNS Server",
+        ),
+        ("Failover Test - DNS Suffix", "Failover Test - DNS Suffix"),
+    ):
+        effective_row[field_name] = first_value(
+            effective_row.get(field_name),
+            vpg.get(vpg_field_name),
+        )
+
+    return effective_row
 
 
 def is_valid_ipv4_address(value) -> bool:
@@ -289,6 +434,76 @@ def is_valid_ipv4_subnet_mask(value) -> bool:
         return False
 
     return True
+
+
+def validate_nic_ip_config_group(
+    prefix: str,
+    change_vnic_ip_config,
+    ip_address,
+    subnet_mask,
+    default_gateway,
+    preferred_dns_server,
+    alternate_dns_server,
+    dns_suffix,
+) -> None:
+    fields = {
+        "IP Address": ip_address,
+        "Subnet Mask": subnet_mask,
+        "Default Gateway": default_gateway,
+        "Preferred DNS Server": preferred_dns_server,
+        "Alternate DNS Server": alternate_dns_server,
+        "DNS Suffix": dns_suffix,
+    }
+
+    if change_vnic_ip_config == "Yes, DHCP":
+        populated_fields = [
+            field_name
+            for field_name, value in fields.items()
+            if value is not None
+        ]
+        if populated_fields:
+            raise ValueError(
+                f"{prefix} IP configuration fields must be empty when "
+                "Change vNIC IP Config is 'Yes, DHCP'. "
+                f"Populated fields: {populated_fields}"
+            )
+
+    if change_vnic_ip_config == "Yes, Static":
+        missing_fields = [
+            field_name
+            for field_name, value in fields.items()
+            if value is None
+        ]
+        if missing_fields:
+            raise ValueError(
+                f"{prefix} IP configuration fields are mandatory when "
+                "Change vNIC IP Config is 'Yes, Static'. "
+                f"Missing fields: {missing_fields}"
+            )
+
+    if ip_address is not None and subnet_mask is not None and default_gateway is not None:
+        validate_gateway_for_network(
+            prefix,
+            ip_address,
+            subnet_mask,
+            default_gateway,
+        )
+
+
+def validate_gateway_for_network(
+    prefix: str,
+    ip_address,
+    subnet_mask,
+    default_gateway,
+) -> None:
+    network = ipaddress.IPv4Network(f"{ip_address}/{subnet_mask}", strict=False)
+    gateway = ipaddress.IPv4Address(str(default_gateway))
+
+    if gateway not in network:
+        raise ValueError(
+            f"{prefix} Default Gateway '{default_gateway}' is not valid for "
+            f"IP Address '{ip_address}' and Subnet Mask '{subnet_mask}'."
+        )
 
 
 def validate_unique_vm_nic_rows(data: list[dict]) -> None:

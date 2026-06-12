@@ -20,7 +20,7 @@ from validation.vm_replication import validate_vm_replication
 from validation.vm_storage import validate_vm_storage
 from validation.vm_nics import validate_vm_nics
 
-EXCEL_FILE = "files/API Sample - VCA Data - 0.106.xlsx"
+EXCEL_FILE = "files/API Sample - VCA Data - Master.xlsx"
 OUTPUT_FILE = "outputs/vca_check_dump.json"
 API_PAYLOAD_OUTPUT_FILE = "outputs/zerto_api_payload.json"
 
@@ -78,10 +78,17 @@ def generate_vca_check_dump(
             lambda: validate_default_vpg_settings(default_vpg_settings),
         ),
         "recovery_zvm_sites": validate_section(
-            lambda: validate_recovery_zvm_sites(recovery_zvm_sites),
+            lambda: validate_recovery_zvm_sites(
+                recovery_zvm_sites,
+                default_vpg_settings,
+            ),
         ),
         "vpgs": validate_section(
-            lambda: validate_vpgs(vpgs),
+            lambda: validate_vpgs(
+                vpgs,
+                default_vpg_settings,
+                recovery_zvm_sites,
+            ),
         ),
         "vm_replication": validate_section(
             lambda: validate_vm_replication(vm_replication),
@@ -90,7 +97,12 @@ def generate_vca_check_dump(
             lambda: validate_vm_storage(vm_storage),
         ),
         "vm_nics": validate_section(
-            lambda: validate_vm_nics(vm_nics),
+            lambda: validate_vm_nics(
+                vm_nics,
+                default_vpg_settings,
+                recovery_zvm_sites,
+                vpgs,
+            ),
         ),
     }
 

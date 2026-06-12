@@ -23,6 +23,7 @@ from validation.recovery_zvm_sites import (
     TargetRPOAlertUnit,
     VPGType,
     YesNo,
+    apply_default_recovery_zvm_site_name,
     normalize_blank,
     validate_journal_history,
     validate_journal_size,
@@ -280,7 +281,7 @@ class VPG(BaseModel):
         return validate_site_scoped_value(
             value,
             info.data.get("recovery_zvm_site_name"),
-            config.recovery_host_names_by_site,
+            config.recovery_host_or_cluster_names_by_site,
             "Recovery Host Name",
         )
 
@@ -416,14 +417,312 @@ def validate_range(value: int, minimum: int, maximum: int, field_name: str, cont
     )
 
 
-def validate_vpg(data: dict) -> VPG:
-    return VPG(**data)
+def validate_vpg(
+    data: dict,
+    default_vpg_settings: dict | None = None,
+    recovery_zvm_sites: list[dict] | None = None,
+) -> VPG:
+    return VPG(**apply_vpg_defaults(data, default_vpg_settings, recovery_zvm_sites))
 
 
-def validate_vpgs(data: list[dict]) -> list[VPG]:
-    validated_rows = validate_model_rows(VPG, data)
+def validate_vpgs(
+    data: list[dict],
+    default_vpg_settings: dict | None = None,
+    recovery_zvm_sites: list[dict] | None = None,
+) -> list[VPG]:
+    effective_data = [
+        apply_vpg_defaults(row, default_vpg_settings, recovery_zvm_sites)
+        for row in data
+    ]
+    load_effective_vpg_context_into_config(effective_data)
+    validated_rows = validate_model_rows(VPG, effective_data)
     validate_unique_vpg_names(data)
     return validated_rows
+
+
+def load_effective_vpg_context_into_config(vpgs: list[dict]) -> None:
+    config.vpg_protected_site_names_by_vpg_name = {
+        vpg["VPG Name"]: vpg.get("Protected ZVM Site Name")
+        for vpg in vpgs
+        if vpg.get("VPG Name")
+    }
+    config.vpg_recovery_site_names_by_vpg_name = {
+        vpg["VPG Name"]: vpg.get("Recovery ZVM Site Name")
+        for vpg in vpgs
+        if vpg.get("VPG Name")
+    }
+    config.vpg_boot_order_meta_group_names_by_vpg_name = {
+        vpg["VPG Name"]: vpg.get("Boot Order Meta Group Name")
+        for vpg in vpgs
+        if vpg.get("VPG Name")
+    }
+
+
+def apply_vpg_defaults(
+    row: dict,
+    default_vpg_settings: dict | None,
+    recovery_zvm_sites: list[dict] | None,
+) -> dict:
+    effective_row = dict(row)
+    effective_protected_site = first_value(
+        effective_row.get("Protected ZVM Site Name"),
+        effective_row.get("Protected Site Name"),
+        default_vpg_settings.get("protected_site") if default_vpg_settings else None,
+    )
+    effective_recovery_site = first_value(
+        effective_row.get("Recovery ZVM Site Name"),
+        effective_row.get("Recovery Site Name"),
+        default_vpg_settings.get("recovery_site") if default_vpg_settings else None,
+    )
+    recovery_defaults = build_recovery_site_defaults(
+        recovery_zvm_sites or [],
+        default_vpg_settings,
+    ).get(effective_recovery_site, {})
+
+    set_default(effective_row, "Protected ZVM Site Name", effective_protected_site)
+    set_default(effective_row, "Recovery ZVM Site Name", effective_recovery_site)
+    set_default(effective_row, "Recovery Host Name", recovery_defaults.get("Recovery Host Name"))
+    set_default(
+        effective_row,
+        "Recovery Datastore Name",
+        recovery_defaults.get("Recovery Datastore Name"),
+    )
+    set_default(
+        effective_row,
+        "Journal History Value",
+        recovery_defaults.get("Journal History Value"),
+    )
+    set_default(
+        effective_row,
+        "Journal History Unit",
+        recovery_defaults.get("Journal History Unit"),
+    )
+    set_default(
+        effective_row,
+        "Target RPO Alert Value",
+        recovery_defaults.get("Target RPO Alert Value"),
+    )
+    set_default(
+        effective_row,
+        "Target RPO Alert Unit",
+        recovery_defaults.get("Target RPO Alert Unit"),
+    )
+    set_default(effective_row, "Test Reminder", recovery_defaults.get("Test Reminder"))
+    set_default(
+        effective_row,
+        "Journal Datastore Name",
+        recovery_defaults.get("Journal Datastore Name"),
+        effective_row.get("Recovery Datastore Name"),
+    )
+    set_default(
+        effective_row,
+        "Journal Size Hard Limit Value",
+        recovery_defaults.get("Journal Size Hard Limit Value"),
+    )
+    set_default(
+        effective_row,
+        "Journal Size Hard Limit Unit",
+        recovery_defaults.get("Journal Size Hard Limit Unit"),
+    )
+    set_default(
+        effective_row,
+        "Journal Size Warning Threshold Value",
+        recovery_defaults.get("Journal Size Warning Threshold Value"),
+    )
+    set_default(
+        effective_row,
+        "Journal Size Warning Threshold Unit",
+        recovery_defaults.get("Journal Size Warning Threshold Unit"),
+    )
+    set_default(
+        effective_row,
+        "Scratch Journal Datastore Name",
+        recovery_defaults.get("Scratch Journal Datastore Name"),
+        effective_row.get("Recovery Datastore Name"),
+    )
+    set_default(
+        effective_row,
+        "Scratch Journal Size Hard Limit Value",
+        recovery_defaults.get("Scratch Journal Size Hard Limit Value"),
+    )
+    set_default(
+        effective_row,
+        "Scratch Journal Size Hard Limit Unit",
+        recovery_defaults.get("Scratch Journal Size Hard Limit Unit"),
+    )
+    set_default(
+        effective_row,
+        "Scratch Journal Size Warning Threshold Value",
+        recovery_defaults.get("Scratch Journal Size Warning Threshold Value"),
+    )
+    set_default(
+        effective_row,
+        "Scratch Journal Size Warning Threshold Unit",
+        recovery_defaults.get("Scratch Journal Size Warning Threshold Unit"),
+    )
+    set_default(
+        effective_row,
+        "Failover Live / Move - Network Name",
+        recovery_defaults.get("Failover Live / Move Network Name"),
+    )
+    set_default(
+        effective_row,
+        "Failover Test Network Name",
+        recovery_defaults.get("Failover Test Network Name"),
+    )
+    set_default(
+        effective_row,
+        "Failover Live / Move - Create new MAC address",
+        recovery_defaults.get("Failover Live / Move - Create new MAC address"),
+        default_vpg_settings.get("failover_live_move_create_new_mac_address")
+        if default_vpg_settings
+        else None,
+    )
+    set_default(
+        effective_row,
+        "Failover Live / Move - Change vNIC IP Config",
+        recovery_defaults.get("Failover Live / Move - Change vNIC IP Config"),
+        default_vpg_settings.get("failover_live_move_change_vnic_ip_config")
+        if default_vpg_settings
+        else None,
+    )
+    set_default(
+        effective_row,
+        "Failover Live / Move - IP Address",
+        recovery_defaults.get("Failover Live / Move - IP Address"),
+        recovery_defaults.get("Failover Live / Move IP Address"),
+    )
+    set_default(
+        effective_row,
+        "Failover Live / Move - Subnet Mask",
+        recovery_defaults.get("Failover Live / Move - Subnet Mask"),
+        default_vpg_settings.get("failover_live_move_subnet_mask")
+        if default_vpg_settings
+        else None,
+    )
+    set_default(
+        effective_row,
+        "Failover Live / Move - Default Gateway",
+        recovery_defaults.get("Failover Live / Move - Default Gateway"),
+        default_vpg_settings.get("failover_live_move_default_gateway")
+        if default_vpg_settings
+        else None,
+    )
+    set_default(
+        effective_row,
+        "Failover Live / Move - Preferred DNS Server",
+        recovery_defaults.get("Failover Live / Move - Preferred DNS Server"),
+        default_vpg_settings.get("failover_live_move_preferred_dns_server")
+        if default_vpg_settings
+        else None,
+    )
+    set_default(
+        effective_row,
+        "Failover Live / Move - Alternate DNS Server",
+        recovery_defaults.get("Failover Live / Move - Alternate DNS Server"),
+        default_vpg_settings.get("failover_live_move_alternate_dns_server")
+        if default_vpg_settings
+        else None,
+    )
+    set_default(
+        effective_row,
+        "Failover Live / Move - DNS Suffix",
+        recovery_defaults.get("Failover Live / Move - DNS Suffix"),
+        default_vpg_settings.get("failover_live_move_dns_suffix")
+        if default_vpg_settings
+        else None,
+    )
+    set_default(
+        effective_row,
+        "Failover Test - Create new MAC address",
+        recovery_defaults.get("Failover Test - Create new MAC address"),
+        default_vpg_settings.get("failover_test_create_new_mac_address")
+        if default_vpg_settings
+        else None,
+    )
+    set_default(
+        effective_row,
+        "Failover Test - Change vNIC IP Config",
+        recovery_defaults.get("Failover Test - Change vNIC IP Config"),
+        default_vpg_settings.get("failover_test_change_vnic_ip_config")
+        if default_vpg_settings
+        else None,
+    )
+    set_default(
+        effective_row,
+        "Failover Test - IP Address",
+        recovery_defaults.get("Failover Test - IP Address"),
+        recovery_defaults.get("Failover Test IP Address"),
+    )
+    set_default(
+        effective_row,
+        "Failover Test - Subnet Mask",
+        recovery_defaults.get("Failover Test - Subnet Mask"),
+        default_vpg_settings.get("failover_test_subnet_mask")
+        if default_vpg_settings
+        else None,
+    )
+    set_default(
+        effective_row,
+        "Failover Test - Default Gateway",
+        recovery_defaults.get("Failover Test - Default Gateway"),
+        default_vpg_settings.get("failover_test_default_gateway")
+        if default_vpg_settings
+        else None,
+    )
+    set_default(
+        effective_row,
+        "Failover Test - Preferred DNS Server",
+        recovery_defaults.get("Failover Test - Preferred DNS Server"),
+        default_vpg_settings.get("failover_test_preferred_dns_server")
+        if default_vpg_settings
+        else None,
+    )
+    set_default(
+        effective_row,
+        "Failover Test - Alternate DNS Server",
+        recovery_defaults.get("Failover Test - Alternate DNS Server"),
+        default_vpg_settings.get("failover_test_alternate_dns_server")
+        if default_vpg_settings
+        else None,
+    )
+    set_default(
+        effective_row,
+        "Failover Test - DNS Suffix",
+        recovery_defaults.get("Failover Test - DNS Suffix"),
+        default_vpg_settings.get("failover_test_dns_suffix")
+        if default_vpg_settings
+        else None,
+    )
+
+    return effective_row
+
+
+def build_recovery_site_defaults(
+    recovery_zvm_sites: list[dict],
+    default_vpg_settings: dict | None,
+) -> dict:
+    defaults = {}
+    for row in recovery_zvm_sites:
+        effective_row = apply_default_recovery_zvm_site_name(row, default_vpg_settings)
+        site_name = normalize_blank(effective_row.get("Recovery ZVM Site Name"))
+        if site_name is not None:
+            defaults[site_name] = effective_row
+
+    return defaults
+
+
+def set_default(row: dict, field_name: str, *defaults) -> None:
+    row[field_name] = first_value(row.get(field_name), *defaults)
+
+
+def first_value(*values):
+    for value in values:
+        normalized_value = normalize_blank(value)
+        if normalized_value is not None:
+            return normalized_value
+
+    return None
 
 
 def validate_unique_vpg_names(data: list[dict]) -> None:

@@ -75,10 +75,11 @@ def clean_records(
             if metadata:
                 cleaned_record.update(metadata[index])
 
-            cleaned_record.setdefault(
-                "__table_row_id",
-                cleaned_record.get("ID") or len(cleaned_records) + 1,
-            )
+            if "__table_row_id" not in cleaned_record:
+                if "ID" in cleaned_record:
+                    cleaned_record["__table_row_id"] = cleaned_record.get("ID")
+                else:
+                    cleaned_record["__table_row_id"] = len(cleaned_records) + 1
 
             cleaned_records.append(cleaned_record)
 

@@ -238,8 +238,10 @@ def load_hypervisor_data_into_config(tables: dict) -> None:
         if host.get("Host Name")
     ]
     config.recovery_host_names_by_site = {}
+    config.recovery_host_or_cluster_names_by_site = {}
     for host in config.recovery_hosts:
         site_name = host.get("Recovery ZVM Site Name")
+        host_cluster_name = host.get("Host Cluster Name")
         host_name = host.get("Host Name")
 
         if site_name and host_name:
@@ -247,6 +249,17 @@ def load_hypervisor_data_into_config(tables: dict) -> None:
                 site_name,
                 [],
             ).append(host_name)
+
+        for value in (host_cluster_name, host_name):
+            if not site_name or not value:
+                continue
+
+            site_values = config.recovery_host_or_cluster_names_by_site.setdefault(
+                site_name,
+                [],
+            )
+            if value not in site_values:
+                site_values.append(value)
 
     config.recovery_datastore_names = [
         datastore["Datastore Name"]

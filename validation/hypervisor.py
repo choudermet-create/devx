@@ -14,8 +14,8 @@ class ProtectedVM(BaseModel):
 
     protected_zvm_site_name: str = Field(validation_alias="Protected ZVM Site Name")
     vm_name: str = Field(validation_alias="VM Name")
-    cpu_count: int | None = Field(default=None, ge=1, le=256, validation_alias="CPU Count")
-    memory_gib: int | None = Field(default=None, ge=1, le=4096, validation_alias="Memory (GiB)")
+    cpu_count: int = Field(ge=1, le=256, validation_alias="CPU Count")
+    memory_gib: int = Field(ge=1, le=4096, validation_alias="Memory (GiB)")
 
     @field_validator("*", mode="before")
     @classmethod
@@ -38,8 +38,7 @@ class ProtectedVMVolume(BaseModel):
     protected_zvm_site_name: str = Field(validation_alias="Protected ZVM Site Name")
     vm_name: str = Field(validation_alias="VM Name")
     volume_location: str = Field(validation_alias="Volume Location")
-    provisioned_size_gib: int | None = Field(
-        default=None,
+    provisioned_size_gib: int = Field(
         ge=1,
         le=65536,
         validation_alias="Provisioned Size (GiB)",
@@ -125,9 +124,13 @@ class RecoveryHost(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
     recovery_zvm_site_name: str = Field(validation_alias="Recovery ZVM Site Name")
+    host_cluster_name: Any | None = Field(
+        default=None,
+        validation_alias="Host Cluster Name",
+    )
     host_name: str = Field(validation_alias="Host Name")
-    cpu_count: int | None = Field(default=None, ge=1, le=256, validation_alias="CPU Count")
-    memory_gib: int | None = Field(default=None, ge=1, le=4096, validation_alias="Memory (GiB)")
+    cpu_count: int = Field(ge=1, le=256, validation_alias="CPU Count")
+    memory_gib: int = Field(ge=1, le=4096, validation_alias="Memory (GiB)")
 
     @field_validator("*", mode="before")
     @classmethod
@@ -148,8 +151,12 @@ class RecoveryDatastore(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
     recovery_zvm_site_name: str = Field(validation_alias="Recovery ZVM Site Name")
+    datastore_cluster_name: Any | None = Field(
+        default=None,
+        validation_alias="Datastore Cluster Name",
+    )
     datastore_name: str = Field(validation_alias="Datastore Name")
-    size_gib: int | None = Field(default=None, ge=1, le=65536, validation_alias="Size (GiB)")
+    size_gib: int = Field(ge=1, le=65536, validation_alias="Size (GiB)")
 
     @field_validator("*", mode="before")
     @classmethod
@@ -250,11 +257,11 @@ def validate_unique_combinations(data: dict) -> None:
     )
     check_unique(
         data["recovery_hosts"],
-        ("Recovery ZVM Site Name", "Host Name"),
+        ("Recovery ZVM Site Name", "Host Cluster Name", "Host Name"),
     )
     check_unique(
         data["recovery_datastores"],
-        ("Recovery ZVM Site Name", "Datastore Name"),
+        ("Recovery ZVM Site Name", "Datastore Cluster Name", "Datastore Name"),
     )
     check_unique(
         data["recovery_folders"],

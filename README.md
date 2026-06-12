@@ -82,8 +82,25 @@ json_output.py
 Current pattern:
 
 ```python
-excel_file = "files/API Sample - VCA Data - 0.106.xlsx"
+excel_file = "files/API Sample - VCA Data - Master.xlsx"
 ```
+
+## VM NICs Validation
+
+The `VM NICs` sheet is validated after workbook defaults are applied. Blank NIC-level failover values can inherit from the matching VPG, `Recovery ZVM Sites`, and then `Default VPG Settings`.
+
+Because of this, a validation error may be reported against a `VM_NICs` table row even when the visible cell on the `VM NICs` sheet is blank. In that case, check the inherited value in the VPG's recovery site row on `Recovery ZVM Sites`, or in `Default VPG Settings`.
+
+NIC failover settings are validated as two parallel groups:
+
+- `Failover Live / Move`
+- `Failover Test`
+
+For each group, network names must exist in the recovery networks for the VPG's recovery site. IP address, gateway, and DNS server fields must be valid IPv4 addresses. Subnet mask fields must be valid IPv4 subnet masks.
+
+When `Change vNIC IP Config` is `Yes, DHCP`, the IP address, subnet mask, default gateway, DNS server, and DNS suffix fields for that group must be blank.
+
+When `Change vNIC IP Config` is `Yes, Static`, the IP address, subnet mask, default gateway, DNS server, and DNS suffix fields for that group must be present. The default gateway must also be valid for the IP address and subnet mask. For example, `192.168.34.55` with subnet mask `255.255.255.0` needs a gateway in the `192.168.34.x` subnet, such as `192.168.34.1` or `192.168.34.254`.
 
 ## Output
 

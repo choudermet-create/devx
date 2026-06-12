@@ -108,6 +108,11 @@ def format_validation_error(
     valid_values = get_valid_values(error_detail)
     valid_range = get_valid_range(error_detail)
     error_message = get_error_message(error_detail, valid_values, valid_range)
+    column_name, input_value = refine_row_level_error(
+        column_name,
+        input_value,
+        error_message,
+    )
 
     if row_context:
         return format_workbook_error(
@@ -121,6 +126,40 @@ def format_validation_error(
         f"Input value {input_value!r} for '{column_name}' is not valid. "
         f"{error_message}"
     )
+
+
+def refine_row_level_error(
+    column_name: str,
+    input_value,
+    error_message: str,
+) -> tuple[str, object]:
+    if column_name or not isinstance(input_value, dict):
+        return column_name, input_value
+
+    paired_fields = {
+        "Journal History Value and Unit must be provided together": (
+            "Journal History Value / Journal History Unit",
+            (
+                "Journal History Value",
+                "Journal History Unit",
+            ),
+        ),
+        "Target RPO Alert Value and Unit must be provided together": (
+            "Target RPO Alert Value / Target RPO Alert Unit",
+            (
+                "Target RPO Alert Value",
+                "Target RPO Alert Unit",
+            ),
+        ),
+    }
+    if error_message not in paired_fields:
+        return column_name, "row-level validation"
+
+    display_name, field_names = paired_fields[error_message]
+    return display_name, {
+        field_name: input_value.get(field_name)
+        for field_name in field_names
+    }
 
 
 def get_error_message(
@@ -149,10 +188,16 @@ def format_workbook_error(
 ) -> str:
     table_name = row_context.get("__table_name", "Unknown")
     table_row_id = row_context.get("__table_row_id", "Unknown")
+    excel_row = row_context.get("__excel_row")
+
+    worksheet_row = ""
+    if excel_row is not None:
+        worksheet_row = f"  Worksheet Row: {format_row_id(excel_row)}\n"
 
     return (
         f"Table: {table_name}\n"
         f"  Table Row ID: {format_row_id(table_row_id)}\n"
+        f"{worksheet_row}"
         f"  Column: {column_name}\n"
         f"  Input value: {input_value!r}\n"
         f"  Error: {error_message}"
@@ -160,6 +205,9 @@ def format_workbook_error(
 
 
 def format_row_id(value) -> str:
+    if value is None:
+        return "blank"
+
     if isinstance(value, float) and value.is_integer():
         return str(int(value))
 

@@ -28,7 +28,7 @@ LOG_FILE = Path("outputs/vca_check.log")
 def main():
     setup_logging()
 
-    excel_file = "files/API Sample - VCA Data - 0.106.xlsx"
+    excel_file = "files/API Sample - VCA Data - Master.xlsx"
     logging.info("Starting VCA workbook validation run")
     logging.info("Source workbook: %s", excel_file)
 
@@ -145,7 +145,7 @@ def main():
         )
 
     try:
-        result = validate_recovery_zvm_sites(recovery_zvm_sites)
+        result = validate_recovery_zvm_sites(recovery_zvm_sites, vpg_settings)
         validations["recovery_zvm_sites"] = validation_passed(result)
         print("\nRecovery ZVM Sites validation passed")
         print("------------------------------------")
@@ -170,7 +170,7 @@ def main():
         )
 
     try:
-        result = validate_vpgs(vpgs)
+        result = validate_vpgs(vpgs, vpg_settings, recovery_zvm_sites)
         validations["vpgs"] = validation_passed(result)
         print("\nVPGs validation passed")
         print("----------------------")
@@ -245,7 +245,12 @@ def main():
         )
 
     try:
-        result = validate_vm_nics(vm_nics)
+        result = validate_vm_nics(
+            vm_nics,
+            vpg_settings,
+            recovery_zvm_sites,
+            vpgs,
+        )
         validations["vm_nics"] = validation_passed(result)
         print("\nVM NICs validation passed")
         print("-------------------------")

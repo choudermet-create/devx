@@ -21,6 +21,13 @@ TABLE_ID_COLUMNS = {
     "Zerto_Data_Recovery_Scripts": "ID.6",
     "Zerto_Data_Boot_Order_Groups": "ID.7",
 }
+BOOT_ORDER_GROUP_REQUIRED_COLUMNS = (
+    ("ID.7", "ID"),
+    ("Group ID", "Group ID"),
+    ("Meta Group Name", "Meta Group Name"),
+    ("Group Name", "Group Name"),
+    ("Boot Delay (Secs)", "Boot Delay (Secs)"),
+)
 
 
 def validate_zerto_data(zerto_data: dict) -> dict:
@@ -29,6 +36,7 @@ def validate_zerto_data(zerto_data: dict) -> dict:
 
     messages.extend(validate_zvm_sites(records))
     messages.extend(validate_labels(records))
+    messages.extend(validate_recovery_scripts(records))
     messages.extend(validate_boot_order_groups(records))
 
     if messages:
@@ -92,6 +100,14 @@ def validate_labels(records: list[dict]) -> list[str]:
     return messages
 
 
+def validate_recovery_scripts(records: list[dict]) -> list[str]:
+    return validate_unique_values(
+        records,
+        "Recovery Script Name",
+        "Zerto_Data_Recovery_Scripts",
+    )
+
+
 def validate_boot_order_groups(records: list[dict]) -> list[str]:
     messages = []
     boot_order_rows = [
@@ -99,9 +115,22 @@ def validate_boot_order_groups(records: list[dict]) -> list[str]:
         for row in records
         if any(
             row.get(column) is not None
-            for column in ("Meta Group Name", "Group Name", "Boot Delay (Secs)")
+            for column, _ in BOOT_ORDER_GROUP_REQUIRED_COLUMNS
         )
     ]
+
+    for row in boot_order_rows:
+        for column_name, display_name in BOOT_ORDER_GROUP_REQUIRED_COLUMNS:
+            if row.get(column_name) is not None:
+                continue
+
+            messages.append(build_error(
+                row,
+                "Zerto_Data_Boot_Order_Groups",
+                display_name,
+                None,
+                "This value is mandatory.",
+            ))
 
     messages.extend(validate_unique_combinations(
         boot_order_rows,

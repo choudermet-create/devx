@@ -19,6 +19,7 @@ protected_network_names_by_vm_nic = {}
 protected_network_names_by_site_vm_nic = {}
 recovery_host_names = []
 recovery_host_names_by_site = {}
+recovery_host_or_cluster_names_by_site = {}
 recovery_datastore_names = []
 recovery_datastore_names_by_site = {}
 recovery_folder_names = []
