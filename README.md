@@ -28,10 +28,10 @@ This project reads a VCA Excel workbook, validates the workbook data, and genera
 ├── config.py
 ├── extraction/
 ├── files/
-├── json_output.py
 ├── ingestion/
 ├── main.py
 ├── outputs/
+├── payload/
 ├── requirements.txt
 └── validation/
 ```
@@ -76,7 +76,7 @@ If the Excel file name changes, update the workbook path in both files:
 
 ```text
 main.py
-json_output.py
+payload/json_output.py
 ```
 
 Current pattern:
