@@ -62,6 +62,7 @@ The script prints validation results and writes the JSON output to:
 ```text
 outputs/vca_check_dump.json
 outputs/zerto_api_payload.json
+outputs/vca_run_manifest.json
 ```
 
 It also appends detailed run logs to:
@@ -104,11 +105,13 @@ When `Change vNIC IP Config` is `Yes, Static`, the IP address, subnet mask, defa
 
 ## Output
 
-The project writes two JSON files.
+The project writes three JSON files.
 
 `outputs/vca_check_dump.json` is the full diagnostic dump. It includes validation status, validation messages, reference data, raw workbook candidate payloads, and defaults-applied candidate payloads.
 
 `outputs/zerto_api_payload.json` is the cleaner API handoff file. It is shaped around the Zerto 10.9 Swagger `VpgSettingsApi` grammar. It contains a `vpgSettings` list, where each item uses Zerto-style sections such as `basic`, `scripting`, `bootGroups`, `journal`, `scratch`, `recovery`, `networks`, and `vms`.
+
+`outputs/vca_run_manifest.json` is the VCA Run manifest file. It uses a PascalCase section layout and is written as a list of VPG definitions for VCA Run to consume while resolving workbook names to platform identifiers.
 
 Internal validation metadata, such as table row IDs and table names, is used only for terminal error messages and the diagnostic dump. It is not included in the clean API payload file.
 

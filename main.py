@@ -26,6 +26,7 @@ from payload.json_output import (
     make_json_safe,
     write_zerto_json_dump,
 )
+from payload.manifest_output import MANIFEST_OUTPUT_FILE
 
 
 LOG_FILE = Path("outputs/vca_check.log")
@@ -366,8 +367,10 @@ def main():
     })
     print(f"\nJSON output written to {output_path}")
     print(f"Zerto API payload written to {API_PAYLOAD_OUTPUT_FILE}")
+    print(f"VCA Run manifest written to {MANIFEST_OUTPUT_FILE}")
     logging.info("JSON output written to %s", output_path)
     logging.info("Zerto API payload written to %s", API_PAYLOAD_OUTPUT_FILE)
+    logging.info("VCA Run manifest written to %s", MANIFEST_OUTPUT_FILE)
     logging.info("Run complete")
     print(f"Detailed log written to {LOG_FILE}")
 

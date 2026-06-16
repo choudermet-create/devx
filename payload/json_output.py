@@ -21,6 +21,8 @@ def write_zerto_json_dump(
     validations: dict,
     output_file: str = OUTPUT_FILE,
 ) -> Path:
+    from payload.manifest_output import write_vca_run_manifest
+
     validation_status = get_validation_status(validations)
     resolved_api_candidate_payloads = build_resolved_api_candidate_payloads(
         default_vpg_settings,
@@ -65,6 +67,10 @@ def write_zerto_json_dump(
         resolved_api_candidate_payloads,
         zerto_data["summary"]["boot_order_groups"],
         validation_status,
+    )
+    write_vca_run_manifest(
+        resolved_api_candidate_payloads,
+        zerto_data["summary"]["boot_order_groups"],
     )
 
     return output_path
