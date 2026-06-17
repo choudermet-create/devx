@@ -208,23 +208,26 @@ def build_manifest_limitation(
     }
 
 
-def limit_value_pair(value, unit) -> tuple[int | float, int | float]:
+def limit_value_pair(value, unit) -> tuple[int | float | None, int | float | None]:
     cleaned_value = clean_value(value)
     cleaned_unit = clean_value(unit)
 
-    if cleaned_value is None or cleaned_unit in (None, "Unlimited"):
+    if cleaned_unit == "Unlimited":
         return 0, 0
 
+    if cleaned_value is None or cleaned_unit is None:
+        return None, None
+
     if cleaned_unit == "%":
-        return 0, cleaned_value
+        return None, cleaned_value
 
     if cleaned_unit == "GiB":
-        return int(float(cleaned_value) * 1024), 0
+        return int(float(cleaned_value) * 1024), None
 
     if cleaned_unit == "TiB":
-        return int(float(cleaned_value) * 1024 * 1024), 0
+        return int(float(cleaned_value) * 1024 * 1024), None
 
-    return 0, 0
+    return None, None
 
 
 def build_manifest_networks(row: dict) -> dict:
