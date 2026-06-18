@@ -129,6 +129,8 @@ def main():
         log_validation_failed("Zerto Data", error.messages)
         validations["zerto_data"] = validation_failed(error.messages)
         raw_log("validation.zerto_data", validations["zerto_data"])
+        stop_after_validation_failure("Zerto Data")
+        return
 
     try:
         result = validate_hypervisor_data(hypervisor_data)
@@ -145,6 +147,8 @@ def main():
         log_validation_failed("Hypervisor Data", error.messages)
         validations["hypervisor_data"] = validation_failed(error.messages)
         raw_log("validation.hypervisor_data", validations["hypervisor_data"])
+        stop_after_validation_failure("Hypervisor Data")
+        return
 
     except ValidationError as error:
         messages = format_validation_errors(error)
@@ -157,6 +161,8 @@ def main():
             error.errors(include_url=False),
         )
         raw_log("validation.hypervisor_data", validations["hypervisor_data"])
+        stop_after_validation_failure("Hypervisor Data")
+        return
 
     except ValueError as error:
         print("\nHypervisor Data validation failed")
@@ -165,6 +171,8 @@ def main():
         log_validation_failed("Hypervisor Data", [str(error)])
         validations["hypervisor_data"] = validation_failed([str(error)])
         raw_log("validation.hypervisor_data", validations["hypervisor_data"])
+        stop_after_validation_failure("Hypervisor Data")
+        return
 
     try:
         result = validate_default_vpg_settings(vpg_settings)
@@ -191,6 +199,8 @@ def main():
             "validation.default_vpg_settings",
             validations["default_vpg_settings"],
         )
+        stop_after_validation_failure("Default VPG Settings")
+        return
 
     try:
         result = validate_recovery_zvm_sites(recovery_zvm_sites, vpg_settings)
@@ -213,6 +223,8 @@ def main():
             "validation.recovery_zvm_sites",
             validations["recovery_zvm_sites"],
         )
+        stop_after_validation_failure("Recovery ZVM Sites")
+        return
 
     except ValidationError as error:
         messages = format_validation_errors(error)
@@ -228,6 +240,8 @@ def main():
             "validation.recovery_zvm_sites",
             validations["recovery_zvm_sites"],
         )
+        stop_after_validation_failure("Recovery ZVM Sites")
+        return
 
     try:
         result = validate_vpgs(vpgs, vpg_settings, recovery_zvm_sites)
@@ -244,6 +258,8 @@ def main():
         log_validation_failed("VPGs", error.messages)
         validations["vpgs"] = validation_failed(error.messages)
         raw_log("validation.vpgs", validations["vpgs"])
+        stop_after_validation_failure("VPGs")
+        return
 
     except ValidationError as error:
         messages = format_validation_errors(error)
@@ -256,6 +272,8 @@ def main():
             error.errors(include_url=False),
         )
         raw_log("validation.vpgs", validations["vpgs"])
+        stop_after_validation_failure("VPGs")
+        return
 
     try:
         result = validate_vm_replication(vm_replication)
@@ -272,6 +290,8 @@ def main():
         log_validation_failed("VM Replication", error.messages)
         validations["vm_replication"] = validation_failed(error.messages)
         raw_log("validation.vm_replication", validations["vm_replication"])
+        stop_after_validation_failure("VM Replication")
+        return
 
     except ValidationError as error:
         messages = format_validation_errors(error)
@@ -284,6 +304,8 @@ def main():
             error.errors(include_url=False),
         )
         raw_log("validation.vm_replication", validations["vm_replication"])
+        stop_after_validation_failure("VM Replication")
+        return
 
     try:
         result = validate_vm_storage(vm_storage)
@@ -300,6 +322,8 @@ def main():
         log_validation_failed("VM Storage", error.messages)
         validations["vm_storage"] = validation_failed(error.messages)
         raw_log("validation.vm_storage", validations["vm_storage"])
+        stop_after_validation_failure("VM Storage")
+        return
 
     except ValidationError as error:
         messages = format_validation_errors(error)
@@ -312,6 +336,8 @@ def main():
             error.errors(include_url=False),
         )
         raw_log("validation.vm_storage", validations["vm_storage"])
+        stop_after_validation_failure("VM Storage")
+        return
 
     try:
         result = validate_vm_nics(
@@ -333,6 +359,8 @@ def main():
         log_validation_failed("VM NICs", error.messages)
         validations["vm_nics"] = validation_failed(error.messages)
         raw_log("validation.vm_nics", validations["vm_nics"])
+        stop_after_validation_failure("VM NICs")
+        return
 
     except ValidationError as error:
         messages = format_validation_errors(error)
@@ -345,6 +373,8 @@ def main():
             error.errors(include_url=False),
         )
         raw_log("validation.vm_nics", validations["vm_nics"])
+        stop_after_validation_failure("VM NICs")
+        return
 
     logging.info("Generating JSON output")
     output_path = write_zerto_json_dump(
@@ -546,6 +576,19 @@ def print_validation_messages(messages: list[str]) -> None:
         if index > 0:
             print()
         print(f"- {message}")
+
+
+def stop_after_validation_failure(section_name: str) -> None:
+    message = (
+        f"Stopping validation because {section_name} failed. "
+        "Fix this section and run VCA Check again."
+    )
+    print(f"\n{message}")
+    raw_log("run_stopped", {
+        "failed_section": section_name,
+        "reason": "Validation failed; later sheets were not validated.",
+    })
+    print(f"Detailed log written to {LOG_FILE}")
 
 
 def validation_passed(result) -> dict:

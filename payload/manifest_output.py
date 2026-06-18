@@ -116,12 +116,20 @@ def build_manifest_boot_group(
             {
                 "bootGroupIdentifier": None,
                 "name": group.get("group_name"),
-                "bootDelayInSeconds": group.get("boot_delay_secs"),
+                "bootDelayInSeconds": to_int_or_none(group.get("boot_delay_secs")),
             }
             for group in boot_order_groups
             if clean_value(group.get("meta_group_name")) == clean_value(meta_group_name)
         ],
     }
+
+
+def to_int_or_none(value) -> int | None:
+    cleaned_value = clean_value(value)
+    if cleaned_value is None:
+        return None
+
+    return int(float(cleaned_value))
 
 
 def build_manifest_scripting(row: dict) -> dict:
@@ -216,18 +224,18 @@ def limit_value_pair(value, unit) -> tuple[int | float | None, int | float | Non
         return 0, 0
 
     if cleaned_value is None or cleaned_unit is None:
-        return None, None
+        return 0, 0
 
     if cleaned_unit == "%":
-        return None, cleaned_value
+        return 0, cleaned_value
 
     if cleaned_unit == "GiB":
-        return int(float(cleaned_value) * 1024), None
+        return int(float(cleaned_value) * 1024), 0
 
     if cleaned_unit == "TiB":
-        return int(float(cleaned_value) * 1024 * 1024), None
+        return int(float(cleaned_value) * 1024 * 1024), 0
 
-    return None, None
+    return 0, 0
 
 
 def build_manifest_networks(row: dict) -> dict:

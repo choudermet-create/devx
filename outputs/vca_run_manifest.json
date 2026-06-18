@@ -18,22 +18,22 @@
         {
           "bootGroupIdentifier": null,
           "name": "Web Server",
-          "bootDelayInSeconds": 300.0
+          "bootDelayInSeconds": 300
         },
         {
           "bootGroupIdentifier": null,
           "name": "App Server",
-          "bootDelayInSeconds": 60.0
+          "bootDelayInSeconds": 60
         },
         {
           "bootGroupIdentifier": null,
           "name": "DB Server",
-          "bootDelayInSeconds": 45.0
+          "bootDelayInSeconds": 45
         },
         {
           "bootGroupIdentifier": null,
           "name": "vik-Web Server-2",
-          "bootDelayInSeconds": 1.0
+          "bootDelayInSeconds": 1
         }
       ]
     },
@@ -69,19 +69,19 @@
     "Journal": {
       "limitation": {
         "hardLimitInMB": 153600,
-        "hardLimitInPercent": null,
+        "hardLimitInPercent": 0,
         "warningThresholdInMB": 115200,
-        "warningThresholdInPercent": null
+        "warningThresholdInPercent": 0
       },
       "datastoreIdentifier": "DS1",
       "datastoreClusterIdentifier": "DS1"
     },
     "Scratch": {
       "limitation": {
-        "hardLimitInMB": null,
+        "hardLimitInMB": 0,
         "hardLimitInPercent": 300,
         "warningThresholdInMB": 230400,
-        "warningThresholdInPercent": null
+        "warningThresholdInPercent": 0
       },
       "datastoreIdentifier": "DS1",
       "datastoreClusterIdentifier": "DS1"
@@ -124,19 +124,19 @@
         "Journal": {
           "limitation": {
             "hardLimitInMB": 153600,
-            "hardLimitInPercent": null,
+            "hardLimitInPercent": 0,
             "warningThresholdInMB": 115200,
-            "warningThresholdInPercent": null
+            "warningThresholdInPercent": 0
           },
           "datastoreIdentifier": "DS1",
           "datastoreClusterIdentifier": "DS1"
         },
         "Scratch": {
           "limitation": {
-            "hardLimitInMB": null,
+            "hardLimitInMB": 0,
             "hardLimitInPercent": 300,
             "warningThresholdInMB": 230400,
-            "warningThresholdInPercent": null
+            "warningThresholdInPercent": 0
           },
           "datastoreIdentifier": "DS1",
           "datastoreClusterIdentifier": "DS1"
@@ -226,19 +226,19 @@
         "Journal": {
           "limitation": {
             "hardLimitInMB": 153600,
-            "hardLimitInPercent": null,
+            "hardLimitInPercent": 0,
             "warningThresholdInMB": 115200,
-            "warningThresholdInPercent": null
+            "warningThresholdInPercent": 0
           },
           "datastoreIdentifier": "DS1",
           "datastoreClusterIdentifier": "DS1"
         },
         "Scratch": {
           "limitation": {
-            "hardLimitInMB": null,
+            "hardLimitInMB": 0,
             "hardLimitInPercent": 300,
             "warningThresholdInMB": 230400,
-            "warningThresholdInPercent": null
+            "warningThresholdInPercent": 0
           },
           "datastoreIdentifier": "DS1",
           "datastoreClusterIdentifier": "DS1"
@@ -267,19 +267,19 @@
         "Journal": {
           "limitation": {
             "hardLimitInMB": 153600,
-            "hardLimitInPercent": null,
+            "hardLimitInPercent": 0,
             "warningThresholdInMB": 115200,
-            "warningThresholdInPercent": null
+            "warningThresholdInPercent": 0
           },
           "datastoreIdentifier": "DS1",
           "datastoreClusterIdentifier": "DS1"
         },
         "Scratch": {
           "limitation": {
-            "hardLimitInMB": null,
+            "hardLimitInMB": 0,
             "hardLimitInPercent": 300,
             "warningThresholdInMB": 230400,
-            "warningThresholdInPercent": null
+            "warningThresholdInPercent": 0
           },
           "datastoreIdentifier": "DS1",
           "datastoreClusterIdentifier": "DS1"
@@ -308,12 +308,12 @@
         {
           "bootGroupIdentifier": null,
           "name": "Higher Tier",
-          "bootDelayInSeconds": 60.0
+          "bootDelayInSeconds": 60
         },
         {
           "bootGroupIdentifier": null,
           "name": "Lower Tier",
-          "bootDelayInSeconds": 999.0
+          "bootDelayInSeconds": 999
         }
       ]
     },
@@ -349,19 +349,19 @@
     "Journal": {
       "limitation": {
         "hardLimitInMB": 153600,
-        "hardLimitInPercent": null,
+        "hardLimitInPercent": 0,
         "warningThresholdInMB": 115200,
-        "warningThresholdInPercent": null
+        "warningThresholdInPercent": 0
       },
       "datastoreIdentifier": "Datastore 1",
       "datastoreClusterIdentifier": "Datastore 1"
     },
     "Scratch": {
       "limitation": {
-        "hardLimitInMB": null,
+        "hardLimitInMB": 0,
         "hardLimitInPercent": 300,
         "warningThresholdInMB": 230400,
-        "warningThresholdInPercent": null
+        "warningThresholdInPercent": 0
       },
       "datastoreIdentifier": "DataStore 2",
       "datastoreClusterIdentifier": "DataStore 2"
@@ -404,19 +404,19 @@
         "Journal": {
           "limitation": {
             "hardLimitInMB": 153600,
-            "hardLimitInPercent": null,
+            "hardLimitInPercent": 0,
             "warningThresholdInMB": 115200,
-            "warningThresholdInPercent": null
+            "warningThresholdInPercent": 0
           },
           "datastoreIdentifier": "Datastore 1",
           "datastoreClusterIdentifier": "Datastore 1"
         },
         "Scratch": {
           "limitation": {
-            "hardLimitInMB": null,
+            "hardLimitInMB": 0,
             "hardLimitInPercent": 300,
             "warningThresholdInMB": 230400,
-            "warningThresholdInPercent": null
+            "warningThresholdInPercent": 0
           },
           "datastoreIdentifier": "DataStore 2",
           "datastoreClusterIdentifier": "DataStore 2"
@@ -506,19 +506,19 @@
         "Journal": {
           "limitation": {
             "hardLimitInMB": 153600,
-            "hardLimitInPercent": null,
+            "hardLimitInPercent": 0,
             "warningThresholdInMB": 115200,
-            "warningThresholdInPercent": null
+            "warningThresholdInPercent": 0
           },
           "datastoreIdentifier": "Datastore 1",
           "datastoreClusterIdentifier": "Datastore 1"
         },
         "Scratch": {
           "limitation": {
-            "hardLimitInMB": null,
+            "hardLimitInMB": 0,
             "hardLimitInPercent": 300,
             "warningThresholdInMB": 230400,
-            "warningThresholdInPercent": null
+            "warningThresholdInPercent": 0
           },
           "datastoreIdentifier": "DataStore 2",
           "datastoreClusterIdentifier": "DataStore 2"
@@ -546,20 +546,20 @@
         },
         "Journal": {
           "limitation": {
-            "hardLimitInMB": null,
-            "hardLimitInPercent": null,
-            "warningThresholdInMB": null,
-            "warningThresholdInPercent": null
+            "hardLimitInMB": 0,
+            "hardLimitInPercent": 0,
+            "warningThresholdInMB": 0,
+            "warningThresholdInPercent": 0
           },
           "datastoreIdentifier": null,
           "datastoreClusterIdentifier": null
         },
         "Scratch": {
           "limitation": {
-            "hardLimitInMB": null,
-            "hardLimitInPercent": null,
-            "warningThresholdInMB": null,
-            "warningThresholdInPercent": null
+            "hardLimitInMB": 0,
+            "hardLimitInPercent": 0,
+            "warningThresholdInMB": 0,
+            "warningThresholdInPercent": 0
           },
           "datastoreIdentifier": null,
           "datastoreClusterIdentifier": null
@@ -608,20 +608,20 @@
         },
         "Journal": {
           "limitation": {
-            "hardLimitInMB": null,
-            "hardLimitInPercent": null,
-            "warningThresholdInMB": null,
-            "warningThresholdInPercent": null
+            "hardLimitInMB": 0,
+            "hardLimitInPercent": 0,
+            "warningThresholdInMB": 0,
+            "warningThresholdInPercent": 0
           },
           "datastoreIdentifier": null,
           "datastoreClusterIdentifier": null
         },
         "Scratch": {
           "limitation": {
-            "hardLimitInMB": null,
-            "hardLimitInPercent": null,
-            "warningThresholdInMB": null,
-            "warningThresholdInPercent": null
+            "hardLimitInMB": 0,
+            "hardLimitInPercent": 0,
+            "warningThresholdInMB": 0,
+            "warningThresholdInPercent": 0
           },
           "datastoreIdentifier": null,
           "datastoreClusterIdentifier": null
@@ -720,19 +720,19 @@
     "Journal": {
       "limitation": {
         "hardLimitInMB": 153600,
-        "hardLimitInPercent": null,
+        "hardLimitInPercent": 0,
         "warningThresholdInMB": 115200,
-        "warningThresholdInPercent": null
+        "warningThresholdInPercent": 0
       },
       "datastoreIdentifier": null,
       "datastoreClusterIdentifier": null
     },
     "Scratch": {
       "limitation": {
-        "hardLimitInMB": null,
+        "hardLimitInMB": 0,
         "hardLimitInPercent": 300,
         "warningThresholdInMB": 230400,
-        "warningThresholdInPercent": null
+        "warningThresholdInPercent": 0
       },
       "datastoreIdentifier": null,
       "datastoreClusterIdentifier": null
@@ -804,19 +804,19 @@
     "Journal": {
       "limitation": {
         "hardLimitInMB": 153600,
-        "hardLimitInPercent": null,
+        "hardLimitInPercent": 0,
         "warningThresholdInMB": 115200,
-        "warningThresholdInPercent": null
+        "warningThresholdInPercent": 0
       },
       "datastoreIdentifier": "DataStore 2",
       "datastoreClusterIdentifier": "DataStore 2"
     },
     "Scratch": {
       "limitation": {
-        "hardLimitInMB": null,
+        "hardLimitInMB": 0,
         "hardLimitInPercent": 300,
         "warningThresholdInMB": 230400,
-        "warningThresholdInPercent": null
+        "warningThresholdInPercent": 0
       },
       "datastoreIdentifier": "Datastore 1",
       "datastoreClusterIdentifier": "Datastore 1"
@@ -888,19 +888,19 @@
     "Journal": {
       "limitation": {
         "hardLimitInMB": 153600,
-        "hardLimitInPercent": null,
+        "hardLimitInPercent": 0,
         "warningThresholdInMB": 115200,
-        "warningThresholdInPercent": null
+        "warningThresholdInPercent": 0
       },
       "datastoreIdentifier": "DataStore 2",
       "datastoreClusterIdentifier": "DataStore 2"
     },
     "Scratch": {
       "limitation": {
-        "hardLimitInMB": null,
+        "hardLimitInMB": 0,
         "hardLimitInPercent": 300,
         "warningThresholdInMB": 230400,
-        "warningThresholdInPercent": null
+        "warningThresholdInPercent": 0
       },
       "datastoreIdentifier": "Datastore 1",
       "datastoreClusterIdentifier": "Datastore 1"
@@ -972,19 +972,19 @@
     "Journal": {
       "limitation": {
         "hardLimitInMB": 153600,
-        "hardLimitInPercent": null,
+        "hardLimitInPercent": 0,
         "warningThresholdInMB": 115200,
-        "warningThresholdInPercent": null
+        "warningThresholdInPercent": 0
       },
       "datastoreIdentifier": "DataStore 2",
       "datastoreClusterIdentifier": "DataStore 2"
     },
     "Scratch": {
       "limitation": {
-        "hardLimitInMB": null,
+        "hardLimitInMB": 0,
         "hardLimitInPercent": 300,
         "warningThresholdInMB": 230400,
-        "warningThresholdInPercent": null
+        "warningThresholdInPercent": 0
       },
       "datastoreIdentifier": "Datastore 1",
       "datastoreClusterIdentifier": "Datastore 1"
