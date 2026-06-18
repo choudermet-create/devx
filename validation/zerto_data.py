@@ -4,6 +4,7 @@ from validation.error_formatting import WorkbookValidationError, format_workbook
 
 
 YES_NO_VALUES = ("Yes", "No")
+ZERTO_VERSION_VALUES = ("10.9", "10.8", "10.0U7")
 LABEL_TABLES = {
     "Label 1": "Zerto_Data_Label_1",
     "Label 2": "Zerto_Data_Label_2",
@@ -52,7 +53,7 @@ def validate_zvm_sites(records: list[dict]) -> list[str]:
         for row in records
         if any(
             row.get(column) is not None
-            for column in ("ZVM Site Name", "Protected?", "Recovery?")
+            for column in ("ZVM Site Name", "Zerto Version", "Protected?", "Recovery?")
         )
     ]
 
@@ -86,6 +87,16 @@ def validate_zvm_sites(records: list[dict]) -> list[str]:
                 "Protected? / Recovery?",
                 f"{protected or 'blank'} / {recovery or 'blank'}",
                 "At least one value must be 'Yes'.",
+            ))
+
+        zerto_version = row.get("Zerto Version")
+        if zerto_version is not None and str(zerto_version) not in ZERTO_VERSION_VALUES:
+            messages.append(build_error(
+                row,
+                "Zerto_Data_ZVM_Site_Names",
+                "Zerto Version",
+                zerto_version,
+                "Valid values are: '10.9', '10.8', '10.0U7'.",
             ))
 
     return messages

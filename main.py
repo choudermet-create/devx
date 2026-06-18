@@ -47,7 +47,7 @@ def raw_log(label: str, value=None) -> None:
 def main():
     setup_logging()
 
-    excel_file = "files/API Sample - VCA Data - Master.xlsx"
+    excel_file = "files/Manifest prep VCA Data - 0.108.xlsx"
     raw_log("run_started", {"source_file": excel_file})
     logging.info("Starting VCA workbook validation run")
     logging.info("Source workbook: %s", excel_file)

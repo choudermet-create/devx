@@ -79,6 +79,7 @@ def build_zerto_summary(records: list[dict]) -> dict:
         if row.get("ZVM Site Name"):
             summary["zvm_sites"].append({
                 "site_name": row.get("ZVM Site Name"),
+                "zerto_version": row.get("Zerto Version"),
                 "protected": row.get("Protected?"),
                 "recovery": row.get("Recovery?"),
             })
