@@ -10,11 +10,16 @@ from pydantic import (
 )
 
 import config
-from validation.error_formatting import validate_model_rows
+from validation.error_formatting import (
+    WorkbookValidationError,
+    format_workbook_error,
+    validate_model_rows,
+)
 from validation.recovery_zvm_sites import (
     JournalSizeUnit,
     normalize_blank,
     validate_journal_size,
+    validate_journal_size_threshold,
     validate_site_scoped_value,
 )
 from validation.vpgs import validate_config_value
@@ -265,6 +270,22 @@ class VMReplication(BaseModel):
             self.scratch_journal_size_warning_threshold_unit,
             "Scratch Journal Size Warning Threshold Value",
         )
+        validate_journal_size_threshold(
+            self.journal_size_warning_threshold_value,
+            self.journal_size_warning_threshold_unit,
+            self.journal_size_hard_limit_value,
+            self.journal_size_hard_limit_unit,
+            "Journal Size Warning Threshold",
+            "Journal Size Hard Limit",
+        )
+        validate_journal_size_threshold(
+            self.scratch_journal_size_warning_threshold_value,
+            self.scratch_journal_size_warning_threshold_unit,
+            self.scratch_journal_size_hard_limit_value,
+            self.scratch_journal_size_hard_limit_unit,
+            "Scratch Journal Size Warning Threshold",
+            "Scratch Journal Size Hard Limit",
+        )
 
         return self
 
@@ -274,8 +295,71 @@ def validate_vm_replication_row(data: dict) -> VMReplication:
 
 
 def validate_vm_replication(data: list[dict]) -> list[VMReplication]:
-    return validate_model_rows(VMReplication, data)
+    validated_rows = validate_model_rows(VMReplication, data)
+    validate_vm_replication_vpg_limits(data)
+    return validated_rows
 
 
 def get_vpg_recovery_site_name(vpg_name: str | None) -> str | None:
     return config.vpg_recovery_site_names_by_vpg_name.get(vpg_name)
+
+
+def validate_vm_replication_vpg_limits(data: list[dict]) -> None:
+    grouped_rows = {}
+
+    for row in data:
+        vpg_name = normalize_blank(row.get("VPG Name"))
+        vm_name = normalize_blank(row.get("VM Name"))
+        if vpg_name is None or vm_name is None:
+            continue
+
+        protected_site = config.vpg_protected_site_names_by_vpg_name.get(vpg_name)
+        recovery_site = config.vpg_recovery_site_names_by_vpg_name.get(vpg_name)
+        if protected_site is None or recovery_site is None:
+            continue
+
+        key = (protected_site, vm_name)
+        grouped_rows.setdefault(key, []).append({
+            "row": row,
+            "vpg_name": vpg_name,
+            "recovery_site": recovery_site,
+        })
+
+    messages = []
+
+    for (protected_site, vm_name), rows in grouped_rows.items():
+        if len(rows) > 3:
+            for item in rows:
+                messages.append(format_workbook_error(
+                    item["row"],
+                    "VM Name",
+                    vm_name,
+                    (
+                        f"VM Name '{vm_name}' with Protected ZVM Site Name "
+                        f"'{protected_site}' can be part of at most 3 VPGs."
+                    ),
+                ))
+
+        recovery_site_rows = {}
+        for item in rows:
+            recovery_site_rows.setdefault(item["recovery_site"], []).append(item)
+
+        for recovery_site, duplicate_rows in recovery_site_rows.items():
+            if len(duplicate_rows) <= 1:
+                continue
+
+            for item in duplicate_rows:
+                messages.append(format_workbook_error(
+                    item["row"],
+                    "VPG Name",
+                    item["vpg_name"],
+                    (
+                        f"VM Name '{vm_name}' with Protected ZVM Site Name "
+                        f"'{protected_site}' can only use each Recovery ZVM "
+                        f"Site Name once. Recovery ZVM Site Name "
+                        f"'{recovery_site}' is duplicated."
+                    ),
+                ))
+
+    if messages:
+        raise WorkbookValidationError(messages)

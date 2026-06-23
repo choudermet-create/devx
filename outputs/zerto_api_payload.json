@@ -3,297 +3,84 @@
   "vpgSettings": [
     {
       "basic": {
-        "name": "test",
-        "vpgType": "Data Mobility and Migration",
-        "rpoInSeconds": 300,
-        "testIntervalInMinutes": 129600,
-        "journalHistoryInHours": 24,
-        "priority": "Medium",
-        "useWanCompression": true,
-        "protectedSiteIdentifier": "Right",
-        "recoverySiteIdentifier": "Left"
-      },
-      "scripting": {
-        "preRecovery": {
-          "command": "AnotherScript",
-          "timeoutInSeconds": 6000
-        },
-        "postRecovery": {
-          "command": "AnotherScript",
-          "timeoutInSeconds": 300
-        }
-      },
-      "bootGroups": {
-        "bootGroups": [
-          {
-            "name": "Web Server",
-            "bootDelayInSeconds": 300.0
-          },
-          {
-            "name": "App Server",
-            "bootDelayInSeconds": 60.0
-          },
-          {
-            "name": "DB Server",
-            "bootDelayInSeconds": 45.0
-          },
-          {
-            "name": "vik-Web Server-2",
-            "bootDelayInSeconds": 1.0
-          }
-        ]
-      },
-      "journal": {
-        "limitation": {
-          "hardLimitInMB": 153600,
-          "warningThresholdInMB": 115200
-        },
-        "datastoreIdentifier": "DS1"
-      },
-      "scratch": {
-        "limitation": {
-          "hardLimitInPercent": 300,
-          "warningThresholdInMB": 230400
-        },
-        "datastoreIdentifier": "DS1"
-      },
-      "recovery": {
-        "defaultHostIdentifier": "Host 1",
-        "defaultDatastoreIdentifier": "DS1",
-        "defaultFolderIdentifier": "/vik_folder"
-      },
-      "networks": {
-        "failover": {
-          "hypervisor": {
-            "defaultNetworkIdentifier": "Network 3"
-          }
-        },
-        "failoverTest": {
-          "hypervisor": {
-            "defaultNetworkIdentifier": "Network 3"
-          }
-        }
-      },
-      "vms": [
-        {
-          "vmIdentifier": "VM 3",
-          "recovery": {
-            "hostIdentifier": "Host 1",
-            "datastoreIdentifier": "DS1",
-            "folderIdentifier": "/vik_folder"
-          },
-          "bootGroupIdentifier": "Web Server",
-          "journal": {
-            "limitation": {
-              "hardLimitInMB": 153600,
-              "warningThresholdInMB": 115200
-            },
-            "datastoreIdentifier": "DS1"
-          },
-          "scratch": {
-            "limitation": {
-              "hardLimitInPercent": 300,
-              "warningThresholdInMB": 230400
-            },
-            "datastoreIdentifier": "DS1"
-          },
-          "volumes": [
-            {
-              "volumeIdentifier": "Disk C",
-              "volumeSyncSettings": "Continuous Sync"
-            }
-          ],
-          "nics": [
-            {
-              "nicIdentifier": "NIC A",
-              "failover": {
-                "hypervisor": {
-                  "networkIdentifier": "VM Network",
-                  "shouldReplaceMacAddress": true,
-                  "dnsSuffix": "company.local",
-                  "ipConfig": {
-                    "staticIp": "192.168.1.55",
-                    "subnetMask": "255.255.255.0",
-                    "gateway": "192.168.1.254",
-                    "primaryDns": "1.1.1.1",
-                    "secondaryDns": "8.8.8.8",
-                    "isDhcp": false
-                  },
-                  "shouldReplaceIpConfiguration": true
-                }
-              },
-              "failoverTest": {
-                "hypervisor": {
-                  "networkIdentifier": "Network 3",
-                  "shouldReplaceMacAddress": false,
-                  "dnsSuffix": "company.local",
-                  "ipConfig": {
-                    "staticIp": "192.168.1.1",
-                    "subnetMask": "255.255.255.0",
-                    "gateway": "192.168.1.254",
-                    "primaryDns": "2.2.2.2",
-                    "secondaryDns": "9.9.9.9",
-                    "isDhcp": false
-                  },
-                  "shouldReplaceIpConfiguration": true
-                }
-              }
-            }
-          ]
-        },
-        {
-          "vmIdentifier": "BLA",
-          "recovery": {
-            "hostIdentifier": "Host 1",
-            "datastoreIdentifier": "DS1",
-            "folderIdentifier": "/vik_folder"
-          },
-          "bootGroupIdentifier": "App Server",
-          "journal": {
-            "limitation": {
-              "hardLimitInMB": 153600,
-              "warningThresholdInMB": 115200
-            },
-            "datastoreIdentifier": "DS1"
-          },
-          "scratch": {
-            "limitation": {
-              "hardLimitInPercent": 300,
-              "warningThresholdInMB": 230400
-            },
-            "datastoreIdentifier": "DS1"
-          }
-        },
-        {
-          "vmIdentifier": "VM dada",
-          "recovery": {
-            "hostIdentifier": "Host 1",
-            "datastoreIdentifier": "DS1",
-            "folderIdentifier": "/vik_folder"
-          },
-          "bootGroupIdentifier": "App Server",
-          "journal": {
-            "limitation": {
-              "hardLimitInMB": 153600,
-              "warningThresholdInMB": 115200
-            },
-            "datastoreIdentifier": "DS1"
-          },
-          "scratch": {
-            "limitation": {
-              "hardLimitInPercent": 300,
-              "warningThresholdInMB": 230400
-            },
-            "datastoreIdentifier": "DS1"
-          }
-        }
-      ]
-    },
-    {
-      "basic": {
-        "name": "Test2",
+        "name": "U L2R",
         "vpgType": "Remote DR and Continuous Backup",
-        "rpoInSeconds": 3600,
+        "rpoInSeconds": 300,
         "testIntervalInMinutes": 259200,
         "journalHistoryInHours": 24,
         "priority": "Medium",
         "useWanCompression": true,
-        "protectedSiteIdentifier": "Left",
-        "recoverySiteIdentifier": "Right"
+        "protectedSiteIdentifier": "ZVM L",
+        "recoverySiteIdentifier": "ZVM R"
       },
       "scripting": {
         "preRecovery": {
-          "command": "MyOnlyRecoveryScript",
-          "timeoutInSeconds": 6000
+          "timeoutInSeconds": 300
         },
         "postRecovery": {
-          "command": "MyOnlyRecoveryScript",
           "timeoutInSeconds": 300
         }
-      },
-      "bootGroups": {
-        "bootGroups": [
-          {
-            "name": "Higher Tier",
-            "bootDelayInSeconds": 60.0
-          },
-          {
-            "name": "Lower Tier",
-            "bootDelayInSeconds": 999.0
-          }
-        ]
       },
       "journal": {
         "limitation": {
           "hardLimitInMB": 153600,
           "warningThresholdInMB": 115200
-        },
-        "datastoreIdentifier": "Datastore 1"
+        }
       },
       "scratch": {
         "limitation": {
-          "hardLimitInPercent": 300,
+          "hardLimitInMB": 307200,
           "warningThresholdInMB": 230400
-        },
-        "datastoreIdentifier": "DataStore 2"
+        }
       },
       "recovery": {
-        "defaultHostIdentifier": "Host",
-        "defaultDatastoreIdentifier": "Datastore 1",
-        "defaultFolderIdentifier": "/MyFolder"
+        "defaultHostIdentifier": "192.168.222.2",
+        "defaultDatastoreIdentifier": "DS_VM_Right",
+        "defaultFolderIdentifier": "/"
       },
       "networks": {
         "failover": {
           "hypervisor": {
-            "defaultNetworkIdentifier": "Network 1"
-          }
-        },
-        "failoverTest": {
-          "hypervisor": {
-            "defaultNetworkIdentifier": "Network 2"
+            "defaultNetworkIdentifier": "VM Network"
           }
         }
       },
       "vms": [
         {
-          "vmIdentifier": "Microsoft 2022",
+          "vmIdentifier": "Ubuntu 22.4",
           "recovery": {
-            "hostIdentifier": "Host",
-            "datastoreIdentifier": "Datastore 1",
-            "folderIdentifier": "/MyFolder"
+            "hostIdentifier": "192.168.222.2",
+            "datastoreIdentifier": "DS_VM_Right",
+            "folderIdentifier": "/"
           },
-          "bootGroupIdentifier": "Higher Tier",
           "journal": {
             "limitation": {
               "hardLimitInMB": 153600,
               "warningThresholdInMB": 115200
-            },
-            "datastoreIdentifier": "Datastore 1"
+            }
           },
           "scratch": {
             "limitation": {
-              "hardLimitInPercent": 300,
+              "hardLimitInMB": 307200,
               "warningThresholdInMB": 230400
-            },
-            "datastoreIdentifier": "DataStore 2"
+            }
           },
           "volumes": [
             {
-              "volumeIdentifier": "Disk A",
+              "volumeIdentifier": "[DS_VM_Left] Ubuntu 22.4/Ubuntu 22.4-000001.vmdk",
               "volumeSyncSettings": "Continuous Sync"
             }
           ],
           "nics": [
             {
-              "nicIdentifier": "NIC 1",
+              "nicIdentifier": "Network adapter 1",
               "failover": {
                 "hypervisor": {
-                  "networkIdentifier": "Network 1",
+                  "networkIdentifier": "VM Network",
                   "shouldReplaceMacAddress": false,
-                  "dnsSuffix": "company.local",
                   "ipConfig": {
                     "subnetMask": "255.255.255.0",
-                    "gateway": "192.168.1.254",
+                    "gateway": "192.168.0.254",
                     "primaryDns": "1.1.1.1",
                     "secondaryDns": "8.8.8.8"
                   },
@@ -302,11 +89,117 @@
               },
               "failoverTest": {
                 "hypervisor": {
-                  "networkIdentifier": "Network 2",
                   "shouldReplaceMacAddress": false,
-                  "dnsSuffix": "company.local",
+                  "ipConfig": {
+                    "subnetMask": "255.255.254.0",
+                    "gateway": "192.168.1.254",
+                    "primaryDns": "2.2.2.2",
+                    "secondaryDns": "9.9.9.9"
+                  },
+                  "shouldReplaceIpConfiguration": false
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "basic": {
+        "name": "ZVM 2R",
+        "vpgType": "Remote DR and Continuous Backup",
+        "rpoInSeconds": 300,
+        "testIntervalInMinutes": 259200,
+        "journalHistoryInHours": 24,
+        "priority": "Medium",
+        "useWanCompression": true,
+        "protectedSiteIdentifier": "ZVM L",
+        "recoverySiteIdentifier": "ZVM R"
+      },
+      "scripting": {
+        "preRecovery": {
+          "timeoutInSeconds": 300
+        },
+        "postRecovery": {
+          "timeoutInSeconds": 300
+        }
+      },
+      "bootGroups": {
+        "bootGroups": [
+          {
+            "name": "Default",
+            "bootDelayInSeconds": 1.0
+          },
+          {
+            "name": "New_Group_1",
+            "bootDelayInSeconds": 2.0
+          }
+        ]
+      },
+      "journal": {
+        "limitation": {
+          "hardLimitInMB": 153600,
+          "warningThresholdInMB": 115200
+        }
+      },
+      "scratch": {
+        "limitation": {
+          "hardLimitInMB": 307200,
+          "warningThresholdInMB": 230400
+        }
+      },
+      "recovery": {
+        "defaultHostIdentifier": "192.168.222.2",
+        "defaultDatastoreIdentifier": "DS_VM_Right",
+        "defaultFolderIdentifier": "/"
+      },
+      "vms": [
+        {
+          "vmIdentifier": "ZVM-Left",
+          "recovery": {
+            "hostIdentifier": "192.168.222.2",
+            "datastoreIdentifier": "DS_VM_Right",
+            "folderIdentifier": "/"
+          },
+          "bootGroupIdentifier": "New_Group_1",
+          "journal": {
+            "limitation": {
+              "hardLimitInMB": 153600,
+              "warningThresholdInMB": 115200
+            }
+          },
+          "scratch": {
+            "limitation": {
+              "hardLimitInMB": 307200,
+              "warningThresholdInMB": 230400
+            }
+          },
+          "volumes": [
+            {
+              "volumeIdentifier": "[DS_VM_Left] ZVM-Left/ZVM-Left.vmdk",
+              "volumeSyncSettings": "Continuous Sync"
+            }
+          ],
+          "nics": [
+            {
+              "nicIdentifier": "Network adapter 1",
+              "failover": {
+                "hypervisor": {
+                  "shouldReplaceMacAddress": false,
                   "ipConfig": {
                     "subnetMask": "255.255.255.0",
+                    "gateway": "192.168.0.254",
+                    "primaryDns": "1.1.1.1",
+                    "secondaryDns": "8.8.8.8"
+                  },
+                  "shouldReplaceIpConfiguration": false
+                }
+              },
+              "failoverTest": {
+                "hypervisor": {
+                  "shouldReplaceMacAddress": false,
+                  "ipConfig": {
+                    "subnetMask": "255.255.254.0",
                     "gateway": "192.168.1.254",
                     "primaryDns": "2.2.2.2",
                     "secondaryDns": "9.9.9.9"
@@ -318,49 +211,40 @@
           ]
         },
         {
-          "vmIdentifier": "ZVML-Left",
+          "vmIdentifier": "Microsoft 2022",
           "recovery": {
-            "hostIdentifier": "Host",
-            "datastoreIdentifier": "Datastore 1",
-            "folderIdentifier": "/MyFolder"
+            "hostIdentifier": "192.168.222.2",
+            "datastoreIdentifier": "DS_VM_Right",
+            "folderIdentifier": "/"
           },
-          "bootGroupIdentifier": "Lower Tier",
+          "bootGroupIdentifier": "Default",
           "journal": {
             "limitation": {
               "hardLimitInMB": 153600,
               "warningThresholdInMB": 115200
-            },
-            "datastoreIdentifier": "Datastore 1"
+            }
           },
           "scratch": {
             "limitation": {
-              "hardLimitInPercent": 300,
+              "hardLimitInMB": 307200,
               "warningThresholdInMB": 230400
-            },
-            "datastoreIdentifier": "DataStore 2"
-          }
-        },
-        {
-          "vmIdentifier": "Z-VRA-192.168.111.2",
+            }
+          },
           "volumes": [
             {
+              "volumeIdentifier": "[DS_VM_Left] Microsoft 2022/Microsoft 2022.vmdk",
               "volumeSyncSettings": "Continuous Sync"
             }
-          ]
-        },
-        {
-          "vmIdentifier": "Ubuntu 22.4",
+          ],
           "nics": [
             {
-              "nicIdentifier": "Nic Veel",
+              "nicIdentifier": "Network adapter 1",
               "failover": {
                 "hypervisor": {
-                  "networkIdentifier": "Network 1",
                   "shouldReplaceMacAddress": false,
-                  "dnsSuffix": "company.local",
                   "ipConfig": {
                     "subnetMask": "255.255.255.0",
-                    "gateway": "192.168.1.254",
+                    "gateway": "192.168.0.254",
                     "primaryDns": "1.1.1.1",
                     "secondaryDns": "8.8.8.8"
                   },
@@ -369,18 +253,14 @@
               },
               "failoverTest": {
                 "hypervisor": {
-                  "networkIdentifier": "Network 2",
                   "shouldReplaceMacAddress": false,
-                  "dnsSuffix": "company.local",
                   "ipConfig": {
-                    "staticIp": "192.168.1.255",
-                    "subnetMask": "255.255.255.0",
+                    "subnetMask": "255.255.254.0",
                     "gateway": "192.168.1.254",
                     "primaryDns": "2.2.2.2",
-                    "secondaryDns": "9.9.9.9",
-                    "isDhcp": false
+                    "secondaryDns": "9.9.9.9"
                   },
-                  "shouldReplaceIpConfiguration": true
+                  "shouldReplaceIpConfiguration": false
                 }
               }
             }
@@ -390,19 +270,19 @@
     },
     {
       "basic": {
-        "name": "Prod2DR",
-        "vpgType": "Remote DR and Continuous Backup",
+        "name": "U Local",
+        "vpgType": "Local Continuous Backup",
         "rpoInSeconds": 300,
         "testIntervalInMinutes": 259200,
         "journalHistoryInHours": 24,
         "priority": "Medium",
         "useWanCompression": true,
-        "protectedSiteIdentifier": "Prod",
-        "recoverySiteIdentifier": "DR"
+        "protectedSiteIdentifier": "ZVM L",
+        "recoverySiteIdentifier": "ZVM L"
       },
       "scripting": {
         "preRecovery": {
-          "timeoutInSeconds": 6000
+          "timeoutInSeconds": 300
         },
         "postRecovery": {
           "timeoutInSeconds": 300
@@ -416,176 +296,39 @@
       },
       "scratch": {
         "limitation": {
-          "hardLimitInPercent": 300,
+          "hardLimitInMB": 307200,
           "warningThresholdInMB": 230400
         }
       },
       "recovery": {
-        "defaultHostIdentifier": "Cluster",
-        "defaultFolderIdentifier": "/"
-      }
-    },
-    {
-      "basic": {
-        "name": "Lange naam voor een VPG die lang is",
-        "vpgType": "Remote DR and Continuous Backup",
-        "rpoInSeconds": 3600,
-        "testIntervalInMinutes": 259200,
-        "journalHistoryInHours": 24,
-        "priority": "Medium",
-        "useWanCompression": true,
-        "protectedSiteIdentifier": "Left",
-        "recoverySiteIdentifier": "Right"
-      },
-      "scripting": {
-        "preRecovery": {
-          "command": "MyOnlyRecoveryScript",
-          "timeoutInSeconds": 6000
-        },
-        "postRecovery": {
-          "command": "MyOnlyRecoveryScript",
-          "timeoutInSeconds": 300
-        }
-      },
-      "journal": {
-        "limitation": {
-          "hardLimitInMB": 153600,
-          "warningThresholdInMB": 115200
-        },
-        "datastoreIdentifier": "DataStore 2"
-      },
-      "scratch": {
-        "limitation": {
-          "hardLimitInPercent": 300,
-          "warningThresholdInMB": 230400
-        },
-        "datastoreIdentifier": "Datastore 1"
-      },
-      "recovery": {
-        "defaultHostIdentifier": "Host",
-        "defaultDatastoreIdentifier": "Datastore 1",
         "defaultFolderIdentifier": "/"
       },
-      "networks": {
-        "failover": {
-          "hypervisor": {
-            "defaultNetworkIdentifier": "Network 1"
-          }
-        },
-        "failoverTest": {
-          "hypervisor": {
-            "defaultNetworkIdentifier": "Network 2"
-          }
+      "vms": [
+        {
+          "vmIdentifier": "Ubuntu 22.4",
+          "recovery": {
+            "folderIdentifier": "/"
+          },
+          "journal": {
+            "limitation": {
+              "hardLimitInMB": 153600,
+              "warningThresholdInMB": 115200
+            }
+          },
+          "scratch": {
+            "limitation": {
+              "hardLimitInMB": 307200,
+              "warningThresholdInMB": 230400
+            }
+          },
+          "volumes": [
+            {
+              "volumeIdentifier": "[DS_VM_Left] Ubuntu 22.4/Ubuntu 22.4-000001.vmdk",
+              "volumeSyncSettings": "Continuous Sync"
+            }
+          ]
         }
-      }
-    },
-    {
-      "basic": {
-        "name": "Name of VPG",
-        "vpgType": "Remote DR and Continuous Backup",
-        "rpoInSeconds": 3600,
-        "testIntervalInMinutes": 259200,
-        "journalHistoryInHours": 24,
-        "priority": "Medium",
-        "useWanCompression": true,
-        "protectedSiteIdentifier": "Left",
-        "recoverySiteIdentifier": "Right"
-      },
-      "scripting": {
-        "preRecovery": {
-          "command": "MyOnlyRecoveryScript",
-          "timeoutInSeconds": 6000
-        },
-        "postRecovery": {
-          "command": "MyOnlyRecoveryScript",
-          "timeoutInSeconds": 300
-        }
-      },
-      "journal": {
-        "limitation": {
-          "hardLimitInMB": 153600,
-          "warningThresholdInMB": 115200
-        },
-        "datastoreIdentifier": "DataStore 2"
-      },
-      "scratch": {
-        "limitation": {
-          "hardLimitInPercent": 300,
-          "warningThresholdInMB": 230400
-        },
-        "datastoreIdentifier": "Datastore 1"
-      },
-      "recovery": {
-        "defaultHostIdentifier": "Host",
-        "defaultDatastoreIdentifier": "Datastore 1",
-        "defaultFolderIdentifier": "/"
-      },
-      "networks": {
-        "failover": {
-          "hypervisor": {
-            "defaultNetworkIdentifier": "Network 1"
-          }
-        },
-        "failoverTest": {
-          "hypervisor": {
-            "defaultNetworkIdentifier": "Network 2"
-          }
-        }
-      }
-    },
-    {
-      "basic": {
-        "name": "New VPG",
-        "vpgType": "Remote DR and Continuous Backup",
-        "rpoInSeconds": 3600,
-        "testIntervalInMinutes": 259200,
-        "journalHistoryInHours": 24,
-        "priority": "Medium",
-        "useWanCompression": true,
-        "protectedSiteIdentifier": "Left",
-        "recoverySiteIdentifier": "Right"
-      },
-      "scripting": {
-        "preRecovery": {
-          "command": "MyOnlyRecoveryScript",
-          "timeoutInSeconds": 6000
-        },
-        "postRecovery": {
-          "command": "MyOnlyRecoveryScript",
-          "timeoutInSeconds": 300
-        }
-      },
-      "journal": {
-        "limitation": {
-          "hardLimitInMB": 153600,
-          "warningThresholdInMB": 115200
-        },
-        "datastoreIdentifier": "DataStore 2"
-      },
-      "scratch": {
-        "limitation": {
-          "hardLimitInPercent": 300,
-          "warningThresholdInMB": 230400
-        },
-        "datastoreIdentifier": "Datastore 1"
-      },
-      "recovery": {
-        "defaultHostIdentifier": "Host",
-        "defaultDatastoreIdentifier": "Datastore 1",
-        "defaultFolderIdentifier": "/"
-      },
-      "networks": {
-        "failover": {
-          "hypervisor": {
-            "defaultNetworkIdentifier": "Network 1"
-          }
-        },
-        "failoverTest": {
-          "hypervisor": {
-            "defaultNetworkIdentifier": "Network 2"
-          }
-        }
-      }
+      ]
     }
   ]
 }

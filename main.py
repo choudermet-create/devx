@@ -47,7 +47,7 @@ def raw_log(label: str, value=None) -> None:
 def main():
     setup_logging()
 
-    excel_file = "files/Manifest prep VCA Data - 0.108.xlsx"
+    excel_file = "files/manifest ready VCA Data - 0.109.xlsx"
     raw_log("run_started", {"source_file": excel_file})
     logging.info("Starting VCA workbook validation run")
     logging.info("Source workbook: %s", excel_file)
@@ -84,9 +84,7 @@ def main():
     raw_log("extracted.vm_replication", vm_replication)
     vm_storage = extract_sheet_table(
         excel_file,
-        "VM Storage",
-        "VPG Name",
-        table_name="VM_Storage",
+        "VM Storage", "VPG Name", table_name="VM_Storage",
     )
     raw_log("extracted.vm_storage", vm_storage)
     vm_nics = extract_sheet_table(

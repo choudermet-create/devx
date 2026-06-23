@@ -44,3 +44,4 @@ vpg_names = []
 vpg_protected_site_names_by_vpg_name = {}
 vpg_recovery_site_names_by_vpg_name = {}
 vpg_boot_order_meta_group_names_by_vpg_name = {}
+vpg_types_by_vpg_name = {}

@@ -32,6 +32,24 @@ JournalSizeUnit = Literal["GiB", "%", "Unlimited"]
 YesNo = Literal["Yes", "No"]
 DiskProvisioningOverride = Literal["As-is", "Thin", "Thick"]
 VnicIpConfigChange = Literal["No", "Yes, DHCP", "Yes, Static"]
+RECOVERY_ZVM_SITE_NETWORK_FIELDS = (
+    "Failover Live / Move Network Name",
+    "Failover Test Network Name",
+    "Failover Live / Move - Create new MAC address",
+    "Failover Live / Move - Change vNIC IP Config",
+    "Failover Live / Move - Subnet Mask",
+    "Failover Live / Move - Default Gateway",
+    "Failover Live / Move - Preferred DNS Server",
+    "Failover Live / Move - Alternate DNS Server",
+    "Failover Live / Move - DNS Suffix",
+    "Failover Test - Create new MAC address",
+    "Failover Test - Change vNIC IP Config",
+    "Failover Test - Subnet Mask",
+    "Failover Test - Default Gateway",
+    "Failover Test - Preferred DNS Server",
+    "Failover Test - Alternate DNS Server",
+    "Failover Test - DNS Suffix",
+)
 
 
 def normalize_blank(value: Any) -> Any:
@@ -364,6 +382,22 @@ class RecoveryZVMSite(BaseModel):
             self.scratch_journal_size_warning_threshold_unit,
             "Scratch Journal Size Warning Threshold Value",
         )
+        validate_journal_size_threshold(
+            self.journal_size_warning_threshold_value,
+            self.journal_size_warning_threshold_unit,
+            self.journal_size_hard_limit_value,
+            self.journal_size_hard_limit_unit,
+            "Journal Size Warning Threshold",
+            "Journal Size Hard Limit",
+        )
+        validate_journal_size_threshold(
+            self.scratch_journal_size_warning_threshold_value,
+            self.scratch_journal_size_warning_threshold_unit,
+            self.scratch_journal_size_hard_limit_value,
+            self.scratch_journal_size_hard_limit_unit,
+            "Scratch Journal Size Warning Threshold",
+            "Scratch Journal Size Hard Limit",
+        )
 
         return self
 
@@ -395,6 +429,11 @@ def validate_recovery_zvm_sites(
 
     try:
         validate_unique_recovery_zvm_site_names(effective_data)
+    except WorkbookValidationError as error:
+        messages.extend(error.messages)
+
+    try:
+        validate_local_continuous_backup_network_fields_empty(data)
     except WorkbookValidationError as error:
         messages.extend(error.messages)
 
@@ -503,6 +542,28 @@ def validate_journal_size(value, unit, field_name: str) -> None:
         validate_range(value, 1, 1000, field_name, "when Unit is %")
 
 
+def validate_journal_size_threshold(
+    warning_value,
+    warning_unit,
+    hard_limit_value,
+    hard_limit_unit,
+    warning_field_name: str,
+    hard_limit_field_name: str,
+) -> None:
+    if warning_value is None or hard_limit_value is None:
+        return
+
+    if warning_unit != hard_limit_unit:
+        return
+
+    if warning_value < hard_limit_value:
+        return
+
+    raise ValueError(
+        f"{hard_limit_field_name} must be larger than {warning_field_name}"
+    )
+
+
 def validate_range(
     value,
     minimum: int,
@@ -540,6 +601,32 @@ def validate_unique_recovery_zvm_site_names(data: list[dict]) -> None:
             continue
 
         seen_rows[site_name] = row
+
+    if messages:
+        raise WorkbookValidationError(messages)
+
+
+def validate_local_continuous_backup_network_fields_empty(data: list[dict]) -> None:
+    messages = []
+
+    for row in data:
+        if normalize_blank(row.get("VPG Type")) != "Local Continuous Backup":
+            continue
+
+        for field_name in RECOVERY_ZVM_SITE_NETWORK_FIELDS:
+            value = normalize_blank(row.get(field_name))
+            if value is None:
+                continue
+
+            messages.append(format_workbook_error(
+                row,
+                field_name,
+                value,
+                (
+                    "This value must be empty when VPG Type is "
+                    "'Local Continuous Backup'."
+                ),
+            ))
 
     if messages:
         raise WorkbookValidationError(messages)

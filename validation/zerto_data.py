@@ -80,7 +80,11 @@ def validate_zvm_sites(records: list[dict]) -> list[str]:
         protected = row.get("Protected?")
         recovery = row.get("Recovery?")
 
-        if row.get("ZVM Site Name") and protected != "Yes" and recovery != "Yes":
+        if (
+            row.get("ZVM Site Name")
+            and protected != "Yes"
+            and recovery != "Yes"
+        ):
             messages.append(build_error(
                 row,
                 "Zerto_Data_ZVM_Site_Names",

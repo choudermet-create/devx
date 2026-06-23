@@ -144,7 +144,15 @@ class VMNIC(BaseModel):
     @field_validator("vpg_name")
     @classmethod
     def validate_vpg_name(cls, value):
-        return validate_config_value(value, config.vpg_names, "VPG Name")
+        validated_value = validate_config_value(value, config.vpg_names, "VPG Name")
+
+        if config.vpg_types_by_vpg_name.get(validated_value) == "Local Continuous Backup":
+            raise ValueError(
+                f"VPG Name '{validated_value}' is not valid because its VPG Type is "
+                "'Local Continuous Backup'."
+            )
+
+        return validated_value
 
     @field_validator("vm_name")
     @classmethod

@@ -27,6 +27,7 @@ from validation.recovery_zvm_sites import (
     normalize_blank,
     validate_journal_history,
     validate_journal_size,
+    validate_journal_size_threshold,
     validate_site_scoped_value,
     validate_target_rpo_alert,
 )
@@ -39,6 +40,26 @@ TestReminder = Literal[
     "9 Months",
     "12 Months",
 ]
+VPG_NETWORK_FIELDS = (
+    "Failover Live / Move - Network Name",
+    "Failover Test Network Name",
+    "Failover Live / Move - Create new MAC address",
+    "Failover Live / Move - Change vNIC IP Config",
+    "Failover Live / Move - IP Address",
+    "Failover Live / Move - Subnet Mask",
+    "Failover Live / Move - Default Gateway",
+    "Failover Live / Move - Preferred DNS Server",
+    "Failover Live / Move - Alternate DNS Server",
+    "Failover Live / Move - DNS Suffix",
+    "Failover Test - Create new MAC address",
+    "Failover Test - Change vNIC IP Config",
+    "Failover Test - IP Address",
+    "Failover Test - Subnet Mask",
+    "Failover Test - Default Gateway",
+    "Failover Test - Preferred DNS Server",
+    "Failover Test - Alternate DNS Server",
+    "Failover Test - DNS Suffix",
+)
 
 
 class VPG(BaseModel):
@@ -361,7 +382,7 @@ class VPG(BaseModel):
         return value
 
     @model_validator(mode="after")
-    def validate_value_unit_pairs(self):
+    def validate_row_rules(self):
         validate_journal_history(
             self.journal_history_value,
             self.journal_history_unit,
@@ -390,6 +411,27 @@ class VPG(BaseModel):
             self.scratch_journal_size_warning_threshold_unit,
             "Scratch Journal Size Warning Threshold Value",
         )
+        validate_journal_size_threshold(
+            self.journal_size_warning_threshold_value,
+            self.journal_size_warning_threshold_unit,
+            self.journal_size_hard_limit_value,
+            self.journal_size_hard_limit_unit,
+            "Journal Size Warning Threshold",
+            "Journal Size Hard Limit",
+        )
+        validate_journal_size_threshold(
+            self.scratch_journal_size_warning_threshold_value,
+            self.scratch_journal_size_warning_threshold_unit,
+            self.scratch_journal_size_hard_limit_value,
+            self.scratch_journal_size_hard_limit_unit,
+            "Scratch Journal Size Warning Threshold",
+            "Scratch Journal Size Hard Limit",
+        )
+        validate_local_continuous_backup_sites(
+            self.vpg_type,
+            self.protected_zvm_site_name,
+            self.recovery_zvm_site_name,
+        )
 
         return self
 
@@ -417,6 +459,49 @@ def validate_range(value: int, minimum: int, maximum: int, field_name: str, cont
     )
 
 
+def validate_local_continuous_backup_sites(
+    vpg_type,
+    protected_site,
+    recovery_site,
+) -> None:
+    if vpg_type != "Local Continuous Backup":
+        return
+
+    if protected_site == recovery_site:
+        return
+
+    raise ValueError(
+        "Protected ZVM Site Name must equal Recovery ZVM Site Name "
+        "when VPG Type is 'Local Continuous Backup'"
+    )
+
+
+def validate_local_continuous_backup_network_fields_empty(data: list[dict]) -> None:
+    messages = []
+
+    for row in data:
+        if normalize_blank(row.get("VPG Type")) != "Local Continuous Backup":
+            continue
+
+        for field_name in VPG_NETWORK_FIELDS:
+            value = normalize_blank(row.get(field_name))
+            if value is None:
+                continue
+
+            messages.append(format_workbook_error(
+                row,
+                field_name,
+                value,
+                (
+                    "This value must be empty when VPG Type is "
+                    "'Local Continuous Backup'."
+                ),
+            ))
+
+    if messages:
+        raise WorkbookValidationError(messages)
+
+
 def validate_vpg(
     data: dict,
     default_vpg_settings: dict | None = None,
@@ -437,6 +522,7 @@ def validate_vpgs(
     load_effective_vpg_context_into_config(effective_data)
     validated_rows = validate_model_rows(VPG, effective_data)
     validate_unique_vpg_names(data)
+    validate_local_continuous_backup_network_fields_empty(data)
     return validated_rows
 
 
@@ -453,6 +539,11 @@ def load_effective_vpg_context_into_config(vpgs: list[dict]) -> None:
     }
     config.vpg_boot_order_meta_group_names_by_vpg_name = {
         vpg["VPG Name"]: vpg.get("Boot Order Meta Group Name")
+        for vpg in vpgs
+        if vpg.get("VPG Name")
+    }
+    config.vpg_types_by_vpg_name = {
+        vpg["VPG Name"]: vpg.get("VPG Type")
         for vpg in vpgs
         if vpg.get("VPG Name")
     }
