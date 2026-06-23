@@ -43,6 +43,11 @@
           "hypervisor": {
             "defaultNetworkIdentifier": "VM Network"
           }
+        },
+        "failoverTest": {
+          "hypervisor": {
+            "defaultNetworkIdentifier": "vRA Network"
+          }
         }
       },
       "vms": [
@@ -89,6 +94,7 @@
               },
               "failoverTest": {
                 "hypervisor": {
+                  "networkIdentifier": "vRA Network",
                   "shouldReplaceMacAddress": false,
                   "ipConfig": {
                     "subnetMask": "255.255.254.0",

@@ -658,7 +658,8 @@ def apply_vpg_defaults(
     )
     set_default(
         effective_row,
-        "Failover Test Network Name",
+        "Failover Test - Network Name",
+        effective_row.get("Failover Test Network Name"),
         recovery_defaults.get("Failover Test Network Name"),
     )
     set_default(

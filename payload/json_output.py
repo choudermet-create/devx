@@ -251,7 +251,10 @@ def build_networks_api(row: dict) -> dict | None:
             row.get("Failover Live / Move - Network Name"),
         ),
         "failoverTest": build_default_hypervisor_network(
-            row.get("Failover Test Network Name"),
+            first_value(
+                row.get("Failover Test - Network Name"),
+                row.get("Failover Test Network Name"),
+            ),
         ),
     })
 
@@ -900,7 +903,8 @@ def resolve_vpg_defaults(
     )
     resolve_field(
         resolved_row,
-        "Failover Test Network Name",
+        "Failover Test - Network Name",
+        resolved_row.get("Failover Test Network Name"),
         recovery_defaults.get("Failover Test Network Name"),
     )
     resolve_field(
@@ -1088,6 +1092,7 @@ def resolve_vm_nic_defaults(row: dict, vpg_defaults: dict) -> dict:
     resolve_field(
         resolved_row,
         "Failover Test - Network Name",
+        vpg.get("Failover Test - Network Name"),
         vpg.get("Failover Test Network Name"),
     )
     resolve_field(

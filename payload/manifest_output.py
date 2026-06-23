@@ -6,6 +6,7 @@ from payload.json_output import (
     disk_provisioning_to_is_thin,
     duration_to_hours,
     duration_to_seconds,
+    first_value,
     is_dhcp,
     make_json_safe,
     rows_for_vm,
@@ -244,7 +245,10 @@ def build_manifest_networks(row: dict) -> dict:
             row.get("Failover Live / Move - Network Name"),
         ),
         "failoverTest": build_manifest_default_network(
-            row.get("Failover Test Network Name"),
+            first_value(
+                row.get("Failover Test - Network Name"),
+                row.get("Failover Test Network Name"),
+            ),
         ),
     }
 

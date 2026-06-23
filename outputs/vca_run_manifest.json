@@ -76,7 +76,7 @@
       "failoverTest": {
         "vcd": null,
         "hypervisor": {
-          "defaultNetworkIdentifier": null
+          "defaultNetworkIdentifier": "vRA Network"
         },
         "publicCloud": null
       }
@@ -147,7 +147,7 @@
             "nicIdentifier": "Network adapter 1",
             "failoverTest": {
               "hypervisor": {
-                "networkIdentifier": null,
+                "networkIdentifier": "vRA Network",
                 "shouldReplaceMacAddress": false,
                 "dnsSuffix": null,
                 "ipConfig": {
