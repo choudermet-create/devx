@@ -142,7 +142,7 @@
             "volumeSyncSettings": "Continuous Sync"
           }
         ],
-        "Nics": [
+        "nics": [
           {
             "nicIdentifier": "Network adapter 1",
             "failoverTest": {
@@ -340,7 +340,7 @@
             "volumeSyncSettings": "Continuous Sync"
           }
         ],
-        "Nics": [
+        "nics": [
           {
             "nicIdentifier": "Network adapter 1",
             "failoverTest": {
@@ -442,7 +442,7 @@
             "volumeSyncSettings": "Continuous Sync"
           }
         ],
-        "Nics": [
+        "nics": [
           {
             "nicIdentifier": "Network adapter 1",
             "failoverTest": {
@@ -629,7 +629,7 @@
             "volumeSyncSettings": "Continuous Sync"
           }
         ],
-        "Nics": []
+        "nics": []
       }
     ]
   }

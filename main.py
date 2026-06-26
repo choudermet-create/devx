@@ -26,7 +26,7 @@ from payload.json_output import (
     make_json_safe,
     write_zerto_json_dump,
 )
-from payload.manifest_output import MANIFEST_OUTPUT_FILE
+from payload.manifest_output import MANIFEST_OUTPUT_FILE, ManifestValidationError
 
 
 LOG_FILE = Path("outputs/vca_check.log")
@@ -375,19 +375,31 @@ def main():
         return
 
     logging.info("Generating JSON output")
-    output_path = write_zerto_json_dump(
-        excel_file=excel_file,
-        zerto_data=zerto_data,
-        hypervisor_data=hypervisor_data,
-        default_vpg_settings=vpg_settings,
-        recovery_zvm_sites=recovery_zvm_sites,
-        vpgs=vpgs,
-        vm_replication=vm_replication,
-        vm_storage=vm_storage,
-        vm_nics=vm_nics,
-        extended_journal=extended_journal,
-        validations=validations,
-    )
+    try:
+        output_path = write_zerto_json_dump(
+            excel_file=excel_file,
+            zerto_data=zerto_data,
+            hypervisor_data=hypervisor_data,
+            default_vpg_settings=vpg_settings,
+            recovery_zvm_sites=recovery_zvm_sites,
+            vpgs=vpgs,
+            vm_replication=vm_replication,
+            vm_storage=vm_storage,
+            vm_nics=vm_nics,
+            extended_journal=extended_journal,
+            validations=validations,
+        )
+    except ManifestValidationError as error:
+        print("\nVCA Run manifest validation failed")
+        print("----------------------------------")
+        print_manifest_validation_messages(error.messages)
+        log_validation_failed("VCA Run manifest", error.messages)
+        raw_log("validation.vca_run_manifest", {
+            "status": "failed",
+            "errors": error.messages,
+        })
+        return
+
     raw_log("outputs", {
         "diagnostic_output_file": str(output_path),
         "api_payload_output_file": API_PAYLOAD_OUTPUT_FILE,
@@ -574,6 +586,40 @@ def print_validation_messages(messages: list[str]) -> None:
         if index > 0:
             print()
         print(f"- {message}")
+
+
+def print_manifest_validation_messages(messages: list[str]) -> None:
+    grouped_messages = {}
+
+    for message in messages:
+        vpg_name = extract_manifest_error_vpg_name(message)
+        grouped_messages.setdefault(vpg_name, []).append(message)
+
+    for index, (vpg_name, vpg_messages) in enumerate(grouped_messages.items()):
+        if index > 0:
+            print()
+
+        print(f"VPG: {vpg_name}")
+        for message in vpg_messages:
+            print(f"- {strip_manifest_error_vpg_name(message, vpg_name)}")
+
+
+def extract_manifest_error_vpg_name(message: str) -> str:
+    marker = "VPG '"
+    start = message.find(marker)
+    if start == -1:
+        return "<unknown VPG>"
+
+    start += len(marker)
+    end = message.find("'", start)
+    if end == -1:
+        return "<unknown VPG>"
+
+    return message[start:end]
+
+
+def strip_manifest_error_vpg_name(message: str, vpg_name: str) -> str:
+    return message.replace(f" for VPG '{vpg_name}', ", " for ", 1)
 
 
 def stop_after_validation_failure(section_name: str) -> None:

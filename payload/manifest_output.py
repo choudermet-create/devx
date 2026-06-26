@@ -20,21 +20,28 @@ from payload.json_output import (
 MANIFEST_OUTPUT_FILE = "outputs/vca_run_manifest.json"
 
 
+class ManifestValidationError(ValueError):
+    def __init__(self, messages: list[str]):
+        self.messages = messages
+        super().__init__("\n".join(messages))
+
+
 def write_vca_run_manifest(
     resolved_api_candidate_payloads: dict,
     boot_order_groups: list[dict],
     output_file: str = MANIFEST_OUTPUT_FILE,
 ) -> Path:
+    manifest = build_vca_run_manifest(
+        resolved_api_candidate_payloads,
+        boot_order_groups,
+    )
+    validate_manifest_required_values(manifest)
+
     output_path = Path(output_file)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(
         json.dumps(
-            make_json_safe(
-                build_vca_run_manifest(
-                    resolved_api_candidate_payloads,
-                    boot_order_groups,
-                ),
-            ),
+            make_json_safe(manifest),
             indent=2,
         ),
         encoding="utf-8",
@@ -62,6 +69,106 @@ def build_vca_run_manifest(
         )
         for row in vpgs
     ]
+
+
+def validate_manifest_required_values(manifest: list[dict]) -> None:
+    errors = []
+
+    for vpg in manifest:
+        vpg_name = value_at(vpg, "Basic", "name") or "<unknown VPG>"
+
+        validate_manifest_journal_datastores(
+            errors,
+            vpg_name,
+            vpg,
+            "Journal",
+        )
+        validate_manifest_journal_datastores(
+            errors,
+            vpg_name,
+            vpg,
+            "Scratch",
+        )
+        validate_manifest_nic_networks(errors, vpg_name, vpg)
+
+    if errors:
+        raise ManifestValidationError(errors)
+
+
+def validate_manifest_journal_datastores(
+    errors: list[str],
+    vpg_name: str,
+    vpg: dict,
+    section_name: str,
+) -> None:
+    has_vpg_datastore = has_datastore_identifier(vpg.get(section_name, {}))
+
+    for vm in vpg.get("VMs", []):
+        vm_name = vm.get("vmIdentifier") or "<unknown VM>"
+        if has_datastore_identifier(vm.get(section_name, {})) or has_vpg_datastore:
+            continue
+
+        errors.append(
+            f"{section_name} datastore is missing for VPG '{vpg_name}', "
+            f"VM '{vm_name}'. Provide either {section_name} datastoreIdentifier "
+            f"or datastoreClusterIdentifier at VM level or VPG level."
+        )
+
+
+def validate_manifest_nic_networks(
+    errors: list[str],
+    vpg_name: str,
+    vpg: dict,
+) -> None:
+    network_checks = (
+        ("failover", "Failover Live / Move"),
+        ("failoverTest", "Failover Test"),
+    )
+
+    for network_key, label in network_checks:
+        vpg_network = value_at(
+            vpg,
+            "Networks",
+            network_key,
+            "hypervisor",
+            "defaultNetworkIdentifier",
+        )
+
+        for vm in vpg.get("VMs", []):
+            vm_name = vm.get("vmIdentifier") or "<unknown VM>"
+            for nic in vm.get("nics", []):
+                nic_name = nic.get("nicIdentifier") or "<unknown NIC>"
+                nic_network = value_at(
+                    nic,
+                    network_key,
+                    "hypervisor",
+                    "networkIdentifier",
+                )
+                if clean_value(nic_network) is not None or clean_value(vpg_network) is not None:
+                    continue
+
+                errors.append(
+                    f"{label} network is missing for VPG '{vpg_name}', "
+                    f"VM '{vm_name}', NIC '{nic_name}'. Provide either NIC "
+                    f"networkIdentifier or VPG defaultNetworkIdentifier."
+                )
+
+
+def has_datastore_identifier(section: dict) -> bool:
+    return (
+        clean_value(section.get("datastoreIdentifier")) is not None
+        or clean_value(section.get("datastoreClusterIdentifier")) is not None
+    )
+
+
+def value_at(data: dict, *keys):
+    current = data
+    for key in keys:
+        if not isinstance(current, dict):
+            return None
+        current = current.get(key)
+
+    return current
 
 
 def build_manifest_vpg(
@@ -287,7 +394,7 @@ def build_manifest_vms(
                 build_manifest_volume(row)
                 for row in rows_for_vm(vm_storage, vm_name)
             ],
-            "Nics": [
+            "nics": [
                 build_manifest_nic(row)
                 for row in rows_for_vm(vm_nics, vm_name)
             ],
