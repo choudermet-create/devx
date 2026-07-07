@@ -1,10 +1,9 @@
 import json
 from pathlib import Path
 
-from extraction.tables import clean_value, extract_sheet_table
+from extraction.tables import clean_value
 
 OUTPUT_FILE = "outputs/vca_check_dump.json"
-API_PAYLOAD_OUTPUT_FILE = "outputs/zerto_api_payload.json"
 
 
 def write_zerto_json_dump(
@@ -25,6 +24,7 @@ def write_zerto_json_dump(
 
     validation_status = get_validation_status(validations)
     resolved_api_candidate_payloads = build_resolved_api_candidate_payloads(
+        hypervisor_data,
         default_vpg_settings,
         recovery_zvm_sites,
         vpgs,
@@ -63,379 +63,12 @@ def write_zerto_json_dump(
         json.dumps(make_json_safe(payload), indent=2),
         encoding="utf-8",
     )
-    write_zerto_api_payload(
-        resolved_api_candidate_payloads,
-        zerto_data["summary"]["boot_order_groups"],
-        validation_status,
-    )
     write_vca_run_manifest(
         resolved_api_candidate_payloads,
         zerto_data["summary"]["boot_order_groups"],
     )
 
     return output_path
-
-
-def write_zerto_api_payload(
-    resolved_api_candidate_payloads: dict,
-    boot_order_groups: list[dict],
-    validation_status: str,
-    output_file: str = API_PAYLOAD_OUTPUT_FILE,
-) -> Path:
-    output_path = Path(output_file)
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(
-        json.dumps(
-            make_json_safe(
-                build_zerto_api_payload(
-                    resolved_api_candidate_payloads,
-                    boot_order_groups,
-                    validation_status,
-                ),
-            ),
-            indent=2,
-        ),
-        encoding="utf-8",
-    )
-
-    return output_path
-
-
-def build_resolved_api_candidate_payloads(
-    default_vpg_settings: dict,
-    recovery_zvm_sites: list[dict],
-    vpgs: list[dict],
-    vm_replication: list[dict],
-    vm_storage: list[dict],
-    vm_nics: list[dict],
-    extended_journal: list[dict],
-) -> dict:
-    resolved_recovery_zvm_sites = [
-        resolve_recovery_zvm_site_defaults(row, default_vpg_settings)
-        for row in recovery_zvm_sites
-    ]
-    recovery_site_defaults = build_recovery_site_defaults(resolved_recovery_zvm_sites)
-    resolved_vpgs = [
-        resolve_vpg_defaults(row, default_vpg_settings, recovery_site_defaults)
-        for row in vpgs
-    ]
-    vpg_defaults = build_vpg_defaults(resolved_vpgs)
-
-    return {
-        "default_vpg_settings": default_vpg_settings,
-        "recovery_zvm_sites": resolved_recovery_zvm_sites,
-        "vpgs": resolved_vpgs,
-        "vm_replication": [
-            resolve_vm_replication_defaults(row, vpg_defaults)
-            for row in vm_replication
-        ],
-        "vm_storage": [
-            resolve_vm_storage_defaults(row, vpg_defaults)
-            for row in vm_storage
-        ],
-        "vm_nics": [
-            resolve_vm_nic_defaults(row, vpg_defaults)
-            for row in vm_nics
-        ],
-        "extended_journal": extended_journal,
-    }
-
-
-def build_zerto_api_payload(
-    resolved_api_candidate_payloads: dict,
-    boot_order_groups: list[dict],
-    validation_status: str,
-) -> dict:
-    vpgs = resolved_api_candidate_payloads["vpgs"]
-    vm_replication = resolved_api_candidate_payloads["vm_replication"]
-    vm_storage = resolved_api_candidate_payloads["vm_storage"]
-    vm_nics = resolved_api_candidate_payloads["vm_nics"]
-
-    return {
-        "validationStatus": validation_status,
-        "vpgSettings": [
-            build_vpg_payload(
-                row,
-                rows_for_vpg(vm_replication, row.get("VPG Name")),
-                rows_for_vpg(vm_storage, row.get("VPG Name")),
-                rows_for_vpg(vm_nics, row.get("VPG Name")),
-                boot_order_groups,
-            )
-            for row in vpgs
-        ],
-    }
-
-
-def build_vpg_payload(
-    row: dict,
-    vm_replication: list[dict],
-    vm_storage: list[dict],
-    vm_nics: list[dict],
-    boot_order_groups: list[dict],
-) -> dict:
-    return compact_dict({
-        "basic": build_basic_api(row),
-        "scripting": build_scripting_api(row),
-        "bootGroups": build_boot_groups_api(
-            boot_order_groups,
-            row.get("Boot Order Meta Group Name"),
-        ),
-        "journal": build_journal_api(row, vm_level=False),
-        "scratch": build_scratch_api(row),
-        "recovery": build_recovery_api(row),
-        "networks": build_networks_api(row),
-        "vms": build_vm_payloads(vm_replication, vm_storage, vm_nics),
-    })
-
-
-def build_basic_api(row: dict) -> dict | None:
-    return compact_dict({
-        "name": row.get("VPG Name"),
-        "vpgType": row.get("VPG Type"),
-        "rpoInSeconds": duration_to_seconds(
-            row.get("Target RPO Alert Value"),
-            row.get("Target RPO Alert Unit"),
-        ),
-        "testIntervalInMinutes": test_reminder_to_minutes(row.get("Test Reminder")),
-        "journalHistoryInHours": duration_to_hours(
-            row.get("Journal History Value"),
-            row.get("Journal History Unit"),
-        ),
-        "priority": row.get("Priority"),
-        "useWanCompression": yes_no_to_bool(row.get("Enable WAN Traffic Compression")),
-        "protectedSiteIdentifier": row.get("Effective Protected ZVM Site Name"),
-        "recoverySiteIdentifier": row.get("Effective Recovery ZVM Site Name"),
-    })
-
-
-def build_recovery_api(row: dict) -> dict | None:
-    return compact_dict({
-        "defaultHostIdentifier": row.get("Recovery Host Name"),
-        "defaultDatastoreIdentifier": row.get("Recovery Datastore Name"),
-        "defaultFolderIdentifier": row.get("Recovery Folder Name"),
-    })
-
-
-def build_journal_api(row: dict, vm_level: bool) -> dict | None:
-    if vm_level:
-        datastore_field = "Journal Datastore Name"
-    else:
-        datastore_field = "Journal Datastore Name"
-
-    return compact_dict({
-        "limitation": build_journal_limitation(
-            row.get("Journal Size Hard Limit Value"),
-            row.get("Journal Size Hard Limit Unit"),
-            row.get("Journal Size Warning Threshold Value"),
-            row.get("Journal Size Warning Threshold Unit"),
-        ),
-        "datastoreIdentifier": row.get(datastore_field),
-    })
-
-
-def build_scratch_api(row: dict) -> dict | None:
-    return compact_dict({
-        "limitation": build_journal_limitation(
-            row.get("Scratch Journal Size Hard Limit Value"),
-            row.get("Scratch Journal Size Hard Limit Unit"),
-            row.get("Scratch Journal Size Warning Threshold Value"),
-            row.get("Scratch Journal Size Warning Threshold Unit"),
-        ),
-        "datastoreIdentifier": row.get("Scratch Journal Datastore Name"),
-    })
-
-
-def build_networks_api(row: dict) -> dict | None:
-    return compact_dict({
-        "failover": build_default_hypervisor_network(
-            row.get("Failover Live / Move - Network Name"),
-        ),
-        "failoverTest": build_default_hypervisor_network(
-            first_value(
-                row.get("Failover Test - Network Name"),
-                row.get("Failover Test Network Name"),
-            ),
-        ),
-    })
-
-
-def build_default_hypervisor_network(network_name) -> dict | None:
-    return compact_dict({
-        "hypervisor": compact_dict({
-            "defaultNetworkIdentifier": network_name,
-        }),
-    })
-
-
-def build_scripting_api(row: dict) -> dict | None:
-    return compact_dict({
-        "preRecovery": build_script_api(row, "Pre-Recovery"),
-        "postRecovery": build_script_api(row, "Post-Recovery"),
-    })
-
-
-def build_script_api(row: dict, prefix: str) -> dict | None:
-    return compact_dict({
-        "command": row.get(f"{prefix} Script Name"),
-        "parameters": row.get(f"{prefix} Script Parameters"),
-        "timeoutInSeconds": row.get(f"{prefix} Script Execution Timeout (Seconds)"),
-    })
-
-
-def build_boot_groups_api(
-    boot_order_groups: list[dict],
-    meta_group_name,
-) -> dict:
-    return compact_dict({
-        "bootGroups": compact_list([
-            compact_dict({
-                "name": group.get("group_name"),
-                "bootDelayInSeconds": group.get("boot_delay_secs"),
-            })
-            for group in boot_order_groups
-            if clean_value(group.get("meta_group_name")) == clean_value(meta_group_name)
-        ]),
-    })
-
-
-def build_vm_payloads(
-    vm_replication: list[dict],
-    vm_storage: list[dict],
-    vm_nics: list[dict],
-) -> list[dict]:
-    vm_names = []
-    for row in vm_replication + vm_storage + vm_nics:
-        vm_name = clean_value(row.get("VM Name"))
-        if vm_name and vm_name not in vm_names:
-            vm_names.append(vm_name)
-
-    return [
-        compact_dict({
-            "vmIdentifier": vm_name,
-            **(build_vm_replication_payload(
-                first_row_for_vm(vm_replication, vm_name),
-            ) or {}),
-            "volumes": [
-                build_vm_storage_payload(row)
-                for row in rows_for_vm(vm_storage, vm_name)
-            ],
-            "nics": [
-                build_vm_nic_payload(row)
-                for row in rows_for_vm(vm_nics, vm_name)
-            ],
-        })
-        for vm_name in vm_names
-    ]
-
-
-def build_vm_replication_payload(row: dict | None) -> dict | None:
-    if not row:
-        return None
-
-    return compact_dict({
-        "recovery": compact_dict({
-            "hostIdentifier": row.get("Recovery Host Name"),
-            "datastoreIdentifier": row.get("Recovery Datastore Name"),
-            "folderIdentifier": row.get("Recovery Folder Name"),
-        }),
-        "bootGroupIdentifier": row.get("Boot Order Group Name"),
-        "journal": build_journal_api(row, vm_level=True),
-        "scratch": build_scratch_api(row),
-    })
-
-
-def build_vm_storage_payload(row: dict) -> dict:
-    return compact_dict({
-        "volumeIdentifier": row.get("Protected Volume Location"),
-        "preseed": compact_dict({
-            "path": row.get("Recovery Volume Location"),
-        }),
-        "rdm": compact_dict({
-            "deviceIdentifier": row.get("Recovery Raw Device Name"),
-        }),
-        "datastore": compact_dict({
-            "isThin": disk_provisioning_to_is_thin(
-                row.get("Disk Provisioning Override"),
-            ),
-        }),
-        "volumeSyncSettings": row.get("Volume Sync Type"),
-    })
-
-
-def build_vm_nic_payload(row: dict) -> dict:
-    return compact_dict({
-        "nicIdentifier": row.get("NIC Name"),
-        "failover": build_vm_nic_network_api(row, "Failover Live / Move"),
-        "failoverTest": build_vm_nic_network_api(row, "Failover Test"),
-    })
-
-
-def build_vm_nic_network_api(row: dict, prefix: str) -> dict | None:
-    return compact_dict({
-        "hypervisor": compact_dict({
-            "networkIdentifier": row.get(f"{prefix} - Network Name"),
-            "shouldReplaceMacAddress": yes_no_to_bool(
-                row.get(f"{prefix} - Create new MAC address"),
-            ),
-            "dnsSuffix": row.get(f"{prefix} - DNS Suffix"),
-            "ipConfig": build_ip_config(row, prefix),
-            "shouldReplaceIpConfiguration": should_replace_ip_configuration(
-                row.get(f"{prefix} - Change vNIC IP Config"),
-            ),
-        }),
-    })
-
-
-def build_ip_config(row: dict, prefix: str) -> dict | None:
-    return compact_dict({
-        "staticIp": row.get(f"{prefix} - IP Address"),
-        "subnetMask": row.get(f"{prefix} - Subnet Mask"),
-        "gateway": row.get(f"{prefix} - Default Gateway"),
-        "primaryDns": row.get(f"{prefix} - Preferred DNS Server"),
-        "secondaryDns": row.get(f"{prefix} - Alternate DNS Server"),
-        "isDhcp": is_dhcp(row.get(f"{prefix} - Change vNIC IP Config")),
-    })
-
-
-def build_journal_limitation(
-    hard_limit_value,
-    hard_limit_unit,
-    warning_value,
-    warning_unit,
-) -> dict | None:
-    return compact_dict({
-        **limit_to_api_fields(hard_limit_value, hard_limit_unit, "hardLimit"),
-        **limit_to_api_fields(warning_value, warning_unit, "warningThreshold"),
-    })
-
-
-def limit_to_api_fields(value, unit, prefix: str) -> dict:
-    cleaned_unit = clean_value(unit)
-    if cleaned_unit in (None, "Unlimited"):
-        return {}
-
-    if cleaned_unit == "%":
-        return {f"{prefix}InPercent": value}
-
-    size_mb = size_to_mb(value, cleaned_unit)
-    if size_mb is None:
-        return {}
-
-    return {f"{prefix}InMB": size_mb}
-
-
-def size_to_mb(value, unit) -> int | None:
-    cleaned_value = clean_value(value)
-    if cleaned_value is None:
-        return None
-
-    if unit == "GiB":
-        return int(float(cleaned_value) * 1024)
-
-    if unit == "TiB":
-        return int(float(cleaned_value) * 1024 * 1024)
-
-    return None
 
 
 def duration_to_seconds(value, unit) -> int | None:
@@ -456,7 +89,6 @@ def duration_to_seconds(value, unit) -> int | None:
 
     return int(float(cleaned_value) * multiplier)
 
-
 def duration_to_hours(value, unit) -> int | None:
     cleaned_value = clean_value(value)
     cleaned_unit = clean_value(unit)
@@ -470,7 +102,6 @@ def duration_to_hours(value, unit) -> int | None:
         return int(float(cleaned_value) * 24)
 
     return None
-
 
 def test_reminder_to_minutes(value) -> int | None:
     cleaned_value = clean_value(value)
@@ -490,7 +121,6 @@ def test_reminder_to_minutes(value) -> int | None:
 
     return months * 30 * 24 * 60
 
-
 def yes_no_to_bool(value) -> bool | None:
     cleaned_value = clean_value(value)
     if cleaned_value == "Yes":
@@ -500,7 +130,6 @@ def yes_no_to_bool(value) -> bool | None:
         return False
 
     return None
-
 
 def disk_provisioning_to_is_thin(value) -> bool | None:
     cleaned_value = clean_value(value)
@@ -512,6 +141,15 @@ def disk_provisioning_to_is_thin(value) -> bool | None:
 
     return None
 
+def effective_disk_provisioning_to_is_thin(
+    disk_provisioning_override,
+    provisioning,
+) -> bool | None:
+    override = clean_value(disk_provisioning_override)
+    if override in ("As-is", "As-Is"):
+        return disk_provisioning_to_is_thin(provisioning)
+
+    return disk_provisioning_to_is_thin(override)
 
 def should_replace_ip_configuration(value) -> bool | None:
     cleaned_value = clean_value(value)
@@ -523,7 +161,6 @@ def should_replace_ip_configuration(value) -> bool | None:
 
     return None
 
-
 def is_dhcp(value) -> bool | None:
     cleaned_value = clean_value(value)
     if cleaned_value == "Yes, DHCP":
@@ -534,14 +171,12 @@ def is_dhcp(value) -> bool | None:
 
     return None
 
-
 def rows_for_vpg(rows: list[dict], vpg_name) -> list[dict]:
     return [
         row
         for row in rows
         if clean_value(row.get("VPG Name")) == clean_value(vpg_name)
     ]
-
 
 def rows_for_vm(rows: list[dict], vm_name) -> list[dict]:
     return [
@@ -550,34 +185,96 @@ def rows_for_vm(rows: list[dict], vm_name) -> list[dict]:
         if clean_value(row.get("VM Name")) == clean_value(vm_name)
     ]
 
+def first_value(*values):
+    for value in values:
+        if clean_value(value) is not None:
+            return clean_value(value)
 
-def first_row_for_vm(rows: list[dict], vm_name) -> dict | None:
-    matching_rows = rows_for_vm(rows, vm_name)
-    if not matching_rows:
-        return None
+    return None
 
-    return matching_rows[0]
+def get_validation_status(validations: dict) -> str:
+    if all(validation["status"] == "passed" for validation in validations.values()):
+        return "passed"
+
+    return "failed"
+
+def make_json_safe(value):
+    if isinstance(value, list):
+        return [make_json_safe(item) for item in value]
+
+    if isinstance(value, tuple):
+        return [make_json_safe(item) for item in value]
+
+    if isinstance(value, dict):
+        return {
+            str(key): make_json_safe(item)
+            for key, item in value.items()
+            if not str(key).startswith("__")
+        }
+
+    if hasattr(value, "model_dump"):
+        return make_json_safe(value.model_dump())
+
+    cleaned_value = clean_value(value)
+
+    if isinstance(cleaned_value, (str, int, float, bool)) or cleaned_value is None:
+        return cleaned_value
+
+    return str(cleaned_value)
 
 
-def compact_dict(row: dict) -> dict | None:
-    compacted = {
-        key: value
-        for key, value in row.items()
-        if clean_value(value) is not None and value != [] and value != {}
-    }
-
-    if not compacted:
-        return None
-
-    return compacted
-
-
-def compact_list(rows: list) -> list:
-    return [
-        row
-        for row in rows
-        if clean_value(row) is not None and row != [] and row != {}
+def build_resolved_api_candidate_payloads(
+    hypervisor_data: dict,
+    default_vpg_settings: dict,
+    recovery_zvm_sites: list[dict],
+    vpgs: list[dict],
+    vm_replication: list[dict],
+    vm_storage: list[dict],
+    vm_nics: list[dict],
+    extended_journal: list[dict],
+) -> dict:
+    resolved_recovery_zvm_sites = [
+        resolve_recovery_zvm_site_defaults(row, default_vpg_settings)
+        for row in recovery_zvm_sites
     ]
+    recovery_site_defaults = build_recovery_site_defaults(resolved_recovery_zvm_sites)
+    resolved_vpgs = [
+        resolve_vpg_defaults(row, default_vpg_settings, recovery_site_defaults)
+        for row in vpgs
+    ]
+    vpg_defaults = build_vpg_defaults(resolved_vpgs)
+    resolved_vm_replication = [
+        resolve_vm_replication_defaults(row, vpg_defaults)
+        for row in vm_replication
+    ]
+    resolved_vm_storage = [
+        resolve_vm_storage_defaults(row, vpg_defaults)
+        for row in vm_storage
+    ]
+    resolved_vm_nics = [
+        resolve_vm_nic_defaults(row, vpg_defaults)
+        for row in vm_nics
+    ]
+
+    return {
+        "default_vpg_settings": default_vpg_settings,
+        "recovery_zvm_sites": resolved_recovery_zvm_sites,
+        "vpgs": resolved_vpgs,
+        "vm_replication": resolved_vm_replication,
+        "vm_storage": add_missing_vm_storage_rows(
+            resolved_vm_storage,
+            resolved_vm_replication,
+            hypervisor_data.get("protected_vm_volumes", []),
+            vpg_defaults,
+        ),
+        "vm_nics": add_missing_vm_nic_rows(
+            resolved_vm_nics,
+            resolved_vm_replication,
+            hypervisor_data.get("protected_vm_nics", []),
+            vpg_defaults,
+        ),
+        "extended_journal": extended_journal,
+    }
 
 
 def resolve_recovery_zvm_site_defaults(row: dict, default_vpg_settings: dict) -> dict:
@@ -749,7 +446,6 @@ def resolve_recovery_zvm_site_defaults(row: dict, default_vpg_settings: dict) ->
     )
 
     return resolved_row
-
 
 def resolve_vpg_defaults(
     row: dict,
@@ -1022,7 +718,6 @@ def resolve_vpg_defaults(
 
     return resolved_row
 
-
 def resolve_vm_replication_defaults(row: dict, vpg_defaults: dict) -> dict:
     resolved_row = dict(row)
     vpg = vpg_defaults.get(row.get("VPG Name"), {})
@@ -1035,6 +730,146 @@ def resolve_vm_replication_defaults(row: dict, vpg_defaults: dict) -> dict:
     copy_vpg_storage_settings(resolved_row, vpg)
     return resolved_row
 
+def add_missing_vm_storage_rows(
+    vm_storage: list[dict],
+    vm_replication: list[dict],
+    protected_vm_volumes: list[dict],
+    vpg_defaults: dict,
+) -> list[dict]:
+    completed_rows = list(vm_storage)
+    seen_volume_keys = {
+        vm_storage_volume_key(row)
+        for row in completed_rows
+    }
+
+    for replication_row in vm_replication:
+        vpg_name = clean_value(replication_row.get("VPG Name"))
+        vm_name = clean_value(replication_row.get("VM Name"))
+        protected_site_name = clean_value(
+            replication_row.get("Effective Protected ZVM Site Name"),
+        )
+
+        if vpg_name is None or vm_name is None or protected_site_name is None:
+            continue
+
+        for volume in protected_vm_volumes:
+            if clean_value(volume.get("Protected ZVM Site Name")) != protected_site_name:
+                continue
+
+            if clean_value(volume.get("VM Name")) != vm_name:
+                continue
+
+            volume_location = clean_value(volume.get("Volume Location"))
+            if volume_location is None:
+                continue
+
+            volume_key = (vpg_name, vm_name, volume_location)
+            if volume_key in seen_volume_keys:
+                continue
+
+            completed_rows.append(resolve_vm_storage_defaults(
+                build_default_vm_storage_row(replication_row, volume),
+                vpg_defaults,
+            ))
+            seen_volume_keys.add(volume_key)
+
+    return completed_rows
+
+def vm_storage_volume_key(row: dict) -> tuple:
+    return (
+        clean_value(row.get("VPG Name")),
+        clean_value(row.get("VM Name")),
+        clean_value(row.get("Protected Volume Location")),
+    )
+
+def build_default_vm_storage_row(replication_row: dict, volume: dict) -> dict:
+    return {
+        "VPG Name": replication_row.get("VPG Name"),
+        "VM Name": replication_row.get("VM Name"),
+        "Protected Volume Location": volume.get("Volume Location"),
+        "Size (GiB)": volume.get("Provisioned Size (GiB)"),
+        "Provisioning": volume.get("Provisioning"),
+        "Protected Site Name": replication_row.get("Protected Site Name"),
+        "Recovery Site Name": replication_row.get("Recovery Site Name"),
+        "Effective Protected ZVM Site Name": replication_row.get(
+            "Effective Protected ZVM Site Name",
+        ),
+        "Effective Recovery ZVM Site Name": replication_row.get(
+            "Effective Recovery ZVM Site Name",
+        ),
+        "__generated_from": "Hypervisor_Data_Protected_ZVM_VM_Volumes",
+        "__source_table_row_id": volume.get("__table_row_id"),
+    }
+
+def add_missing_vm_nic_rows(
+    vm_nics: list[dict],
+    vm_replication: list[dict],
+    protected_vm_nics: list[dict],
+    vpg_defaults: dict,
+) -> list[dict]:
+    completed_rows = list(vm_nics)
+    seen_nic_keys = {
+        vm_nic_key(row)
+        for row in completed_rows
+    }
+
+    for replication_row in vm_replication:
+        vpg_name = clean_value(replication_row.get("VPG Name"))
+        vm_name = clean_value(replication_row.get("VM Name"))
+        protected_site_name = clean_value(
+            replication_row.get("Effective Protected ZVM Site Name"),
+        )
+
+        if vpg_name is None or vm_name is None or protected_site_name is None:
+            continue
+
+        for nic in protected_vm_nics:
+            if clean_value(nic.get("Protected ZVM Site Name")) != protected_site_name:
+                continue
+
+            if clean_value(nic.get("VM Name")) != vm_name:
+                continue
+
+            nic_name = clean_value(nic.get("NIC Name"))
+            if nic_name is None:
+                continue
+
+            nic_key = (vpg_name, vm_name, nic_name)
+            if nic_key in seen_nic_keys:
+                continue
+
+            completed_rows.append(resolve_vm_nic_defaults(
+                build_default_vm_nic_row(replication_row, nic),
+                vpg_defaults,
+            ))
+            seen_nic_keys.add(nic_key)
+
+    return completed_rows
+
+def vm_nic_key(row: dict) -> tuple:
+    return (
+        clean_value(row.get("VPG Name")),
+        clean_value(row.get("VM Name")),
+        clean_value(row.get("NIC Name")),
+    )
+
+def build_default_vm_nic_row(replication_row: dict, nic: dict) -> dict:
+    return {
+        "VPG Name": replication_row.get("VPG Name"),
+        "VM Name": replication_row.get("VM Name"),
+        "NIC Name": nic.get("NIC Name"),
+        "Protected Network Name": nic.get("Network Name"),
+        "Protected Site Name": replication_row.get("Protected Site Name"),
+        "Recovery Site Name": replication_row.get("Recovery Site Name"),
+        "Effective Protected ZVM Site Name": replication_row.get(
+            "Effective Protected ZVM Site Name",
+        ),
+        "Effective Recovery ZVM Site Name": replication_row.get(
+            "Effective Recovery ZVM Site Name",
+        ),
+        "__generated_from": "Hypervisor_Data_Protected_ZVM_VM_NICs",
+        "__source_table_row_id": nic.get("__table_row_id"),
+    }
 
 def resolve_vm_storage_defaults(row: dict, vpg_defaults: dict) -> dict:
     resolved_row = dict(row)
@@ -1043,7 +878,6 @@ def resolve_vm_storage_defaults(row: dict, vpg_defaults: dict) -> dict:
     resolve_field(resolved_row, "Disk Provisioning Override", vpg.get("Disk Provisioning Override"))
     resolve_field(resolved_row, "Volume Sync Type", vpg.get("Volume Sync Type"))
     return resolved_row
-
 
 def resolve_vm_nic_defaults(row: dict, vpg_defaults: dict) -> dict:
     resolved_row = dict(row)
@@ -1132,7 +966,6 @@ def resolve_vm_nic_defaults(row: dict, vpg_defaults: dict) -> dict:
     )
     return resolved_row
 
-
 def apply_vpg_site_context(row: dict, vpg: dict) -> None:
     resolve_field(row, "Protected Site Name", vpg.get("Effective Protected ZVM Site Name"))
     resolve_field(row, "Recovery Site Name", vpg.get("Effective Recovery ZVM Site Name"))
@@ -1144,7 +977,6 @@ def apply_vpg_site_context(row: dict, vpg: dict) -> None:
         row.get("Recovery Site Name"),
         vpg.get("Effective Recovery ZVM Site Name"),
     )
-
 
 def copy_vpg_storage_settings(row: dict, vpg: dict) -> None:
     for field_name in (
@@ -1160,14 +992,12 @@ def copy_vpg_storage_settings(row: dict, vpg: dict) -> None:
     ):
         resolve_field(row, field_name, vpg.get(field_name))
 
-
 def build_recovery_site_defaults(resolved_recovery_zvm_sites: list[dict]) -> dict:
     return {
         row["Effective Recovery ZVM Site Name"]: row
         for row in resolved_recovery_zvm_sites
         if row.get("Effective Recovery ZVM Site Name")
     }
-
 
 def build_vpg_defaults(resolved_vpgs: list[dict]) -> dict:
     return {
@@ -1176,18 +1006,8 @@ def build_vpg_defaults(resolved_vpgs: list[dict]) -> dict:
         if row.get("VPG Name")
     }
 
-
 def resolve_field(row: dict, field_name: str, *defaults) -> None:
     row[field_name] = first_value(row.get(field_name), *defaults)
-
-
-def first_value(*values):
-    for value in values:
-        if clean_value(value) is not None:
-            return clean_value(value)
-
-    return None
-
 
 def value_unit_value(value_unit: dict | None):
     if not value_unit:
@@ -1195,41 +1015,8 @@ def value_unit_value(value_unit: dict | None):
 
     return value_unit.get("value")
 
-
 def value_unit_unit(value_unit: dict | None):
     if not value_unit:
         return None
 
     return value_unit.get("unit")
-
-
-def get_validation_status(validations: dict) -> str:
-    if all(validation["status"] == "passed" for validation in validations.values()):
-        return "passed"
-
-    return "failed"
-
-
-def make_json_safe(value):
-    if isinstance(value, list):
-        return [make_json_safe(item) for item in value]
-
-    if isinstance(value, tuple):
-        return [make_json_safe(item) for item in value]
-
-    if isinstance(value, dict):
-        return {
-            str(key): make_json_safe(item)
-            for key, item in value.items()
-            if not str(key).startswith("__")
-        }
-
-    if hasattr(value, "model_dump"):
-        return make_json_safe(value.model_dump())
-
-    cleaned_value = clean_value(value)
-
-    if isinstance(cleaned_value, (str, int, float, bool)) or cleaned_value is None:
-        return cleaned_value
-
-    return str(cleaned_value)

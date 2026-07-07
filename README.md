@@ -17,7 +17,6 @@ VCA Run is expected to take that manifest, resolve workbook names to real platfo
 - Validates the extracted data against the VCA rules.
 - Stops at the first failed validation section.
 - Writes JSON output only when validation passes.
-- Writes a fresh run log to `outputs/vca_check.log`.
 
 ## Validated Sheets
 
@@ -91,14 +90,7 @@ If validation passes, the program writes:
 
 ```text
 outputs/vca_check_dump.json
-outputs/zerto_api_payload.json
 outputs/vca_run_manifest.json
-```
-
-It also writes a fresh log file for the run:
-
-```text
-outputs/vca_check.log
 ```
 
 If validation fails, the program prints the failed section and stops. The JSON output files are not regenerated from invalid data.
@@ -130,23 +122,6 @@ It includes:
 
 The resolved data is important because some workbook fields can be blank and still have an effective value inherited from another sheet.
 
-### `outputs/zerto_api_payload.json`
-
-This is the older Zerto-shaped payload output. It uses Zerto-style section names such as:
-
-```text
-basic
-scripting
-bootGroups
-journal
-scratch
-recovery
-networks
-vms
-```
-
-This file still contains workbook names in identifier-like fields. Those names are not real Zerto or vCenter identifiers yet.
-
 ### `outputs/vca_run_manifest.json`
 
 This is the VCA Run manifest. It uses PascalCase section names and is written as a list of VPG definitions.
@@ -164,9 +139,7 @@ Networks
 VMs
 ```
 
-This is the file VCA Run should consume. VCA Run should resolve names such as site names, VM names, host names, datastore names, network names, folder names, boot order groups, volumes, and NICs into real identifiers before calling Zerto.
-
-If a lookup returns more than one match, VCA Run should fail with an ambiguity error instead of guessing.
+This is the file VCA Run should consume. It contains the validated VPG definitions from the workbook. VCA Run should resolve names such as sites, VMs, hosts, datastores, networks, folders, volumes, and NICs into real identifiers before making the POST/PUT API calls to Zerto.
 
 ## Defaults and Effective Values
 
@@ -189,45 +162,10 @@ outputs/vca_check_dump.json
 
 Look at the resolved candidate payload section first, then trace the value back to the workbook default row it came from.
 
-## VM NIC Validation
-
-NIC failover settings are checked in two groups:
-
-```text
-Failover Live / Move
-Failover Test
-```
-
-For each group:
-
-- network names must exist for the VPG recovery site
-- IP address fields must be valid IPv4 addresses
-- subnet mask fields must be valid IPv4 subnet masks
-- default gateway must belong to the same subnet as the IP address and mask
-
-When `Change vNIC IP Config` is `Yes, DHCP`, the IP address, subnet mask, gateway, DNS server, and DNS suffix fields for that group must be blank.
-
-When `Change vNIC IP Config` is `Yes, Static`, those fields must be present.
-
-Example:
-
-```text
-IP Address: 192.168.34.55
-Subnet Mask: 255.255.255.0
-```
-
-Valid gateways would be in the same `192.168.34.x` subnet, such as:
-
-```text
-192.168.34.1
-192.168.34.254
-```
-
 ## Notes
 
 - `main.py` is the normal entry point.
 - Validation is the gate before JSON generation.
 - `payload/manifest_output.py` builds the VCA Run manifest.
-- `payload/json_output.py` builds the diagnostic dump and the older Zerto-shaped payload.
-- `outputs/vca_check.log` is recreated on each run.
+- `payload/json_output.py` builds the diagnostic dump.
 - The project currently checks workbook readiness and prepares handoff JSON. Creating objects in Zerto belongs to the VCA Run side.

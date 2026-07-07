@@ -1,6 +1,4 @@
 import logging
-from pprint import pformat
-from pathlib import Path
 import traceback
 
 from pydantic import ValidationError
@@ -22,26 +20,14 @@ from validation.vm_storage import validate_vm_storage
 from validation.vm_nics import validate_vm_nics
 from validation.error_formatting import WorkbookValidationError, format_validation_errors
 from payload.json_output import (
-    API_PAYLOAD_OUTPUT_FILE,
     make_json_safe,
     write_zerto_json_dump,
 )
 from payload.manifest_output import MANIFEST_OUTPUT_FILE, ManifestValidationError
 
 
-LOG_FILE = Path("outputs/vca_check.log")
-RAW_LOG_STREAM = None
-
-
 def raw_log(label: str, value=None) -> None:
-    if RAW_LOG_STREAM is None:
-        return
-
-    RAW_LOG_STREAM.write(f"\n--- {label} ---\n")
-    if value is not None:
-        RAW_LOG_STREAM.write(pformat(value, width=120))
-        RAW_LOG_STREAM.write("\n")
-    RAW_LOG_STREAM.flush()
+    return
 
 
 def main():
@@ -402,17 +388,13 @@ def main():
 
     raw_log("outputs", {
         "diagnostic_output_file": str(output_path),
-        "api_payload_output_file": API_PAYLOAD_OUTPUT_FILE,
-        "log_file": str(LOG_FILE),
+        "manifest_output_file": MANIFEST_OUTPUT_FILE,
     })
-    print(f"\nJSON output written to {output_path}")
-    print(f"Zerto API payload written to {API_PAYLOAD_OUTPUT_FILE}")
+    print(f"\nDiagnostic dump written to {output_path}")
     print(f"VCA Run manifest written to {MANIFEST_OUTPUT_FILE}")
     logging.info("JSON output written to %s", output_path)
-    logging.info("Zerto API payload written to %s", API_PAYLOAD_OUTPUT_FILE)
     logging.info("VCA Run manifest written to %s", MANIFEST_OUTPUT_FILE)
     logging.info("Run complete")
-    print(f"Detailed log written to {LOG_FILE}")
 
 
 def print_zerto_summary(summary: dict) -> None:
@@ -515,10 +497,6 @@ def print_topic_heading(title: str) -> None:
 
 
 def setup_logging() -> None:
-    global RAW_LOG_STREAM
-
-    LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
-    RAW_LOG_STREAM = LOG_FILE.open("w", encoding="utf-8")
     logging.disable(logging.CRITICAL)
 
 
@@ -632,7 +610,6 @@ def stop_after_validation_failure(section_name: str) -> None:
         "failed_section": section_name,
         "reason": "Validation failed; later sheets were not validated.",
     })
-    print(f"Detailed log written to {LOG_FILE}")
 
 
 def validation_passed(result) -> dict:

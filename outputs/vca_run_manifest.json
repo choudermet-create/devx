@@ -52,8 +52,8 @@
         "warningThresholdInMB": 115200,
         "warningThresholdInPercent": 0
       },
-      "datastoreIdentifier": null,
-      "datastoreClusterIdentifier": null
+      "datastoreIdentifier": "DS_VM_Right",
+      "datastoreClusterIdentifier": "DS_VM_Right"
     },
     "Scratch": {
       "limitation": {
@@ -62,8 +62,8 @@
         "warningThresholdInMB": 230400,
         "warningThresholdInPercent": 0
       },
-      "datastoreIdentifier": null,
-      "datastoreClusterIdentifier": null
+      "datastoreIdentifier": "DS_VM_Right",
+      "datastoreClusterIdentifier": "DS_VM_Right"
     },
     "Networks": {
       "failover": {
@@ -107,8 +107,8 @@
             "warningThresholdInMB": 115200,
             "warningThresholdInPercent": 0
           },
-          "datastoreIdentifier": null,
-          "datastoreClusterIdentifier": null
+          "datastoreIdentifier": "DS_VM_Right",
+          "datastoreClusterIdentifier": "DS_VM_Right"
         },
         "Scratch": {
           "limitation": {
@@ -117,8 +117,8 @@
             "warningThresholdInMB": 230400,
             "warningThresholdInPercent": 0
           },
-          "datastoreIdentifier": null,
-          "datastoreClusterIdentifier": null
+          "datastoreIdentifier": "DS_VM_Right",
+          "datastoreClusterIdentifier": "DS_VM_Right"
         },
         "Volumes": [
           {
@@ -150,14 +150,8 @@
                 "networkIdentifier": "vRA Network",
                 "shouldReplaceMacAddress": false,
                 "dnsSuffix": null,
-                "ipConfig": {
-                  "staticIp": null,
-                  "subnetMask": "255.255.254.0",
-                  "gateway": "192.168.1.254",
-                  "primaryDns": "2.2.2.2",
-                  "secondaryDns": "9.9.9.9",
-                  "isDhcp": null
-                },
+                "ipConfig": null,
+                "isDhcp": null,
                 "shouldReplaceIpConfiguration": false
               },
               "vcd": null,
@@ -168,14 +162,35 @@
                 "networkIdentifier": "VM Network",
                 "shouldReplaceMacAddress": false,
                 "dnsSuffix": null,
-                "ipConfig": {
-                  "staticIp": null,
-                  "subnetMask": "255.255.255.0",
-                  "gateway": "192.168.0.254",
-                  "primaryDns": "1.1.1.1",
-                  "secondaryDns": "8.8.8.8",
-                  "isDhcp": null
-                },
+                "ipConfig": null,
+                "isDhcp": null,
+                "shouldReplaceIpConfiguration": false
+              },
+              "vcd": null,
+              "publicCloud": null
+            }
+          },
+          {
+            "nicIdentifier": "vik-Network adapter 1",
+            "failoverTest": {
+              "hypervisor": {
+                "networkIdentifier": "vRA Network",
+                "shouldReplaceMacAddress": false,
+                "dnsSuffix": null,
+                "ipConfig": null,
+                "isDhcp": null,
+                "shouldReplaceIpConfiguration": false
+              },
+              "vcd": null,
+              "publicCloud": null
+            },
+            "failover": {
+              "hypervisor": {
+                "networkIdentifier": "VM Network",
+                "shouldReplaceMacAddress": false,
+                "dnsSuffix": null,
+                "ipConfig": null,
+                "isDhcp": null,
                 "shouldReplaceIpConfiguration": false
               },
               "vcd": null,
@@ -250,8 +265,8 @@
         "warningThresholdInMB": 115200,
         "warningThresholdInPercent": 0
       },
-      "datastoreIdentifier": null,
-      "datastoreClusterIdentifier": null
+      "datastoreIdentifier": "DS_VM_Right",
+      "datastoreClusterIdentifier": "DS_VM_Right"
     },
     "Scratch": {
       "limitation": {
@@ -260,21 +275,21 @@
         "warningThresholdInMB": 230400,
         "warningThresholdInPercent": 0
       },
-      "datastoreIdentifier": null,
-      "datastoreClusterIdentifier": null
+      "datastoreIdentifier": "DS_VM_Right",
+      "datastoreClusterIdentifier": "DS_VM_Right"
     },
     "Networks": {
       "failover": {
         "vcd": null,
         "hypervisor": {
-          "defaultNetworkIdentifier": null
+          "defaultNetworkIdentifier": "VM Network"
         },
         "publicCloud": null
       },
       "failoverTest": {
         "vcd": null,
         "hypervisor": {
-          "defaultNetworkIdentifier": null
+          "defaultNetworkIdentifier": "VM Network"
         },
         "publicCloud": null
       }
@@ -305,8 +320,8 @@
             "warningThresholdInMB": 115200,
             "warningThresholdInPercent": 0
           },
-          "datastoreIdentifier": null,
-          "datastoreClusterIdentifier": null
+          "datastoreIdentifier": "DS_VM_Right",
+          "datastoreClusterIdentifier": "DS_VM_Right"
         },
         "Scratch": {
           "limitation": {
@@ -315,8 +330,8 @@
             "warningThresholdInMB": 230400,
             "warningThresholdInPercent": 0
           },
-          "datastoreIdentifier": null,
-          "datastoreClusterIdentifier": null
+          "datastoreIdentifier": "DS_VM_Right",
+          "datastoreClusterIdentifier": "DS_VM_Right"
         },
         "Volumes": [
           {
@@ -345,17 +360,11 @@
             "nicIdentifier": "Network adapter 1",
             "failoverTest": {
               "hypervisor": {
-                "networkIdentifier": null,
+                "networkIdentifier": "VM Network",
                 "shouldReplaceMacAddress": false,
                 "dnsSuffix": null,
-                "ipConfig": {
-                  "staticIp": null,
-                  "subnetMask": "255.255.254.0",
-                  "gateway": "192.168.1.254",
-                  "primaryDns": "2.2.2.2",
-                  "secondaryDns": "9.9.9.9",
-                  "isDhcp": null
-                },
+                "ipConfig": null,
+                "isDhcp": null,
                 "shouldReplaceIpConfiguration": false
               },
               "vcd": null,
@@ -363,17 +372,11 @@
             },
             "failover": {
               "hypervisor": {
-                "networkIdentifier": null,
+                "networkIdentifier": "VM Network",
                 "shouldReplaceMacAddress": false,
                 "dnsSuffix": null,
-                "ipConfig": {
-                  "staticIp": null,
-                  "subnetMask": "255.255.255.0",
-                  "gateway": "192.168.0.254",
-                  "primaryDns": "1.1.1.1",
-                  "secondaryDns": "8.8.8.8",
-                  "isDhcp": null
-                },
+                "ipConfig": null,
+                "isDhcp": null,
                 "shouldReplaceIpConfiguration": false
               },
               "vcd": null,
@@ -407,8 +410,8 @@
             "warningThresholdInMB": 115200,
             "warningThresholdInPercent": 0
           },
-          "datastoreIdentifier": null,
-          "datastoreClusterIdentifier": null
+          "datastoreIdentifier": "DS_VM_Right",
+          "datastoreClusterIdentifier": "DS_VM_Right"
         },
         "Scratch": {
           "limitation": {
@@ -417,8 +420,8 @@
             "warningThresholdInMB": 230400,
             "warningThresholdInPercent": 0
           },
-          "datastoreIdentifier": null,
-          "datastoreClusterIdentifier": null
+          "datastoreIdentifier": "DS_VM_Right",
+          "datastoreClusterIdentifier": "DS_VM_Right"
         },
         "Volumes": [
           {
@@ -447,17 +450,11 @@
             "nicIdentifier": "Network adapter 1",
             "failoverTest": {
               "hypervisor": {
-                "networkIdentifier": null,
+                "networkIdentifier": "VM Network",
                 "shouldReplaceMacAddress": false,
                 "dnsSuffix": null,
-                "ipConfig": {
-                  "staticIp": null,
-                  "subnetMask": "255.255.254.0",
-                  "gateway": "192.168.1.254",
-                  "primaryDns": "2.2.2.2",
-                  "secondaryDns": "9.9.9.9",
-                  "isDhcp": null
-                },
+                "ipConfig": null,
+                "isDhcp": null,
                 "shouldReplaceIpConfiguration": false
               },
               "vcd": null,
@@ -465,17 +462,11 @@
             },
             "failover": {
               "hypervisor": {
-                "networkIdentifier": null,
+                "networkIdentifier": "VM Network",
                 "shouldReplaceMacAddress": false,
                 "dnsSuffix": null,
-                "ipConfig": {
-                  "staticIp": null,
-                  "subnetMask": "255.255.255.0",
-                  "gateway": "192.168.0.254",
-                  "primaryDns": "1.1.1.1",
-                  "secondaryDns": "8.8.8.8",
-                  "isDhcp": null
-                },
+                "ipConfig": null,
+                "isDhcp": null,
                 "shouldReplaceIpConfiguration": false
               },
               "vcd": null,
@@ -539,8 +530,8 @@
         "warningThresholdInMB": 115200,
         "warningThresholdInPercent": 0
       },
-      "datastoreIdentifier": null,
-      "datastoreClusterIdentifier": null
+      "datastoreIdentifier": "DS_VM_Left",
+      "datastoreClusterIdentifier": "DS_VM_Left"
     },
     "Scratch": {
       "limitation": {
@@ -549,8 +540,8 @@
         "warningThresholdInMB": 230400,
         "warningThresholdInPercent": 0
       },
-      "datastoreIdentifier": null,
-      "datastoreClusterIdentifier": null
+      "datastoreIdentifier": "DS_VM_Left",
+      "datastoreClusterIdentifier": "DS_VM_Left"
     },
     "Networks": {
       "failover": {
@@ -594,8 +585,8 @@
             "warningThresholdInMB": 115200,
             "warningThresholdInPercent": 0
           },
-          "datastoreIdentifier": null,
-          "datastoreClusterIdentifier": null
+          "datastoreIdentifier": "DS_VM_Left",
+          "datastoreClusterIdentifier": "DS_VM_Left"
         },
         "Scratch": {
           "limitation": {
@@ -604,8 +595,8 @@
             "warningThresholdInMB": 230400,
             "warningThresholdInPercent": 0
           },
-          "datastoreIdentifier": null,
-          "datastoreClusterIdentifier": null
+          "datastoreIdentifier": "DS_VM_Left",
+          "datastoreClusterIdentifier": "DS_VM_Left"
         },
         "Volumes": [
           {
@@ -629,7 +620,62 @@
             "volumeSyncSettings": "Continuous Sync"
           }
         ],
-        "nics": []
+        "nics": [
+          {
+            "nicIdentifier": "Network adapter 1",
+            "failoverTest": {
+              "hypervisor": {
+                "networkIdentifier": null,
+                "shouldReplaceMacAddress": false,
+                "dnsSuffix": null,
+                "ipConfig": null,
+                "isDhcp": null,
+                "shouldReplaceIpConfiguration": false
+              },
+              "vcd": null,
+              "publicCloud": null
+            },
+            "failover": {
+              "hypervisor": {
+                "networkIdentifier": null,
+                "shouldReplaceMacAddress": false,
+                "dnsSuffix": null,
+                "ipConfig": null,
+                "isDhcp": null,
+                "shouldReplaceIpConfiguration": false
+              },
+              "vcd": null,
+              "publicCloud": null
+            }
+          },
+          {
+            "nicIdentifier": "vik-Network adapter 1",
+            "failoverTest": {
+              "hypervisor": {
+                "networkIdentifier": null,
+                "shouldReplaceMacAddress": false,
+                "dnsSuffix": null,
+                "ipConfig": null,
+                "isDhcp": null,
+                "shouldReplaceIpConfiguration": false
+              },
+              "vcd": null,
+              "publicCloud": null
+            },
+            "failover": {
+              "hypervisor": {
+                "networkIdentifier": null,
+                "shouldReplaceMacAddress": false,
+                "dnsSuffix": null,
+                "ipConfig": null,
+                "isDhcp": null,
+                "shouldReplaceIpConfiguration": false
+              },
+              "vcd": null,
+              "publicCloud": null
+            }
+          }
+        ]
       }
     ]
   }

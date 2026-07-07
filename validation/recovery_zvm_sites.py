@@ -30,7 +30,7 @@ TargetRPOAlertUnit = Literal["Seconds", "Minutes", "Hours"]
 TestReminder = Literal["None", "3 Months", "6 Months", "9 Months", "12 Months"]
 JournalSizeUnit = Literal["GiB", "%", "Unlimited"]
 YesNo = Literal["Yes", "No"]
-DiskProvisioningOverride = Literal["As-is", "Thin", "Thick"]
+DiskProvisioningOverride = Literal["As-is", "As-Is", "Thin", "Thick"]
 VnicIpConfigChange = Literal["No", "Yes, DHCP", "Yes, Static"]
 RECOVERY_ZVM_SITE_NETWORK_FIELDS = (
     "Failover Live / Move Network Name",

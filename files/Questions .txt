@@ -121,8 +121,16 @@ Add a contract version at the top of the JSON.
 Keep raw extracted workbook data only as debug/reference, not as the main API handoff section.
 
 
+===========================================
 
 
+7th July
+
+- user guide VM storage is not updates with new filed like SCSI in the workbook. 
+
+- i see in the workbook there is provisioing. is this provisioing telling what the current situation at the
+protected site is or is it saying hwo the recovery site will be provisioned? if the current situation at the
+recovery site, then the userguide is saying 
 
 
 

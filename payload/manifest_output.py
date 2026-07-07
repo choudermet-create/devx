@@ -3,9 +3,9 @@ from pathlib import Path
 
 from extraction.tables import clean_value
 from payload.json_output import (
-    disk_provisioning_to_is_thin,
     duration_to_hours,
     duration_to_seconds,
+    effective_disk_provisioning_to_is_thin,
     first_value,
     is_dhcp,
     make_json_safe,
@@ -120,6 +120,9 @@ def validate_manifest_nic_networks(
     vpg_name: str,
     vpg: dict,
 ) -> None:
+    if value_at(vpg, "Basic", "vpgType") == "Local Continuous Backup":
+        return
+
     network_checks = (
         ("failover", "Failover Live / Move"),
         ("failoverTest", "Failover Test"),
@@ -438,8 +441,9 @@ def build_manifest_volume(row: dict) -> dict:
     return {
         "volumeIdentifier": row.get("Protected Volume Location"),
         "vcd": {
-            "isThin": disk_provisioning_to_is_thin(
+            "isThin": effective_disk_provisioning_to_is_thin(
                 row.get("Disk Provisioning Override"),
+                row.get("Provisioning"),
             ),
         },
         "preseed": {
@@ -453,8 +457,9 @@ def build_manifest_volume(row: dict) -> dict:
         "datastore": {
             "datastoreClusterIdentifier": row.get("Recovery Datastore Name"),
             "datastoreIdentifier": row.get("Recovery Datastore Name"),
-            "isThin": disk_provisioning_to_is_thin(
+            "isThin": effective_disk_provisioning_to_is_thin(
                 row.get("Disk Provisioning Override"),
+                row.get("Provisioning"),
             ),
         },
         "volumeSyncSettings": row.get("Volume Sync Type"),
@@ -477,18 +482,25 @@ def build_manifest_nic_network(row: dict, prefix: str) -> dict:
                 row.get(f"{prefix} - Create new MAC address"),
             ),
             "dnsSuffix": row.get(f"{prefix} - DNS Suffix"),
-            "ipConfig": {
-                "staticIp": row.get(f"{prefix} - IP Address"),
-                "subnetMask": row.get(f"{prefix} - Subnet Mask"),
-                "gateway": row.get(f"{prefix} - Default Gateway"),
-                "primaryDns": row.get(f"{prefix} - Preferred DNS Server"),
-                "secondaryDns": row.get(f"{prefix} - Alternate DNS Server"),
-                "isDhcp": is_dhcp(row.get(f"{prefix} - Change vNIC IP Config")),
-            },
+            "ipConfig": build_manifest_ip_config(row, prefix),
+            "isDhcp": is_dhcp(row.get(f"{prefix} - Change vNIC IP Config")),
             "shouldReplaceIpConfiguration": should_replace_ip_configuration(
                 row.get(f"{prefix} - Change vNIC IP Config"),
             ),
         },
         "vcd": None,
         "publicCloud": None,
+    }
+
+
+def build_manifest_ip_config(row: dict, prefix: str) -> dict | None:
+    if row.get(f"{prefix} - Change vNIC IP Config") != "Yes, Static":
+        return None
+
+    return {
+        "staticIp": row.get(f"{prefix} - IP Address"),
+        "subnetMask": row.get(f"{prefix} - Subnet Mask"),
+        "gateway": row.get(f"{prefix} - Default Gateway"),
+        "primaryDns": row.get(f"{prefix} - Preferred DNS Server"),
+        "secondaryDns": row.get(f"{prefix} - Alternate DNS Server"),
     }

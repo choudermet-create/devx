@@ -17,6 +17,7 @@ VolumeSyncType = Literal[
     "Initial Sync Only",
     "No Sync (Empty Disk)",
 ]
+Provisioning = Literal["Thin", "Thick"]
 
 
 class VMStorage(BaseModel):
@@ -49,6 +50,10 @@ class VMStorage(BaseModel):
     disk_provisioning_override: DiskProvisioningOverride | None = Field(
         default=None,
         validation_alias="Disk Provisioning Override",
+    )
+    provisioning: Provisioning | None = Field(
+        default=None,
+        validation_alias="Provisioning",
     )
     volume_sync_type: VolumeSyncType | None = Field(
         default=None,

@@ -1,5 +1,5 @@
 from collections import Counter
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, ValidationInfo, field_validator
 
@@ -7,6 +7,9 @@ import config
 from validation.recovery_zvm_sites import normalize_blank
 from validation.error_formatting import WorkbookValidationError, validate_model_rows
 from validation.vpgs import validate_config_value
+
+
+Provisioning = Literal["Thin", "Thick"]
 
 
 class ProtectedVM(BaseModel):
@@ -42,6 +45,10 @@ class ProtectedVMVolume(BaseModel):
         ge=1,
         le=65536,
         validation_alias="Provisioned Size (GiB)",
+    )
+    provisioning: Provisioning | None = Field(
+        default=None,
+        validation_alias="Provisioning",
     )
 
     @field_validator("*", mode="before")
