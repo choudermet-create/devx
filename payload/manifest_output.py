@@ -36,18 +36,53 @@ def write_vca_run_manifest(
         boot_order_groups,
     )
     validate_manifest_required_values(manifest)
+    output_manifest = pascalize_manifest_keys(manifest)
 
     output_path = Path(output_file)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(
         json.dumps(
-            make_json_safe(manifest),
+            make_json_safe(output_manifest),
             indent=2,
         ),
         encoding="utf-8",
     )
 
     return output_path
+
+
+def pascalize_manifest_keys(value):
+    if isinstance(value, list):
+        return [
+            pascalize_manifest_keys(item)
+            for item in value
+        ]
+
+    if isinstance(value, dict):
+        return {
+            pascalize_manifest_key(key): pascalize_manifest_keys(item)
+            for key, item in value.items()
+        }
+
+    return value
+
+
+def pascalize_manifest_key(key) -> str:
+    key = str(key)
+    special_cases = {
+        "BootGroup": "BootGroups",
+        "VMs": "Vms",
+        "nics": "Nics",
+        "vcd": "VCD",
+        "rdm": "RDM",
+        "ipConfig": "IpConfig",
+        "isDhcp": "IsDhcp",
+    }
+
+    if key in special_cases:
+        return special_cases[key]
+
+    return key[:1].upper() + key[1:]
 
 
 def build_vca_run_manifest(

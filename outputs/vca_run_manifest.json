@@ -1,200 +1,200 @@
 [
   {
     "Basic": {
-      "name": "U L2R",
-      "vpgType": "Remote DR and Continuous Backup",
-      "rpoInSeconds": 300,
-      "testIntervalInMinutes": 259200,
-      "journalHistoryInHours": 24,
-      "priority": "Medium",
-      "useWanCompression": true,
-      "serviceProfileIdentifier": null,
-      "zorgIdentifier": null,
-      "protectedSiteIdentifier": "ZVM L",
-      "recoverySiteIdentifier": "ZVM R"
+      "Name": "U L2R",
+      "VpgType": "Remote DR and Continuous Backup",
+      "RpoInSeconds": 300,
+      "TestIntervalInMinutes": 259200,
+      "JournalHistoryInHours": 24,
+      "Priority": "Medium",
+      "UseWanCompression": true,
+      "ServiceProfileIdentifier": null,
+      "ZorgIdentifier": null,
+      "ProtectedSiteIdentifier": "ZVM L",
+      "RecoverySiteIdentifier": "ZVM R"
     },
-    "BootGroup": {
-      "bootGroups": []
+    "BootGroups": {
+      "BootGroups": []
     },
     "Scripting": {
-      "preRecovery": {
-        "command": null,
-        "parameters": null,
-        "timeoutInSeconds": 300
+      "PreRecovery": {
+        "Command": null,
+        "Parameters": null,
+        "TimeoutInSeconds": 300
       },
-      "postRecovery": {
-        "command": null,
-        "parameters": null,
-        "timeoutInSeconds": 300
+      "PostRecovery": {
+        "Command": null,
+        "Parameters": null,
+        "TimeoutInSeconds": 300
       },
-      "postBackup": {
-        "command": null,
-        "parameters": null,
-        "timeoutInSeconds": 0
+      "PostBackup": {
+        "Command": null,
+        "Parameters": null,
+        "TimeoutInSeconds": 0
       }
     },
     "Recovery": {
-      "defaultHostIdentifier": "192.168.222.2",
-      "defaultHostClusterIdentifier": "192.168.222.2",
-      "defaultDatastoreIdentifier": "DS_VM_Right",
-      "defaultDatastoreClusterIdentifier": "DS_VM_Right",
-      "defaultFolderIdentifier": "/",
-      "resourcePoolIdentifier": null,
-      "vcd": {
-        "orgVdcIdentifier": null
+      "DefaultHostIdentifier": "192.168.222.2",
+      "DefaultHostClusterIdentifier": "192.168.222.2",
+      "DefaultDatastoreIdentifier": "DS_VM_Right",
+      "DefaultDatastoreClusterIdentifier": "DS_VM_Right",
+      "DefaultFolderIdentifier": "/",
+      "ResourcePoolIdentifier": null,
+      "VCD": {
+        "OrgVdcIdentifier": null
       },
-      "publicCloud": null
+      "PublicCloud": null
     },
     "Journal": {
-      "limitation": {
-        "hardLimitInMB": 153600,
-        "hardLimitInPercent": 0,
-        "warningThresholdInMB": 115200,
-        "warningThresholdInPercent": 0
+      "Limitation": {
+        "HardLimitInMB": 153600,
+        "HardLimitInPercent": 0,
+        "WarningThresholdInMB": 115200,
+        "WarningThresholdInPercent": 0
       },
-      "datastoreIdentifier": "DS_VM_Right",
-      "datastoreClusterIdentifier": "DS_VM_Right"
+      "DatastoreIdentifier": "DS_VM_Right",
+      "DatastoreClusterIdentifier": "DS_VM_Right"
     },
     "Scratch": {
-      "limitation": {
-        "hardLimitInMB": 307200,
-        "hardLimitInPercent": 0,
-        "warningThresholdInMB": 230400,
-        "warningThresholdInPercent": 0
+      "Limitation": {
+        "HardLimitInMB": 307200,
+        "HardLimitInPercent": 0,
+        "WarningThresholdInMB": 230400,
+        "WarningThresholdInPercent": 0
       },
-      "datastoreIdentifier": "DS_VM_Right",
-      "datastoreClusterIdentifier": "DS_VM_Right"
+      "DatastoreIdentifier": "DS_VM_Right",
+      "DatastoreClusterIdentifier": "DS_VM_Right"
     },
     "Networks": {
-      "failover": {
-        "vcd": null,
-        "hypervisor": {
-          "defaultNetworkIdentifier": "VM Network"
+      "Failover": {
+        "VCD": null,
+        "Hypervisor": {
+          "DefaultNetworkIdentifier": "VM Network"
         },
-        "publicCloud": null
+        "PublicCloud": null
       },
-      "failoverTest": {
-        "vcd": null,
-        "hypervisor": {
-          "defaultNetworkIdentifier": "vRA Network"
+      "FailoverTest": {
+        "VCD": null,
+        "Hypervisor": {
+          "DefaultNetworkIdentifier": "vRA Network"
         },
-        "publicCloud": null
+        "PublicCloud": null
       }
     },
-    "VMs": [
+    "Vms": [
       {
-        "vmIdentifier": "Ubuntu 22.4",
+        "VmIdentifier": "Ubuntu 22.4",
         "Recovery": {
-          "hostIdentifier": "192.168.222.2",
-          "hostClusterIdentifier": "192.168.222.2",
-          "datastoreIdentifier": "DS_VM_Right",
-          "datastoreClusterIdentifier": "DS_VM_Right",
-          "folderIdentifier": "/",
-          "resourcePoolIdentifier": null,
-          "vcd": {
-            "storagePolicyIdentifier": null
+          "HostIdentifier": "192.168.222.2",
+          "HostClusterIdentifier": "192.168.222.2",
+          "DatastoreIdentifier": "DS_VM_Right",
+          "DatastoreClusterIdentifier": "DS_VM_Right",
+          "FolderIdentifier": "/",
+          "ResourcePoolIdentifier": null,
+          "VCD": {
+            "StoragePolicyIdentifier": null
           },
-          "publicCloud": null,
-          "useVmEncryption": false
+          "PublicCloud": null,
+          "UseVmEncryption": false
         },
-        "BootGroup": {
-          "bootGroupIdentifier": null
+        "BootGroups": {
+          "BootGroupIdentifier": null
         },
         "Journal": {
-          "limitation": {
-            "hardLimitInMB": 153600,
-            "hardLimitInPercent": 0,
-            "warningThresholdInMB": 115200,
-            "warningThresholdInPercent": 0
+          "Limitation": {
+            "HardLimitInMB": 153600,
+            "HardLimitInPercent": 0,
+            "WarningThresholdInMB": 115200,
+            "WarningThresholdInPercent": 0
           },
-          "datastoreIdentifier": "DS_VM_Right",
-          "datastoreClusterIdentifier": "DS_VM_Right"
+          "DatastoreIdentifier": "DS_VM_Right",
+          "DatastoreClusterIdentifier": "DS_VM_Right"
         },
         "Scratch": {
-          "limitation": {
-            "hardLimitInMB": 307200,
-            "hardLimitInPercent": 0,
-            "warningThresholdInMB": 230400,
-            "warningThresholdInPercent": 0
+          "Limitation": {
+            "HardLimitInMB": 307200,
+            "HardLimitInPercent": 0,
+            "WarningThresholdInMB": 230400,
+            "WarningThresholdInPercent": 0
           },
-          "datastoreIdentifier": "DS_VM_Right",
-          "datastoreClusterIdentifier": "DS_VM_Right"
+          "DatastoreIdentifier": "DS_VM_Right",
+          "DatastoreClusterIdentifier": "DS_VM_Right"
         },
         "Volumes": [
           {
-            "volumeIdentifier": "[DS_VM_Left] Ubuntu 22.4/Ubuntu 22.4-000001.vmdk",
-            "vcd": {
-              "isThin": null
+            "VolumeIdentifier": "[DS_VM_Left] Ubuntu 22.4/Ubuntu 22.4-000001.vmdk",
+            "VCD": {
+              "IsThin": null
             },
-            "preseed": {
-              "datastoreIdentifier": null,
-              "path": null
+            "Preseed": {
+              "DatastoreIdentifier": null,
+              "Path": null
             },
-            "rdm": {
-              "deviceIdentifier": null,
-              "isPhysical": true
+            "RDM": {
+              "DeviceIdentifier": null,
+              "IsPhysical": true
             },
-            "datastore": {
-              "datastoreClusterIdentifier": null,
-              "datastoreIdentifier": null,
-              "isThin": null
+            "Datastore": {
+              "DatastoreClusterIdentifier": null,
+              "DatastoreIdentifier": null,
+              "IsThin": null
             },
-            "volumeSyncSettings": "Continuous Sync"
+            "VolumeSyncSettings": "Continuous Sync"
           }
         ],
-        "nics": [
+        "Nics": [
           {
-            "nicIdentifier": "Network adapter 1",
-            "failoverTest": {
-              "hypervisor": {
-                "networkIdentifier": "vRA Network",
-                "shouldReplaceMacAddress": false,
-                "dnsSuffix": null,
-                "ipConfig": null,
-                "isDhcp": null,
-                "shouldReplaceIpConfiguration": false
+            "NicIdentifier": "Network adapter 1",
+            "FailoverTest": {
+              "Hypervisor": {
+                "NetworkIdentifier": "vRA Network",
+                "ShouldReplaceMacAddress": false,
+                "DnsSuffix": null,
+                "IpConfig": null,
+                "IsDhcp": null,
+                "ShouldReplaceIpConfiguration": false
               },
-              "vcd": null,
-              "publicCloud": null
+              "VCD": null,
+              "PublicCloud": null
             },
-            "failover": {
-              "hypervisor": {
-                "networkIdentifier": "VM Network",
-                "shouldReplaceMacAddress": false,
-                "dnsSuffix": null,
-                "ipConfig": null,
-                "isDhcp": null,
-                "shouldReplaceIpConfiguration": false
+            "Failover": {
+              "Hypervisor": {
+                "NetworkIdentifier": "VM Network",
+                "ShouldReplaceMacAddress": false,
+                "DnsSuffix": null,
+                "IpConfig": null,
+                "IsDhcp": null,
+                "ShouldReplaceIpConfiguration": false
               },
-              "vcd": null,
-              "publicCloud": null
+              "VCD": null,
+              "PublicCloud": null
             }
           },
           {
-            "nicIdentifier": "vik-Network adapter 1",
-            "failoverTest": {
-              "hypervisor": {
-                "networkIdentifier": "vRA Network",
-                "shouldReplaceMacAddress": false,
-                "dnsSuffix": null,
-                "ipConfig": null,
-                "isDhcp": null,
-                "shouldReplaceIpConfiguration": false
+            "NicIdentifier": "vik-Network adapter 1",
+            "FailoverTest": {
+              "Hypervisor": {
+                "NetworkIdentifier": "vRA Network",
+                "ShouldReplaceMacAddress": false,
+                "DnsSuffix": null,
+                "IpConfig": null,
+                "IsDhcp": null,
+                "ShouldReplaceIpConfiguration": false
               },
-              "vcd": null,
-              "publicCloud": null
+              "VCD": null,
+              "PublicCloud": null
             },
-            "failover": {
-              "hypervisor": {
-                "networkIdentifier": "VM Network",
-                "shouldReplaceMacAddress": false,
-                "dnsSuffix": null,
-                "ipConfig": null,
-                "isDhcp": null,
-                "shouldReplaceIpConfiguration": false
+            "Failover": {
+              "Hypervisor": {
+                "NetworkIdentifier": "VM Network",
+                "ShouldReplaceMacAddress": false,
+                "DnsSuffix": null,
+                "IpConfig": null,
+                "IsDhcp": null,
+                "ShouldReplaceIpConfiguration": false
               },
-              "vcd": null,
-              "publicCloud": null
+              "VCD": null,
+              "PublicCloud": null
             }
           }
         ]
@@ -203,274 +203,274 @@
   },
   {
     "Basic": {
-      "name": "ZVM 2R",
-      "vpgType": "Remote DR and Continuous Backup",
-      "rpoInSeconds": 300,
-      "testIntervalInMinutes": 259200,
-      "journalHistoryInHours": 24,
-      "priority": "Medium",
-      "useWanCompression": true,
-      "serviceProfileIdentifier": null,
-      "zorgIdentifier": null,
-      "protectedSiteIdentifier": "ZVM L",
-      "recoverySiteIdentifier": "ZVM R"
+      "Name": "ZVM 2R",
+      "VpgType": "Remote DR and Continuous Backup",
+      "RpoInSeconds": 300,
+      "TestIntervalInMinutes": 259200,
+      "JournalHistoryInHours": 24,
+      "Priority": "Medium",
+      "UseWanCompression": true,
+      "ServiceProfileIdentifier": null,
+      "ZorgIdentifier": null,
+      "ProtectedSiteIdentifier": "ZVM L",
+      "RecoverySiteIdentifier": "ZVM R"
     },
-    "BootGroup": {
-      "bootGroups": [
+    "BootGroups": {
+      "BootGroups": [
         {
-          "bootGroupIdentifier": null,
-          "name": "Default",
-          "bootDelayInSeconds": 1
+          "BootGroupIdentifier": null,
+          "Name": "Default",
+          "BootDelayInSeconds": 1
         },
         {
-          "bootGroupIdentifier": null,
-          "name": "New_Group_1",
-          "bootDelayInSeconds": 2
+          "BootGroupIdentifier": null,
+          "Name": "New_Group_1",
+          "BootDelayInSeconds": 2
         }
       ]
     },
     "Scripting": {
-      "preRecovery": {
-        "command": null,
-        "parameters": null,
-        "timeoutInSeconds": 300
+      "PreRecovery": {
+        "Command": null,
+        "Parameters": null,
+        "TimeoutInSeconds": 300
       },
-      "postRecovery": {
-        "command": null,
-        "parameters": null,
-        "timeoutInSeconds": 300
+      "PostRecovery": {
+        "Command": null,
+        "Parameters": null,
+        "TimeoutInSeconds": 300
       },
-      "postBackup": {
-        "command": null,
-        "parameters": null,
-        "timeoutInSeconds": 0
+      "PostBackup": {
+        "Command": null,
+        "Parameters": null,
+        "TimeoutInSeconds": 0
       }
     },
     "Recovery": {
-      "defaultHostIdentifier": "192.168.222.2",
-      "defaultHostClusterIdentifier": "192.168.222.2",
-      "defaultDatastoreIdentifier": "DS_VM_Right",
-      "defaultDatastoreClusterIdentifier": "DS_VM_Right",
-      "defaultFolderIdentifier": "/",
-      "resourcePoolIdentifier": null,
-      "vcd": {
-        "orgVdcIdentifier": null
+      "DefaultHostIdentifier": "192.168.222.2",
+      "DefaultHostClusterIdentifier": "192.168.222.2",
+      "DefaultDatastoreIdentifier": "DS_VM_Right",
+      "DefaultDatastoreClusterIdentifier": "DS_VM_Right",
+      "DefaultFolderIdentifier": "/",
+      "ResourcePoolIdentifier": null,
+      "VCD": {
+        "OrgVdcIdentifier": null
       },
-      "publicCloud": null
+      "PublicCloud": null
     },
     "Journal": {
-      "limitation": {
-        "hardLimitInMB": 153600,
-        "hardLimitInPercent": 0,
-        "warningThresholdInMB": 115200,
-        "warningThresholdInPercent": 0
+      "Limitation": {
+        "HardLimitInMB": 153600,
+        "HardLimitInPercent": 0,
+        "WarningThresholdInMB": 115200,
+        "WarningThresholdInPercent": 0
       },
-      "datastoreIdentifier": "DS_VM_Right",
-      "datastoreClusterIdentifier": "DS_VM_Right"
+      "DatastoreIdentifier": "DS_VM_Right",
+      "DatastoreClusterIdentifier": "DS_VM_Right"
     },
     "Scratch": {
-      "limitation": {
-        "hardLimitInMB": 307200,
-        "hardLimitInPercent": 0,
-        "warningThresholdInMB": 230400,
-        "warningThresholdInPercent": 0
+      "Limitation": {
+        "HardLimitInMB": 307200,
+        "HardLimitInPercent": 0,
+        "WarningThresholdInMB": 230400,
+        "WarningThresholdInPercent": 0
       },
-      "datastoreIdentifier": "DS_VM_Right",
-      "datastoreClusterIdentifier": "DS_VM_Right"
+      "DatastoreIdentifier": "DS_VM_Right",
+      "DatastoreClusterIdentifier": "DS_VM_Right"
     },
     "Networks": {
-      "failover": {
-        "vcd": null,
-        "hypervisor": {
-          "defaultNetworkIdentifier": "VM Network"
+      "Failover": {
+        "VCD": null,
+        "Hypervisor": {
+          "DefaultNetworkIdentifier": "VM Network"
         },
-        "publicCloud": null
+        "PublicCloud": null
       },
-      "failoverTest": {
-        "vcd": null,
-        "hypervisor": {
-          "defaultNetworkIdentifier": "VM Network"
+      "FailoverTest": {
+        "VCD": null,
+        "Hypervisor": {
+          "DefaultNetworkIdentifier": "VM Network"
         },
-        "publicCloud": null
+        "PublicCloud": null
       }
     },
-    "VMs": [
+    "Vms": [
       {
-        "vmIdentifier": "ZVM-Left",
+        "VmIdentifier": "ZVM-Left",
         "Recovery": {
-          "hostIdentifier": "192.168.222.2",
-          "hostClusterIdentifier": "192.168.222.2",
-          "datastoreIdentifier": "DS_VM_Right",
-          "datastoreClusterIdentifier": "DS_VM_Right",
-          "folderIdentifier": "/",
-          "resourcePoolIdentifier": null,
-          "vcd": {
-            "storagePolicyIdentifier": null
+          "HostIdentifier": "192.168.222.2",
+          "HostClusterIdentifier": "192.168.222.2",
+          "DatastoreIdentifier": "DS_VM_Right",
+          "DatastoreClusterIdentifier": "DS_VM_Right",
+          "FolderIdentifier": "/",
+          "ResourcePoolIdentifier": null,
+          "VCD": {
+            "StoragePolicyIdentifier": null
           },
-          "publicCloud": null,
-          "useVmEncryption": false
+          "PublicCloud": null,
+          "UseVmEncryption": false
         },
-        "BootGroup": {
-          "bootGroupIdentifier": "New_Group_1"
+        "BootGroups": {
+          "BootGroupIdentifier": "New_Group_1"
         },
         "Journal": {
-          "limitation": {
-            "hardLimitInMB": 153600,
-            "hardLimitInPercent": 0,
-            "warningThresholdInMB": 115200,
-            "warningThresholdInPercent": 0
+          "Limitation": {
+            "HardLimitInMB": 153600,
+            "HardLimitInPercent": 0,
+            "WarningThresholdInMB": 115200,
+            "WarningThresholdInPercent": 0
           },
-          "datastoreIdentifier": "DS_VM_Right",
-          "datastoreClusterIdentifier": "DS_VM_Right"
+          "DatastoreIdentifier": "DS_VM_Right",
+          "DatastoreClusterIdentifier": "DS_VM_Right"
         },
         "Scratch": {
-          "limitation": {
-            "hardLimitInMB": 307200,
-            "hardLimitInPercent": 0,
-            "warningThresholdInMB": 230400,
-            "warningThresholdInPercent": 0
+          "Limitation": {
+            "HardLimitInMB": 307200,
+            "HardLimitInPercent": 0,
+            "WarningThresholdInMB": 230400,
+            "WarningThresholdInPercent": 0
           },
-          "datastoreIdentifier": "DS_VM_Right",
-          "datastoreClusterIdentifier": "DS_VM_Right"
+          "DatastoreIdentifier": "DS_VM_Right",
+          "DatastoreClusterIdentifier": "DS_VM_Right"
         },
         "Volumes": [
           {
-            "volumeIdentifier": "[DS_VM_Left] ZVM-Left/ZVM-Left.vmdk",
-            "vcd": {
-              "isThin": null
+            "VolumeIdentifier": "[DS_VM_Left] ZVM-Left/ZVM-Left.vmdk",
+            "VCD": {
+              "IsThin": null
             },
-            "preseed": {
-              "datastoreIdentifier": null,
-              "path": null
+            "Preseed": {
+              "DatastoreIdentifier": null,
+              "Path": null
             },
-            "rdm": {
-              "deviceIdentifier": null,
-              "isPhysical": true
+            "RDM": {
+              "DeviceIdentifier": null,
+              "IsPhysical": true
             },
-            "datastore": {
-              "datastoreClusterIdentifier": null,
-              "datastoreIdentifier": null,
-              "isThin": null
+            "Datastore": {
+              "DatastoreClusterIdentifier": null,
+              "DatastoreIdentifier": null,
+              "IsThin": null
             },
-            "volumeSyncSettings": "Continuous Sync"
+            "VolumeSyncSettings": "Continuous Sync"
           }
         ],
-        "nics": [
+        "Nics": [
           {
-            "nicIdentifier": "Network adapter 1",
-            "failoverTest": {
-              "hypervisor": {
-                "networkIdentifier": "VM Network",
-                "shouldReplaceMacAddress": false,
-                "dnsSuffix": null,
-                "ipConfig": null,
-                "isDhcp": null,
-                "shouldReplaceIpConfiguration": false
+            "NicIdentifier": "Network adapter 1",
+            "FailoverTest": {
+              "Hypervisor": {
+                "NetworkIdentifier": "VM Network",
+                "ShouldReplaceMacAddress": false,
+                "DnsSuffix": null,
+                "IpConfig": null,
+                "IsDhcp": null,
+                "ShouldReplaceIpConfiguration": false
               },
-              "vcd": null,
-              "publicCloud": null
+              "VCD": null,
+              "PublicCloud": null
             },
-            "failover": {
-              "hypervisor": {
-                "networkIdentifier": "VM Network",
-                "shouldReplaceMacAddress": false,
-                "dnsSuffix": null,
-                "ipConfig": null,
-                "isDhcp": null,
-                "shouldReplaceIpConfiguration": false
+            "Failover": {
+              "Hypervisor": {
+                "NetworkIdentifier": "VM Network",
+                "ShouldReplaceMacAddress": false,
+                "DnsSuffix": null,
+                "IpConfig": null,
+                "IsDhcp": null,
+                "ShouldReplaceIpConfiguration": false
               },
-              "vcd": null,
-              "publicCloud": null
+              "VCD": null,
+              "PublicCloud": null
             }
           }
         ]
       },
       {
-        "vmIdentifier": "Microsoft 2022",
+        "VmIdentifier": "Microsoft 2022",
         "Recovery": {
-          "hostIdentifier": "192.168.222.2",
-          "hostClusterIdentifier": "192.168.222.2",
-          "datastoreIdentifier": "DS_VM_Right",
-          "datastoreClusterIdentifier": "DS_VM_Right",
-          "folderIdentifier": "/",
-          "resourcePoolIdentifier": null,
-          "vcd": {
-            "storagePolicyIdentifier": null
+          "HostIdentifier": "192.168.222.2",
+          "HostClusterIdentifier": "192.168.222.2",
+          "DatastoreIdentifier": "DS_VM_Right",
+          "DatastoreClusterIdentifier": "DS_VM_Right",
+          "FolderIdentifier": "/",
+          "ResourcePoolIdentifier": null,
+          "VCD": {
+            "StoragePolicyIdentifier": null
           },
-          "publicCloud": null,
-          "useVmEncryption": false
+          "PublicCloud": null,
+          "UseVmEncryption": false
         },
-        "BootGroup": {
-          "bootGroupIdentifier": "Default"
+        "BootGroups": {
+          "BootGroupIdentifier": "Default"
         },
         "Journal": {
-          "limitation": {
-            "hardLimitInMB": 153600,
-            "hardLimitInPercent": 0,
-            "warningThresholdInMB": 115200,
-            "warningThresholdInPercent": 0
+          "Limitation": {
+            "HardLimitInMB": 153600,
+            "HardLimitInPercent": 0,
+            "WarningThresholdInMB": 115200,
+            "WarningThresholdInPercent": 0
           },
-          "datastoreIdentifier": "DS_VM_Right",
-          "datastoreClusterIdentifier": "DS_VM_Right"
+          "DatastoreIdentifier": "DS_VM_Right",
+          "DatastoreClusterIdentifier": "DS_VM_Right"
         },
         "Scratch": {
-          "limitation": {
-            "hardLimitInMB": 307200,
-            "hardLimitInPercent": 0,
-            "warningThresholdInMB": 230400,
-            "warningThresholdInPercent": 0
+          "Limitation": {
+            "HardLimitInMB": 307200,
+            "HardLimitInPercent": 0,
+            "WarningThresholdInMB": 230400,
+            "WarningThresholdInPercent": 0
           },
-          "datastoreIdentifier": "DS_VM_Right",
-          "datastoreClusterIdentifier": "DS_VM_Right"
+          "DatastoreIdentifier": "DS_VM_Right",
+          "DatastoreClusterIdentifier": "DS_VM_Right"
         },
         "Volumes": [
           {
-            "volumeIdentifier": "[DS_VM_Left] Microsoft 2022/Microsoft 2022.vmdk",
-            "vcd": {
-              "isThin": null
+            "VolumeIdentifier": "[DS_VM_Left] Microsoft 2022/Microsoft 2022.vmdk",
+            "VCD": {
+              "IsThin": null
             },
-            "preseed": {
-              "datastoreIdentifier": null,
-              "path": null
+            "Preseed": {
+              "DatastoreIdentifier": null,
+              "Path": null
             },
-            "rdm": {
-              "deviceIdentifier": null,
-              "isPhysical": true
+            "RDM": {
+              "DeviceIdentifier": null,
+              "IsPhysical": true
             },
-            "datastore": {
-              "datastoreClusterIdentifier": null,
-              "datastoreIdentifier": null,
-              "isThin": null
+            "Datastore": {
+              "DatastoreClusterIdentifier": null,
+              "DatastoreIdentifier": null,
+              "IsThin": null
             },
-            "volumeSyncSettings": "Continuous Sync"
+            "VolumeSyncSettings": "Continuous Sync"
           }
         ],
-        "nics": [
+        "Nics": [
           {
-            "nicIdentifier": "Network adapter 1",
-            "failoverTest": {
-              "hypervisor": {
-                "networkIdentifier": "VM Network",
-                "shouldReplaceMacAddress": false,
-                "dnsSuffix": null,
-                "ipConfig": null,
-                "isDhcp": null,
-                "shouldReplaceIpConfiguration": false
+            "NicIdentifier": "Network adapter 1",
+            "FailoverTest": {
+              "Hypervisor": {
+                "NetworkIdentifier": "VM Network",
+                "ShouldReplaceMacAddress": false,
+                "DnsSuffix": null,
+                "IpConfig": null,
+                "IsDhcp": null,
+                "ShouldReplaceIpConfiguration": false
               },
-              "vcd": null,
-              "publicCloud": null
+              "VCD": null,
+              "PublicCloud": null
             },
-            "failover": {
-              "hypervisor": {
-                "networkIdentifier": "VM Network",
-                "shouldReplaceMacAddress": false,
-                "dnsSuffix": null,
-                "ipConfig": null,
-                "isDhcp": null,
-                "shouldReplaceIpConfiguration": false
+            "Failover": {
+              "Hypervisor": {
+                "NetworkIdentifier": "VM Network",
+                "ShouldReplaceMacAddress": false,
+                "DnsSuffix": null,
+                "IpConfig": null,
+                "IsDhcp": null,
+                "ShouldReplaceIpConfiguration": false
               },
-              "vcd": null,
-              "publicCloud": null
+              "VCD": null,
+              "PublicCloud": null
             }
           }
         ]
@@ -479,200 +479,200 @@
   },
   {
     "Basic": {
-      "name": "U Local",
-      "vpgType": "Local Continuous Backup",
-      "rpoInSeconds": 300,
-      "testIntervalInMinutes": 259200,
-      "journalHistoryInHours": 24,
-      "priority": "Medium",
-      "useWanCompression": true,
-      "serviceProfileIdentifier": null,
-      "zorgIdentifier": null,
-      "protectedSiteIdentifier": "ZVM L",
-      "recoverySiteIdentifier": "ZVM L"
+      "Name": "U Local",
+      "VpgType": "Local Continuous Backup",
+      "RpoInSeconds": 300,
+      "TestIntervalInMinutes": 259200,
+      "JournalHistoryInHours": 24,
+      "Priority": "Medium",
+      "UseWanCompression": true,
+      "ServiceProfileIdentifier": null,
+      "ZorgIdentifier": null,
+      "ProtectedSiteIdentifier": "ZVM L",
+      "RecoverySiteIdentifier": "ZVM L"
     },
-    "BootGroup": {
-      "bootGroups": []
+    "BootGroups": {
+      "BootGroups": []
     },
     "Scripting": {
-      "preRecovery": {
-        "command": null,
-        "parameters": null,
-        "timeoutInSeconds": 300
+      "PreRecovery": {
+        "Command": null,
+        "Parameters": null,
+        "TimeoutInSeconds": 300
       },
-      "postRecovery": {
-        "command": null,
-        "parameters": null,
-        "timeoutInSeconds": 300
+      "PostRecovery": {
+        "Command": null,
+        "Parameters": null,
+        "TimeoutInSeconds": 300
       },
-      "postBackup": {
-        "command": null,
-        "parameters": null,
-        "timeoutInSeconds": 0
+      "PostBackup": {
+        "Command": null,
+        "Parameters": null,
+        "TimeoutInSeconds": 0
       }
     },
     "Recovery": {
-      "defaultHostIdentifier": null,
-      "defaultHostClusterIdentifier": null,
-      "defaultDatastoreIdentifier": null,
-      "defaultDatastoreClusterIdentifier": null,
-      "defaultFolderIdentifier": "/",
-      "resourcePoolIdentifier": null,
-      "vcd": {
-        "orgVdcIdentifier": null
+      "DefaultHostIdentifier": null,
+      "DefaultHostClusterIdentifier": null,
+      "DefaultDatastoreIdentifier": null,
+      "DefaultDatastoreClusterIdentifier": null,
+      "DefaultFolderIdentifier": "/",
+      "ResourcePoolIdentifier": null,
+      "VCD": {
+        "OrgVdcIdentifier": null
       },
-      "publicCloud": null
+      "PublicCloud": null
     },
     "Journal": {
-      "limitation": {
-        "hardLimitInMB": 153600,
-        "hardLimitInPercent": 0,
-        "warningThresholdInMB": 115200,
-        "warningThresholdInPercent": 0
+      "Limitation": {
+        "HardLimitInMB": 153600,
+        "HardLimitInPercent": 0,
+        "WarningThresholdInMB": 115200,
+        "WarningThresholdInPercent": 0
       },
-      "datastoreIdentifier": "DS_VM_Left",
-      "datastoreClusterIdentifier": "DS_VM_Left"
+      "DatastoreIdentifier": "DS_VM_Left",
+      "DatastoreClusterIdentifier": "DS_VM_Left"
     },
     "Scratch": {
-      "limitation": {
-        "hardLimitInMB": 307200,
-        "hardLimitInPercent": 0,
-        "warningThresholdInMB": 230400,
-        "warningThresholdInPercent": 0
+      "Limitation": {
+        "HardLimitInMB": 307200,
+        "HardLimitInPercent": 0,
+        "WarningThresholdInMB": 230400,
+        "WarningThresholdInPercent": 0
       },
-      "datastoreIdentifier": "DS_VM_Left",
-      "datastoreClusterIdentifier": "DS_VM_Left"
+      "DatastoreIdentifier": "DS_VM_Left",
+      "DatastoreClusterIdentifier": "DS_VM_Left"
     },
     "Networks": {
-      "failover": {
-        "vcd": null,
-        "hypervisor": {
-          "defaultNetworkIdentifier": null
+      "Failover": {
+        "VCD": null,
+        "Hypervisor": {
+          "DefaultNetworkIdentifier": null
         },
-        "publicCloud": null
+        "PublicCloud": null
       },
-      "failoverTest": {
-        "vcd": null,
-        "hypervisor": {
-          "defaultNetworkIdentifier": null
+      "FailoverTest": {
+        "VCD": null,
+        "Hypervisor": {
+          "DefaultNetworkIdentifier": null
         },
-        "publicCloud": null
+        "PublicCloud": null
       }
     },
-    "VMs": [
+    "Vms": [
       {
-        "vmIdentifier": "Ubuntu 22.4",
+        "VmIdentifier": "Ubuntu 22.4",
         "Recovery": {
-          "hostIdentifier": null,
-          "hostClusterIdentifier": null,
-          "datastoreIdentifier": null,
-          "datastoreClusterIdentifier": null,
-          "folderIdentifier": "/",
-          "resourcePoolIdentifier": null,
-          "vcd": {
-            "storagePolicyIdentifier": null
+          "HostIdentifier": null,
+          "HostClusterIdentifier": null,
+          "DatastoreIdentifier": null,
+          "DatastoreClusterIdentifier": null,
+          "FolderIdentifier": "/",
+          "ResourcePoolIdentifier": null,
+          "VCD": {
+            "StoragePolicyIdentifier": null
           },
-          "publicCloud": null,
-          "useVmEncryption": false
+          "PublicCloud": null,
+          "UseVmEncryption": false
         },
-        "BootGroup": {
-          "bootGroupIdentifier": null
+        "BootGroups": {
+          "BootGroupIdentifier": null
         },
         "Journal": {
-          "limitation": {
-            "hardLimitInMB": 153600,
-            "hardLimitInPercent": 0,
-            "warningThresholdInMB": 115200,
-            "warningThresholdInPercent": 0
+          "Limitation": {
+            "HardLimitInMB": 153600,
+            "HardLimitInPercent": 0,
+            "WarningThresholdInMB": 115200,
+            "WarningThresholdInPercent": 0
           },
-          "datastoreIdentifier": "DS_VM_Left",
-          "datastoreClusterIdentifier": "DS_VM_Left"
+          "DatastoreIdentifier": "DS_VM_Left",
+          "DatastoreClusterIdentifier": "DS_VM_Left"
         },
         "Scratch": {
-          "limitation": {
-            "hardLimitInMB": 307200,
-            "hardLimitInPercent": 0,
-            "warningThresholdInMB": 230400,
-            "warningThresholdInPercent": 0
+          "Limitation": {
+            "HardLimitInMB": 307200,
+            "HardLimitInPercent": 0,
+            "WarningThresholdInMB": 230400,
+            "WarningThresholdInPercent": 0
           },
-          "datastoreIdentifier": "DS_VM_Left",
-          "datastoreClusterIdentifier": "DS_VM_Left"
+          "DatastoreIdentifier": "DS_VM_Left",
+          "DatastoreClusterIdentifier": "DS_VM_Left"
         },
         "Volumes": [
           {
-            "volumeIdentifier": "[DS_VM_Left] Ubuntu 22.4/Ubuntu 22.4-000001.vmdk",
-            "vcd": {
-              "isThin": null
+            "VolumeIdentifier": "[DS_VM_Left] Ubuntu 22.4/Ubuntu 22.4-000001.vmdk",
+            "VCD": {
+              "IsThin": null
             },
-            "preseed": {
-              "datastoreIdentifier": null,
-              "path": null
+            "Preseed": {
+              "DatastoreIdentifier": null,
+              "Path": null
             },
-            "rdm": {
-              "deviceIdentifier": null,
-              "isPhysical": true
+            "RDM": {
+              "DeviceIdentifier": null,
+              "IsPhysical": true
             },
-            "datastore": {
-              "datastoreClusterIdentifier": null,
-              "datastoreIdentifier": null,
-              "isThin": null
+            "Datastore": {
+              "DatastoreClusterIdentifier": null,
+              "DatastoreIdentifier": null,
+              "IsThin": null
             },
-            "volumeSyncSettings": "Continuous Sync"
+            "VolumeSyncSettings": "Continuous Sync"
           }
         ],
-        "nics": [
+        "Nics": [
           {
-            "nicIdentifier": "Network adapter 1",
-            "failoverTest": {
-              "hypervisor": {
-                "networkIdentifier": null,
-                "shouldReplaceMacAddress": false,
-                "dnsSuffix": null,
-                "ipConfig": null,
-                "isDhcp": null,
-                "shouldReplaceIpConfiguration": false
+            "NicIdentifier": "Network adapter 1",
+            "FailoverTest": {
+              "Hypervisor": {
+                "NetworkIdentifier": null,
+                "ShouldReplaceMacAddress": false,
+                "DnsSuffix": null,
+                "IpConfig": null,
+                "IsDhcp": null,
+                "ShouldReplaceIpConfiguration": false
               },
-              "vcd": null,
-              "publicCloud": null
+              "VCD": null,
+              "PublicCloud": null
             },
-            "failover": {
-              "hypervisor": {
-                "networkIdentifier": null,
-                "shouldReplaceMacAddress": false,
-                "dnsSuffix": null,
-                "ipConfig": null,
-                "isDhcp": null,
-                "shouldReplaceIpConfiguration": false
+            "Failover": {
+              "Hypervisor": {
+                "NetworkIdentifier": null,
+                "ShouldReplaceMacAddress": false,
+                "DnsSuffix": null,
+                "IpConfig": null,
+                "IsDhcp": null,
+                "ShouldReplaceIpConfiguration": false
               },
-              "vcd": null,
-              "publicCloud": null
+              "VCD": null,
+              "PublicCloud": null
             }
           },
           {
-            "nicIdentifier": "vik-Network adapter 1",
-            "failoverTest": {
-              "hypervisor": {
-                "networkIdentifier": null,
-                "shouldReplaceMacAddress": false,
-                "dnsSuffix": null,
-                "ipConfig": null,
-                "isDhcp": null,
-                "shouldReplaceIpConfiguration": false
+            "NicIdentifier": "vik-Network adapter 1",
+            "FailoverTest": {
+              "Hypervisor": {
+                "NetworkIdentifier": null,
+                "ShouldReplaceMacAddress": false,
+                "DnsSuffix": null,
+                "IpConfig": null,
+                "IsDhcp": null,
+                "ShouldReplaceIpConfiguration": false
               },
-              "vcd": null,
-              "publicCloud": null
+              "VCD": null,
+              "PublicCloud": null
             },
-            "failover": {
-              "hypervisor": {
-                "networkIdentifier": null,
-                "shouldReplaceMacAddress": false,
-                "dnsSuffix": null,
-                "ipConfig": null,
-                "isDhcp": null,
-                "shouldReplaceIpConfiguration": false
+            "Failover": {
+              "Hypervisor": {
+                "NetworkIdentifier": null,
+                "ShouldReplaceMacAddress": false,
+                "DnsSuffix": null,
+                "IpConfig": null,
+                "IsDhcp": null,
+                "ShouldReplaceIpConfiguration": false
               },
-              "vcd": null,
-              "publicCloud": null
+              "VCD": null,
+              "PublicCloud": null
             }
           }
         ]
