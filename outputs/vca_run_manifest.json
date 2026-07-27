@@ -4,7 +4,7 @@
       "Name": "U L2R",
       "VpgType": "Remote DR and Continuous Backup",
       "RpoInSeconds": 300,
-      "TestIntervalInMinutes": 259200,
+      "TestIntervalInMinutes": 262080,
       "JournalHistoryInHours": 24,
       "Priority": "Medium",
       "UseWanCompression": true,
@@ -97,9 +97,7 @@
           "PublicCloud": null,
           "UseVmEncryption": false
         },
-        "BootGroups": {
-          "BootGroupIdentifier": null
-        },
+        "BootGroupIdentifier": null,
         "Journal": {
           "Limitation": {
             "HardLimitInMB": 153600,
@@ -123,23 +121,15 @@
         "Volumes": [
           {
             "VolumeIdentifier": "[DS_VM_Left] Ubuntu 22.4/Ubuntu 22.4-000001.vmdk",
-            "VCD": {
-              "IsThin": null
-            },
-            "Preseed": {
-              "DatastoreIdentifier": null,
-              "Path": null
-            },
-            "RDM": {
-              "DeviceIdentifier": null,
-              "IsPhysical": true
-            },
+            "VCD": null,
+            "Preseed": null,
+            "RDM": null,
             "Datastore": {
               "DatastoreClusterIdentifier": null,
               "DatastoreIdentifier": null,
               "IsThin": null
             },
-            "VolumeSyncSettings": "Continuous Sync"
+            "VolumeSyncSettings": "ContinuousSync"
           }
         ],
         "Nics": [
@@ -206,7 +196,7 @@
       "Name": "ZVM 2R",
       "VpgType": "Remote DR and Continuous Backup",
       "RpoInSeconds": 300,
-      "TestIntervalInMinutes": 259200,
+      "TestIntervalInMinutes": 262080,
       "JournalHistoryInHours": 24,
       "Priority": "Medium",
       "UseWanCompression": true,
@@ -310,9 +300,7 @@
           "PublicCloud": null,
           "UseVmEncryption": false
         },
-        "BootGroups": {
-          "BootGroupIdentifier": "New_Group_1"
-        },
+        "BootGroupIdentifier": "New_Group_1",
         "Journal": {
           "Limitation": {
             "HardLimitInMB": 153600,
@@ -336,23 +324,15 @@
         "Volumes": [
           {
             "VolumeIdentifier": "[DS_VM_Left] ZVM-Left/ZVM-Left.vmdk",
-            "VCD": {
-              "IsThin": null
-            },
-            "Preseed": {
-              "DatastoreIdentifier": null,
-              "Path": null
-            },
-            "RDM": {
-              "DeviceIdentifier": null,
-              "IsPhysical": true
-            },
+            "VCD": null,
+            "Preseed": null,
+            "RDM": null,
             "Datastore": {
               "DatastoreClusterIdentifier": null,
               "DatastoreIdentifier": null,
               "IsThin": null
             },
-            "VolumeSyncSettings": "Continuous Sync"
+            "VolumeSyncSettings": "ContinuousSync"
           }
         ],
         "Nics": [
@@ -400,9 +380,7 @@
           "PublicCloud": null,
           "UseVmEncryption": false
         },
-        "BootGroups": {
-          "BootGroupIdentifier": "Default"
-        },
+        "BootGroupIdentifier": "Default",
         "Journal": {
           "Limitation": {
             "HardLimitInMB": 153600,
@@ -426,23 +404,15 @@
         "Volumes": [
           {
             "VolumeIdentifier": "[DS_VM_Left] Microsoft 2022/Microsoft 2022.vmdk",
-            "VCD": {
-              "IsThin": null
-            },
-            "Preseed": {
-              "DatastoreIdentifier": null,
-              "Path": null
-            },
-            "RDM": {
-              "DeviceIdentifier": null,
-              "IsPhysical": true
-            },
+            "VCD": null,
+            "Preseed": null,
+            "RDM": null,
             "Datastore": {
               "DatastoreClusterIdentifier": null,
               "DatastoreIdentifier": null,
               "IsThin": null
             },
-            "VolumeSyncSettings": "Continuous Sync"
+            "VolumeSyncSettings": "ContinuousSync"
           }
         ],
         "Nics": [
@@ -482,7 +452,7 @@
       "Name": "U Local",
       "VpgType": "Local Continuous Backup",
       "RpoInSeconds": 300,
-      "TestIntervalInMinutes": 259200,
+      "TestIntervalInMinutes": 262080,
       "JournalHistoryInHours": 24,
       "Priority": "Medium",
       "UseWanCompression": true,
@@ -575,9 +545,7 @@
           "PublicCloud": null,
           "UseVmEncryption": false
         },
-        "BootGroups": {
-          "BootGroupIdentifier": null
-        },
+        "BootGroupIdentifier": null,
         "Journal": {
           "Limitation": {
             "HardLimitInMB": 153600,
@@ -601,23 +569,15 @@
         "Volumes": [
           {
             "VolumeIdentifier": "[DS_VM_Left] Ubuntu 22.4/Ubuntu 22.4-000001.vmdk",
-            "VCD": {
-              "IsThin": null
-            },
-            "Preseed": {
-              "DatastoreIdentifier": null,
-              "Path": null
-            },
-            "RDM": {
-              "DeviceIdentifier": null,
-              "IsPhysical": true
-            },
+            "VCD": null,
+            "Preseed": null,
+            "RDM": null,
             "Datastore": {
               "DatastoreClusterIdentifier": null,
               "DatastoreIdentifier": null,
               "IsThin": null
             },
-            "VolumeSyncSettings": "Continuous Sync"
+            "VolumeSyncSettings": "ContinuousSync"
           }
         ],
         "Nics": [

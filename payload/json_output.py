@@ -108,18 +108,14 @@ def test_reminder_to_minutes(value) -> int | None:
     if cleaned_value in (None, "None"):
         return None
 
-    month_map = {
-        "1 Month": 1,
-        "3 Months": 3,
-        "6 Months": 6,
-        "9 Months": 9,
-        "12 Months": 12,
+    reminder_minutes = {
+        "1 Month": 44640,
+        "3 Months": 131040,
+        "6 Months": 262080,
+        "9 Months": 393120,
+        "12 Months": 525600,
     }
-    months = month_map.get(cleaned_value)
-    if months is None:
-        return None
-
-    return months * 30 * 24 * 60
+    return reminder_minutes.get(cleaned_value)
 
 def yes_no_to_bool(value) -> bool | None:
     cleaned_value = clean_value(value)

@@ -423,7 +423,7 @@ def build_manifest_vms(
         {
             "vmIdentifier": vm_name,
             "Recovery": build_manifest_vm_recovery(first_row_for_vm(vm_replication, vm_name)),
-            "BootGroup": build_manifest_vm_boot_group(
+            "bootGroupIdentifier": build_manifest_vm_boot_group_identifier(
                 first_row_for_vm(vm_replication, vm_name),
             ),
             "Journal": build_manifest_journal(first_row_for_vm(vm_replication, vm_name) or {}),
@@ -466,29 +466,19 @@ def build_manifest_vm_recovery(row: dict | None) -> dict:
     }
 
 
-def build_manifest_vm_boot_group(row: dict | None) -> dict:
-    return {
-        "bootGroupIdentifier": None if row is None else row.get("Boot Order Group Name"),
-    }
+def build_manifest_vm_boot_group_identifier(row: dict | None):
+    if row is None:
+        return None
+
+    return row.get("Boot Order Group Name")
 
 
 def build_manifest_volume(row: dict) -> dict:
     return {
         "volumeIdentifier": row.get("Protected Volume Location"),
-        "vcd": {
-            "isThin": effective_disk_provisioning_to_is_thin(
-                row.get("Disk Provisioning Override"),
-                row.get("Provisioning"),
-            ),
-        },
-        "preseed": {
-            "datastoreIdentifier": row.get("Recovery Volume Location"),
-            "path": row.get("Recovery Volume Location"),
-        },
-        "rdm": {
-            "deviceIdentifier": row.get("Recovery Raw Device Name"),
-            "isPhysical": True,
-        },
+        "vcd": None,
+        "preseed": None,
+        "rdm": None,
         "datastore": {
             "datastoreClusterIdentifier": row.get("Recovery Datastore Name"),
             "datastoreIdentifier": row.get("Recovery Datastore Name"),
@@ -497,8 +487,19 @@ def build_manifest_volume(row: dict) -> dict:
                 row.get("Provisioning"),
             ),
         },
-        "volumeSyncSettings": row.get("Volume Sync Type"),
+        "volumeSyncSettings": normalize_volume_sync_settings(
+            row.get("Volume Sync Type"),
+        ),
     }
+
+
+def normalize_volume_sync_settings(value):
+    sync_settings = {
+        "Continuous Sync": "ContinuousSync",
+    }
+
+    cleaned_value = clean_value(value)
+    return sync_settings.get(cleaned_value, cleaned_value)
 
 
 def build_manifest_nic(row: dict) -> dict:
