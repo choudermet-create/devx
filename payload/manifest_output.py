@@ -155,7 +155,7 @@ def validate_manifest_nic_networks(
     vpg_name: str,
     vpg: dict,
 ) -> None:
-    if value_at(vpg, "Basic", "vpgType") == "Local Continuous Backup":
+    if value_at(vpg, "Basic", "vpgType") in ("Local Continuous Backup", "Local"):
         return
 
     network_checks = (
@@ -234,7 +234,7 @@ def build_manifest_vpg(
 def build_manifest_basic(row: dict) -> dict:
     return {
         "name": row.get("VPG Name"),
-        "vpgType": row.get("VPG Type"),
+        "vpgType": normalize_vpg_type(row.get("VPG Type")),
         "rpoInSeconds": duration_to_seconds(
             row.get("Target RPO Alert Value"),
             row.get("Target RPO Alert Unit"),
@@ -251,6 +251,18 @@ def build_manifest_basic(row: dict) -> dict:
         "protectedSiteIdentifier": row.get("Effective Protected ZVM Site Name"),
         "recoverySiteIdentifier": row.get("Effective Recovery ZVM Site Name"),
     }
+
+
+def normalize_vpg_type(value):
+    vpg_types = {
+        "Remote DR and Continuous Backup": "Remote",
+        "Cyber Recovery": "Cyber",
+        "Local Continuous Backup": "Local",
+        "Data Mobility and Migration": "Migrate",
+    }
+
+    cleaned_value = clean_value(value)
+    return vpg_types.get(cleaned_value, cleaned_value)
 
 
 def build_manifest_boot_group(
@@ -475,7 +487,10 @@ def build_manifest_vm_boot_group_identifier(row: dict | None):
 
 def build_manifest_volume(row: dict) -> dict:
     return {
-        "volumeIdentifier": row.get("Protected Volume Location"),
+        "volumeIdentifier": first_value(
+            row.get("SCSI ID"),
+            row.get("Protected Volume Location"),
+        ),
         "vcd": None,
         "preseed": None,
         "rdm": None,

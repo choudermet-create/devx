@@ -1,5 +1,5 @@
 {
-  "source_file": "files/manifest ready VCA Data - 0.109.xlsx",
+  "source_file": "files/manifest_ready_VCA Data - v0.111.xlsx",
   "validation_status": "passed",
   "validations": {
     "zerto_data": {
@@ -7,16 +7,16 @@
       "records": {
         "zvm_sites": [
           {
-            "site_name": "ZVM L",
-            "zerto_version": 10.9,
-            "protected": "Yes",
+            "site_name": "Zerto - Left",
+            "zerto_version": null,
+            "protected": "No",
             "recovery": "Yes"
           },
           {
-            "site_name": "ZVM R",
+            "site_name": "Zerto - Right",
             "zerto_version": 10.9,
-            "protected": "No",
-            "recovery": "Yes"
+            "protected": "Yes",
+            "recovery": "No"
           }
         ],
         "labels": {
@@ -122,75 +122,28 @@
       "records": {
         "protected_vms": [
           {
-            "protected_zvm_site_name": "ZVM L",
+            "protected_zvm_site_name": "Zerto - Right",
             "vm_name": "Ubuntu 22.4",
-            "cpu_count": 1,
-            "memory_gib": 3
+            "cpu_count": 2,
+            "memory_gib": 4
           },
           {
-            "protected_zvm_site_name": "ZVM L",
+            "protected_zvm_site_name": "Zerto - Right",
             "vm_name": "Microsoft 2022",
             "cpu_count": 2,
             "memory_gib": 4
-          },
-          {
-            "protected_zvm_site_name": "ZVM L",
-            "vm_name": "ZVM-Left",
-            "cpu_count": 2,
-            "memory_gib": 4
-          },
-          {
-            "protected_zvm_site_name": "ZVM L",
-            "vm_name": "ZVML",
-            "cpu_count": 6,
-            "memory_gib": 16
           }
         ],
         "protected_vm_volumes": [
           {
-            "protected_zvm_site_name": "ZVM L",
-            "vm_name": "ZVM-Left",
-            "volume_location": "[DS_VM_Left] ZVM-Left/ZVM-Left.vmdk",
-            "provisioned_size_gib": 10,
-            "provisioning": null
-          },
-          {
-            "protected_zvm_site_name": "ZVM L",
-            "vm_name": "ZVML",
-            "volume_location": "[DS_VM_Left] ZVML/ZVML.vmdk",
-            "provisioned_size_gib": 16,
-            "provisioning": null
-          },
-          {
-            "protected_zvm_site_name": "ZVM L",
-            "vm_name": "ZVML",
-            "volume_location": "[DS_VM_Left] ZVML/ZVML_1.vmdk",
-            "provisioned_size_gib": 50,
-            "provisioning": null
-          },
-          {
-            "protected_zvm_site_name": "ZVM L",
-            "vm_name": "ZVML",
-            "volume_location": "[DS_VM_Left] ZVML/ZVML_2.vmdk",
-            "provisioned_size_gib": 50,
-            "provisioning": null
-          },
-          {
-            "protected_zvm_site_name": "ZVM L",
-            "vm_name": "ZVML",
-            "volume_location": "[DS_VM_Left] ZVML/ZVML_3.vmdk",
-            "provisioned_size_gib": 500,
-            "provisioning": null
-          },
-          {
-            "protected_zvm_site_name": "ZVM L",
+            "protected_zvm_site_name": "Zerto - Right",
             "vm_name": "Microsoft 2022",
             "volume_location": "[DS_VM_Left] Microsoft 2022/Microsoft 2022.vmdk",
             "provisioned_size_gib": 750,
             "provisioning": null
           },
           {
-            "protected_zvm_site_name": "ZVM L",
+            "protected_zvm_site_name": "Zerto - Right",
             "vm_name": "Ubuntu 22.4",
             "volume_location": "[DS_VM_Left] Ubuntu 22.4/Ubuntu 22.4-000001.vmdk",
             "provisioned_size_gib": 16,
@@ -199,93 +152,37 @@
         ],
         "protected_vm_nics": [
           {
-            "protected_zvm_site_name": "ZVM L",
-            "vm_name": "Ubuntu 22.4",
-            "nic_name": "Network adapter 1",
-            "network_name": "VM Network"
-          },
-          {
-            "protected_zvm_site_name": "ZVM L",
-            "vm_name": "ZVM-Left",
-            "nic_name": "Network adapter 1",
-            "network_name": "VM Network"
-          },
-          {
-            "protected_zvm_site_name": "ZVM L",
+            "protected_zvm_site_name": "Zerto - Right",
             "vm_name": "Microsoft 2022",
             "nic_name": "Network adapter 1",
             "network_name": "VM Network"
           },
           {
-            "protected_zvm_site_name": "ZVM L",
+            "protected_zvm_site_name": "Zerto - Right",
             "vm_name": "Ubuntu 22.4",
-            "nic_name": "vik-Network adapter 1",
+            "nic_name": "Network adapter 1",
             "network_name": "VM Network"
           }
         ],
         "recovery_hosts": [
           {
-            "recovery_zvm_site_name": "ZVM R",
-            "host_cluster_name": null,
-            "host_name": "192.168.222.1",
-            "cpu_count": 16,
-            "memory_gib": 64
-          },
-          {
-            "recovery_zvm_site_name": "ZVM R",
-            "host_cluster_name": null,
-            "host_name": "192.168.222.2",
-            "cpu_count": 16,
-            "memory_gib": 64
-          },
-          {
-            "recovery_zvm_site_name": "ZVM L",
+            "recovery_zvm_site_name": "Zerto - Left",
             "host_cluster_name": null,
             "host_name": "192.168.111.1",
             "cpu_count": 16,
-            "memory_gib": 64
+            "memory_gib": 65
           },
           {
-            "recovery_zvm_site_name": "ZVM L",
+            "recovery_zvm_site_name": "Zerto - Left",
             "host_cluster_name": null,
             "host_name": "192.168.111.2",
-            "cpu_count": 15,
-            "memory_gib": 63
+            "cpu_count": 16,
+            "memory_gib": 65
           }
         ],
         "recovery_datastores": [
           {
-            "recovery_zvm_site_name": "ZVM R",
-            "datastore_cluster_name": null,
-            "datastore_name": "ESXi-1-DS",
-            "size_gib": 128
-          },
-          {
-            "recovery_zvm_site_name": "ZVM R",
-            "datastore_cluster_name": null,
-            "datastore_name": "ESXi-2-DS",
-            "size_gib": 512
-          },
-          {
-            "recovery_zvm_site_name": "ZVM R",
-            "datastore_cluster_name": null,
-            "datastore_name": "DS_VM_Right",
-            "size_gib": 65536
-          },
-          {
-            "recovery_zvm_site_name": "ZVM L",
-            "datastore_cluster_name": null,
-            "datastore_name": "ESXi-1-DS",
-            "size_gib": 128
-          },
-          {
-            "recovery_zvm_site_name": "ZVM L",
-            "datastore_cluster_name": null,
-            "datastore_name": "ESXi-2-DS",
-            "size_gib": 512
-          },
-          {
-            "recovery_zvm_site_name": "ZVM L",
+            "recovery_zvm_site_name": "Zerto - Left",
             "datastore_cluster_name": null,
             "datastore_name": "DS_VM_Left",
             "size_gib": 65536
@@ -293,41 +190,17 @@
         ],
         "recovery_folders": [
           {
-            "recovery_zvm_site_name": "ZVM R",
-            "folder_name": "/"
-          },
-          {
-            "recovery_zvm_site_name": "ZVM R",
-            "folder_name": "/MyFolder"
-          },
-          {
-            "recovery_zvm_site_name": "ZVM L",
+            "recovery_zvm_site_name": "Zerto - Left",
             "folder_name": "/"
           }
         ],
         "recovery_networks": [
           {
-            "recovery_zvm_site_name": "ZVM R",
-            "network_name": "Remote"
-          },
-          {
-            "recovery_zvm_site_name": "ZVM R",
+            "recovery_zvm_site_name": "Zerto - Left",
             "network_name": "VM Network"
           },
           {
-            "recovery_zvm_site_name": "ZVM R",
-            "network_name": "vRA Network"
-          },
-          {
-            "recovery_zvm_site_name": "ZVM L",
-            "network_name": "Remote"
-          },
-          {
-            "recovery_zvm_site_name": "ZVM L",
-            "network_name": "VM Network"
-          },
-          {
-            "recovery_zvm_site_name": "ZVM L",
+            "recovery_zvm_site_name": "Zerto - Left",
             "network_name": "vRA Network"
           }
         ]
@@ -336,8 +209,8 @@
     "default_vpg_settings": {
       "status": "passed",
       "records": {
-        "protected_site": "ZVM L",
-        "recovery_site": "ZVM R",
+        "protected_site": "Zerto - Right",
+        "recovery_site": "Zerto - Left",
         "vpg_type": "Remote DR and Continuous Backup",
         "priority": "Medium",
         "journal_history": {
@@ -392,115 +265,18 @@
     },
     "recovery_zvm_sites": {
       "status": "passed",
-      "records": []
-    },
-    "vpgs": {
-      "status": "passed",
       "records": [
         {
-          "vpg_name": "U L2R",
-          "protected_zvm_site_name": "ZVM L",
-          "recovery_zvm_site_name": "ZVM R",
-          "vpg_type": null,
-          "priority": null,
-          "vpg_description": null,
-          "label_1": null,
-          "label_2": null,
-          "label_3": null,
-          "label_4": null,
-          "label_5": null,
-          "boot_order_meta_group_name": null,
-          "recovery_host_name": "192.168.222.2",
-          "recovery_datastore_name": "DS_VM_Right",
-          "journal_history_unit": "Days",
-          "journal_history_value": 1,
-          "target_rpo_alert_value": 5,
-          "target_rpo_alert_unit": "Minutes",
-          "test_reminder": "6 Months",
-          "journal_datastore_name": "DS_VM_Right",
-          "journal_size_hard_limit_value": null,
-          "journal_size_hard_limit_unit": null,
-          "journal_size_warning_threshold_value": null,
-          "journal_size_warning_threshold_unit": null,
-          "scratch_journal_datastore_name": "DS_VM_Right",
-          "scratch_journal_size_hard_limit_value": null,
-          "scratch_journal_size_hard_limit_unit": null,
-          "scratch_journal_size_warning_threshold_value": null,
-          "scratch_journal_size_warning_threshold_unit": null,
-          "enable_wan_traffic_compression": null,
-          "disk_provisioning_override": null,
-          "failover_live_move_network_name": "VM Network",
-          "failover_test_network_name": null,
-          "recovery_folder_name": "/",
-          "pre_recovery_script_name": null,
-          "pre_recovery_script_parameters": null,
-          "pre_recovery_script_execution_timeout_seconds": null,
-          "post_recovery_script_name": null,
-          "post_recovery_script_parameters": null,
-          "post_recovery_script_execution_timeout_seconds": null
-        },
-        {
-          "vpg_name": "ZVM 2R",
-          "protected_zvm_site_name": "ZVM L",
-          "recovery_zvm_site_name": "ZVM R",
-          "vpg_type": null,
-          "priority": null,
-          "vpg_description": null,
-          "label_1": null,
-          "label_2": null,
-          "label_3": null,
-          "label_4": null,
-          "label_5": null,
-          "boot_order_meta_group_name": "Test",
-          "recovery_host_name": "192.168.222.2",
-          "recovery_datastore_name": "DS_VM_Right",
-          "journal_history_unit": "Days",
-          "journal_history_value": 1,
-          "target_rpo_alert_value": 5,
-          "target_rpo_alert_unit": "Minutes",
-          "test_reminder": "6 Months",
-          "journal_datastore_name": "DS_VM_Right",
-          "journal_size_hard_limit_value": null,
-          "journal_size_hard_limit_unit": null,
-          "journal_size_warning_threshold_value": null,
-          "journal_size_warning_threshold_unit": null,
-          "scratch_journal_datastore_name": "DS_VM_Right",
-          "scratch_journal_size_hard_limit_value": null,
-          "scratch_journal_size_hard_limit_unit": null,
-          "scratch_journal_size_warning_threshold_value": null,
-          "scratch_journal_size_warning_threshold_unit": null,
-          "enable_wan_traffic_compression": null,
-          "disk_provisioning_override": null,
-          "failover_live_move_network_name": "VM Network",
-          "failover_test_network_name": null,
-          "recovery_folder_name": "/",
-          "pre_recovery_script_name": null,
-          "pre_recovery_script_parameters": null,
-          "pre_recovery_script_execution_timeout_seconds": null,
-          "post_recovery_script_name": null,
-          "post_recovery_script_parameters": null,
-          "post_recovery_script_execution_timeout_seconds": null
-        },
-        {
-          "vpg_name": "U Local",
-          "protected_zvm_site_name": "ZVM L",
-          "recovery_zvm_site_name": "ZVM L",
-          "vpg_type": "Local Continuous Backup",
-          "priority": null,
-          "vpg_description": null,
-          "label_1": null,
-          "label_2": null,
-          "label_3": null,
-          "label_4": null,
-          "label_5": null,
-          "boot_order_meta_group_name": null,
-          "recovery_host_name": null,
-          "recovery_datastore_name": null,
-          "journal_history_unit": "Days",
-          "journal_history_value": 1,
-          "target_rpo_alert_value": 5,
-          "target_rpo_alert_unit": "Minutes",
-          "test_reminder": "6 Months",
+          "recovery_zvm_site_name": "Zerto - Left",
+          "vpg_type": "Remote DR and Continuous Backup",
+          "priority": "Medium",
+          "recovery_host_name": "192.168.111.1",
+          "recovery_datastore_name": "DS_VM_Left",
+          "journal_history_value": null,
+          "journal_history_unit": null,
+          "target_rpo_alert_value": null,
+          "target_rpo_alert_unit": null,
+          "test_reminder": null,
           "journal_datastore_name": "DS_VM_Left",
           "journal_size_hard_limit_value": null,
           "journal_size_hard_limit_unit": null,
@@ -521,6 +297,67 @@
           "pre_recovery_script_execution_timeout_seconds": null,
           "post_recovery_script_name": null,
           "post_recovery_script_parameters": null,
+          "post_recovery_script_execution_timeout_seconds": null,
+          "failover_live_move_create_new_mac_address": null,
+          "failover_live_move_change_vnic_ip_config": null,
+          "failover_live_move_subnet_mask": null,
+          "failover_live_move_default_gateway": null,
+          "failover_live_move_preferred_dns_server": null,
+          "failover_live_move_alternate_dns_server": null,
+          "failover_live_move_dns_suffix": null,
+          "failover_test_create_new_mac_address": null,
+          "failover_test_change_vnic_ip_config": null,
+          "failover_test_subnet_mask": null,
+          "failover_test_default_gateway": null,
+          "failover_test_preferred_dns_server": null,
+          "failover_test_alternate_dns_server": null,
+          "failover_test_dns_suffix": null
+        }
+      ]
+    },
+    "vpgs": {
+      "status": "passed",
+      "records": [
+        {
+          "vpg_name": "vik_vpg",
+          "protected_zvm_site_name": "Zerto - Right",
+          "recovery_zvm_site_name": "Zerto - Left",
+          "vpg_type": "Remote DR and Continuous Backup",
+          "priority": "Medium",
+          "vpg_description": null,
+          "label_1": null,
+          "label_2": null,
+          "label_3": null,
+          "label_4": null,
+          "label_5": null,
+          "boot_order_meta_group_name": "Test",
+          "recovery_host_name": "192.168.111.1",
+          "recovery_datastore_name": "DS_VM_Left",
+          "journal_history_unit": "Days",
+          "journal_history_value": 1,
+          "target_rpo_alert_value": 5,
+          "target_rpo_alert_unit": "Minutes",
+          "test_reminder": "6 Months",
+          "journal_datastore_name": "DS_VM_Left",
+          "journal_size_hard_limit_value": null,
+          "journal_size_hard_limit_unit": null,
+          "journal_size_warning_threshold_value": null,
+          "journal_size_warning_threshold_unit": null,
+          "scratch_journal_datastore_name": "DS_VM_Left",
+          "scratch_journal_size_hard_limit_value": null,
+          "scratch_journal_size_hard_limit_unit": null,
+          "scratch_journal_size_warning_threshold_value": null,
+          "scratch_journal_size_warning_threshold_unit": null,
+          "enable_wan_traffic_compression": null,
+          "disk_provisioning_override": null,
+          "failover_live_move_network_name": "VM Network",
+          "failover_test_network_name": null,
+          "recovery_folder_name": "/",
+          "pre_recovery_script_name": null,
+          "pre_recovery_script_parameters": null,
+          "pre_recovery_script_execution_timeout_seconds": null,
+          "post_recovery_script_name": null,
+          "post_recovery_script_parameters": null,
           "post_recovery_script_execution_timeout_seconds": null
         }
       ]
@@ -529,31 +366,8 @@
       "status": "passed",
       "records": [
         {
-          "vpg_name": "U L2R",
+          "vpg_name": "vik_vpg",
           "vm_name": "Ubuntu 22.4",
-          "label_1": null,
-          "label_2": null,
-          "label_3": null,
-          "label_4": null,
-          "label_5": null,
-          "boot_order_group_name": null,
-          "recovery_host_name": null,
-          "recovery_datastore_name": null,
-          "recovery_folder_name": null,
-          "journal_datastore_name": null,
-          "journal_size_hard_limit_value": null,
-          "journal_size_hard_limit_unit": null,
-          "journal_size_warning_threshold_value": null,
-          "journal_size_warning_threshold_unit": null,
-          "scratch_journal_datastore_name": null,
-          "scratch_journal_size_hard_limit_value": null,
-          "scratch_journal_size_hard_limit_unit": null,
-          "scratch_journal_size_warning_threshold_value": null,
-          "scratch_journal_size_warning_threshold_unit": null
-        },
-        {
-          "vpg_name": "ZVM 2R",
-          "vm_name": "ZVM-Left",
           "label_1": null,
           "label_2": null,
           "label_3": null,
@@ -563,53 +377,7 @@
           "recovery_host_name": null,
           "recovery_datastore_name": null,
           "recovery_folder_name": null,
-          "journal_datastore_name": null,
-          "journal_size_hard_limit_value": null,
-          "journal_size_hard_limit_unit": null,
-          "journal_size_warning_threshold_value": null,
-          "journal_size_warning_threshold_unit": null,
-          "scratch_journal_datastore_name": null,
-          "scratch_journal_size_hard_limit_value": null,
-          "scratch_journal_size_hard_limit_unit": null,
-          "scratch_journal_size_warning_threshold_value": null,
-          "scratch_journal_size_warning_threshold_unit": null
-        },
-        {
-          "vpg_name": "ZVM 2R",
-          "vm_name": "Microsoft 2022",
-          "label_1": null,
-          "label_2": null,
-          "label_3": null,
-          "label_4": null,
-          "label_5": null,
-          "boot_order_group_name": "Default",
-          "recovery_host_name": null,
-          "recovery_datastore_name": null,
-          "recovery_folder_name": null,
-          "journal_datastore_name": null,
-          "journal_size_hard_limit_value": null,
-          "journal_size_hard_limit_unit": null,
-          "journal_size_warning_threshold_value": null,
-          "journal_size_warning_threshold_unit": null,
-          "scratch_journal_datastore_name": null,
-          "scratch_journal_size_hard_limit_value": null,
-          "scratch_journal_size_hard_limit_unit": null,
-          "scratch_journal_size_warning_threshold_value": null,
-          "scratch_journal_size_warning_threshold_unit": null
-        },
-        {
-          "vpg_name": "U Local",
-          "vm_name": "Ubuntu 22.4",
-          "label_1": null,
-          "label_2": null,
-          "label_3": null,
-          "label_4": null,
-          "label_5": null,
-          "boot_order_group_name": null,
-          "recovery_host_name": null,
-          "recovery_datastore_name": null,
-          "recovery_folder_name": null,
-          "journal_datastore_name": null,
+          "journal_datastore_name": "DS_VM_Left",
           "journal_size_hard_limit_value": null,
           "journal_size_hard_limit_unit": null,
           "journal_size_warning_threshold_value": null,
@@ -626,42 +394,10 @@
       "status": "passed",
       "records": [
         {
-          "vpg_name": "U L2R",
+          "vpg_name": "vik_vpg",
           "vm_name": "Ubuntu 22.4",
           "protected_volume_location": "[DS_VM_Left] Ubuntu 22.4/Ubuntu 22.4-000001.vmdk",
-          "size_gib": 16,
-          "recovery_volume_location": null,
-          "recovery_raw_device_name": null,
-          "disk_provisioning_override": null,
-          "provisioning": null,
-          "volume_sync_type": null
-        },
-        {
-          "vpg_name": "ZVM 2R",
-          "vm_name": "ZVM-Left",
-          "protected_volume_location": "[DS_VM_Left] ZVM-Left/ZVM-Left.vmdk",
-          "size_gib": 10,
-          "recovery_volume_location": null,
-          "recovery_raw_device_name": null,
-          "disk_provisioning_override": null,
-          "provisioning": null,
-          "volume_sync_type": null
-        },
-        {
-          "vpg_name": "ZVM 2R",
-          "vm_name": "Microsoft 2022",
-          "protected_volume_location": "[DS_VM_Left] Microsoft 2022/Microsoft 2022.vmdk",
-          "size_gib": 750,
-          "recovery_volume_location": null,
-          "recovery_raw_device_name": null,
-          "disk_provisioning_override": null,
-          "provisioning": null,
-          "volume_sync_type": null
-        },
-        {
-          "vpg_name": "U Local",
-          "vm_name": "Ubuntu 22.4",
-          "protected_volume_location": "[DS_VM_Left] Ubuntu 22.4/Ubuntu 22.4-000001.vmdk",
+          "scsi_id": "scsi:0:0",
           "size_gib": 16,
           "recovery_volume_location": null,
           "recovery_raw_device_name": null,
@@ -675,56 +411,8 @@
       "status": "passed",
       "records": [
         {
-          "vpg_name": "U L2R",
+          "vpg_name": "vik_vpg",
           "vm_name": "Ubuntu 22.4",
-          "nic_name": "Network adapter 1",
-          "protected_network_name": "VM Network",
-          "failover_live_move_network_name": "VM Network",
-          "failover_live_move_create_new_mac_address": "No",
-          "failover_live_move_change_vnic_ip_config": "No",
-          "failover_live_move_ip_address": null,
-          "failover_live_move_subnet_mask": "255.255.255.0",
-          "failover_live_move_default_gateway": "192.168.0.254",
-          "failover_live_move_preferred_dns_server": "1.1.1.1",
-          "failover_live_move_alternate_dns_server": "8.8.8.8",
-          "failover_live_move_dns_suffix": null,
-          "failover_test_network_name": null,
-          "failover_test_create_new_mac_address": "No",
-          "failover_test_change_vnic_ip_config": "No",
-          "failover_test_ip_address": null,
-          "failover_test_subnet_mask": "255.255.254.0",
-          "failover_test_default_gateway": "192.168.1.254",
-          "failover_test_preferred_dns_server": "2.2.2.2",
-          "failover_test_alternate_dns_server": "9.9.9.9",
-          "failover_test_dns_suffix": null
-        },
-        {
-          "vpg_name": "ZVM 2R",
-          "vm_name": "ZVM-Left",
-          "nic_name": "Network adapter 1",
-          "protected_network_name": "VM Network",
-          "failover_live_move_network_name": "VM Network",
-          "failover_live_move_create_new_mac_address": "No",
-          "failover_live_move_change_vnic_ip_config": "No",
-          "failover_live_move_ip_address": null,
-          "failover_live_move_subnet_mask": "255.255.255.0",
-          "failover_live_move_default_gateway": "192.168.0.254",
-          "failover_live_move_preferred_dns_server": "1.1.1.1",
-          "failover_live_move_alternate_dns_server": "8.8.8.8",
-          "failover_live_move_dns_suffix": null,
-          "failover_test_network_name": null,
-          "failover_test_create_new_mac_address": "No",
-          "failover_test_change_vnic_ip_config": "No",
-          "failover_test_ip_address": null,
-          "failover_test_subnet_mask": "255.255.254.0",
-          "failover_test_default_gateway": "192.168.1.254",
-          "failover_test_preferred_dns_server": "2.2.2.2",
-          "failover_test_alternate_dns_server": "9.9.9.9",
-          "failover_test_dns_suffix": null
-        },
-        {
-          "vpg_name": "ZVM 2R",
-          "vm_name": "Microsoft 2022",
           "nic_name": "Network adapter 1",
           "protected_network_name": "VM Network",
           "failover_live_move_network_name": "VM Network",
@@ -752,16 +440,16 @@
   "reference_data": {
     "zvm_sites": [
       {
-        "site_name": "ZVM L",
-        "zerto_version": 10.9,
-        "protected": "Yes",
+        "site_name": "Zerto - Left",
+        "zerto_version": null,
+        "protected": "No",
         "recovery": "Yes"
       },
       {
-        "site_name": "ZVM R",
+        "site_name": "Zerto - Right",
         "zerto_version": 10.9,
-        "protected": "No",
-        "recovery": "Yes"
+        "protected": "Yes",
+        "recovery": "No"
       }
     ],
     "labels": {
@@ -863,199 +551,82 @@
     "hypervisor": {
       "protected_vms": [
         {
-          "ID": 1,
-          "Protected ZVM Site Name": "ZVM L",
-          "VM Name": "Ubuntu 22.4",
-          "CPU Count": 1,
-          "Memory (GiB)": 3
-        },
-        {
-          "ID": 2,
-          "Protected ZVM Site Name": "ZVM L",
-          "VM Name": "Microsoft 2022",
-          "CPU Count": 2,
-          "Memory (GiB)": 4
-        },
-        {
           "ID": 3,
-          "Protected ZVM Site Name": "ZVM L",
-          "VM Name": "ZVM-Left",
+          "Protected ZVM Site Name": "Zerto - Right",
+          "VM Name": "Ubuntu 22.4",
           "CPU Count": 2,
           "Memory (GiB)": 4
         },
         {
           "ID": 4,
-          "Protected ZVM Site Name": "ZVM L",
-          "VM Name": "ZVML",
-          "CPU Count": 6,
-          "Memory (GiB)": 16
+          "Protected ZVM Site Name": "Zerto - Right",
+          "VM Name": "Microsoft 2022",
+          "CPU Count": 2,
+          "Memory (GiB)": 4
         }
       ],
       "protected_vm_volumes": [
         {
-          "ID": 1,
-          "Protected ZVM Site Name": "ZVM L",
-          "VM Name": "ZVM-Left",
-          "Volume Location": "[DS_VM_Left] ZVM-Left/ZVM-Left.vmdk",
-          "Provisioned Size (GiB)": 10,
-          "Protected ZVM Site Name|VM Name": "ZVM L|ZVM-Left"
-        },
-        {
-          "ID": 2,
-          "Protected ZVM Site Name": "ZVM L",
-          "VM Name": "ZVML",
-          "Volume Location": "[DS_VM_Left] ZVML/ZVML.vmdk",
-          "Provisioned Size (GiB)": 16,
-          "Protected ZVM Site Name|VM Name": "ZVM L|ZVML"
-        },
-        {
-          "ID": 3,
-          "Protected ZVM Site Name": "ZVM L",
-          "VM Name": "ZVML",
-          "Volume Location": "[DS_VM_Left] ZVML/ZVML_1.vmdk",
-          "Provisioned Size (GiB)": 50,
-          "Protected ZVM Site Name|VM Name": "ZVM L|ZVML"
-        },
-        {
-          "ID": 4,
-          "Protected ZVM Site Name": "ZVM L",
-          "VM Name": "ZVML",
-          "Volume Location": "[DS_VM_Left] ZVML/ZVML_2.vmdk",
-          "Provisioned Size (GiB)": 50,
-          "Protected ZVM Site Name|VM Name": "ZVM L|ZVML"
-        },
-        {
-          "ID": 5,
-          "Protected ZVM Site Name": "ZVM L",
-          "VM Name": "ZVML",
-          "Volume Location": "[DS_VM_Left] ZVML/ZVML_3.vmdk",
-          "Provisioned Size (GiB)": 500,
-          "Protected ZVM Site Name|VM Name": "ZVM L|ZVML"
-        },
-        {
           "ID": 6,
-          "Protected ZVM Site Name": "ZVM L",
+          "Protected ZVM Site Name": "Zerto - Right",
           "VM Name": "Microsoft 2022",
           "Volume Location": "[DS_VM_Left] Microsoft 2022/Microsoft 2022.vmdk",
+          "SCSI ID": null,
           "Provisioned Size (GiB)": 750,
-          "Protected ZVM Site Name|VM Name": "ZVM L|Microsoft 2022"
+          "Provisioning": null,
+          "Protected ZVM Site Name|VM Name": "Zerto - Right|Microsoft 2022"
         },
         {
           "ID": 7,
-          "Protected ZVM Site Name": "ZVM L",
+          "Protected ZVM Site Name": "Zerto - Right",
           "VM Name": "Ubuntu 22.4",
           "Volume Location": "[DS_VM_Left] Ubuntu 22.4/Ubuntu 22.4-000001.vmdk",
+          "SCSI ID": "scsi:0:0",
           "Provisioned Size (GiB)": 16,
-          "Protected ZVM Site Name|VM Name": "ZVM L|Ubuntu 22.4"
+          "Provisioning": null,
+          "Protected ZVM Site Name|VM Name": "Zerto - Right|Ubuntu 22.4"
         }
       ],
       "protected_vm_nics": [
         {
           "ID": 1,
-          "Protected ZVM Site Name": "ZVM L",
-          "VM Name": "Ubuntu 22.4",
-          "NIC Name": "Network adapter 1",
-          "Network Name": "VM Network",
-          "Protected ZVM Site Name|VM Name": "ZVM L|Ubuntu 22.4"
-        },
-        {
-          "ID": 2,
-          "Protected ZVM Site Name": "ZVM L",
-          "VM Name": "ZVM-Left",
-          "NIC Name": "Network adapter 1",
-          "Network Name": "VM Network",
-          "Protected ZVM Site Name|VM Name": "ZVM L|ZVM-Left"
-        },
-        {
-          "ID": 3,
-          "Protected ZVM Site Name": "ZVM L",
+          "Protected ZVM Site Name": "Zerto - Right",
           "VM Name": "Microsoft 2022",
           "NIC Name": "Network adapter 1",
           "Network Name": "VM Network",
-          "Protected ZVM Site Name|VM Name": "ZVM L|Microsoft 2022"
+          "Protected ZVM Site Name|VM Name": "Zerto - Right|Microsoft 2022"
         },
         {
-          "ID": 4,
-          "Protected ZVM Site Name": "ZVM L",
+          "ID": 5,
+          "Protected ZVM Site Name": "Zerto - Right",
           "VM Name": "Ubuntu 22.4",
-          "NIC Name": "vik-Network adapter 1",
+          "NIC Name": "Network adapter 1",
           "Network Name": "VM Network",
-          "Protected ZVM Site Name|VM Name": "ZVM L|Ubuntu 22.4"
+          "Protected ZVM Site Name|VM Name": "Zerto - Right|Ubuntu 22.4"
         }
       ],
       "recovery_hosts": [
         {
-          "ID": 1,
-          "Recovery ZVM Site Name": "ZVM R",
-          "Host Cluster Name": null,
-          "Host Name": "192.168.222.1",
-          "CPU Count": 16,
-          "Memory (GiB)": 64
-        },
-        {
-          "ID": 2,
-          "Recovery ZVM Site Name": "ZVM R",
-          "Host Cluster Name": null,
-          "Host Name": "192.168.222.2",
-          "CPU Count": 16,
-          "Memory (GiB)": 64
-        },
-        {
-          "ID": 3,
-          "Recovery ZVM Site Name": "ZVM L",
+          "ID": 4,
+          "Recovery ZVM Site Name": "Zerto - Left",
           "Host Cluster Name": null,
           "Host Name": "192.168.111.1",
           "CPU Count": 16,
-          "Memory (GiB)": 64
+          "Memory (GiB)": 65
         },
         {
-          "ID": 4,
-          "Recovery ZVM Site Name": "ZVM L",
+          "ID": 5,
+          "Recovery ZVM Site Name": "Zerto - Left",
           "Host Cluster Name": null,
           "Host Name": "192.168.111.2",
-          "CPU Count": 15,
-          "Memory (GiB)": 63
+          "CPU Count": 16,
+          "Memory (GiB)": 65
         }
       ],
       "recovery_datastores": [
         {
-          "ID": 1,
-          "Recovery ZVM Site Name": "ZVM R",
-          "Datastore Cluster Name": null,
-          "Datastore Name": "ESXi-1-DS",
-          "Size (GiB)": 128
-        },
-        {
-          "ID": 2,
-          "Recovery ZVM Site Name": "ZVM R",
-          "Datastore Cluster Name": null,
-          "Datastore Name": "ESXi-2-DS",
-          "Size (GiB)": 512
-        },
-        {
-          "ID": 3,
-          "Recovery ZVM Site Name": "ZVM R",
-          "Datastore Cluster Name": null,
-          "Datastore Name": "DS_VM_Right",
-          "Size (GiB)": 65536
-        },
-        {
-          "ID": 4,
-          "Recovery ZVM Site Name": "ZVM L",
-          "Datastore Cluster Name": null,
-          "Datastore Name": "ESXi-1-DS",
-          "Size (GiB)": 128
-        },
-        {
-          "ID": 5,
-          "Recovery ZVM Site Name": "ZVM L",
-          "Datastore Cluster Name": null,
-          "Datastore Name": "ESXi-2-DS",
-          "Size (GiB)": 512
-        },
-        {
-          "ID": 6,
-          "Recovery ZVM Site Name": "ZVM L",
+          "ID": 8,
+          "Recovery ZVM Site Name": "Zerto - Left",
           "Datastore Cluster Name": null,
           "Datastore Name": "DS_VM_Left",
           "Size (GiB)": 65536
@@ -1063,50 +634,20 @@
       ],
       "recovery_folders": [
         {
-          "ID": 1,
-          "Recovery ZVM Site Name": "ZVM R",
-          "Folder Name": "/"
-        },
-        {
-          "ID": 2,
-          "Recovery ZVM Site Name": "ZVM R",
-          "Folder Name": "/MyFolder"
-        },
-        {
           "ID": 3,
-          "Recovery ZVM Site Name": "ZVM L",
+          "Recovery ZVM Site Name": "Zerto - Left",
           "Folder Name": "/"
         }
       ],
       "recovery_networks": [
         {
-          "ID": 1,
-          "Recovery ZVM Site Name": "ZVM R",
-          "Network Name": "Remote"
-        },
-        {
-          "ID": 2,
-          "Recovery ZVM Site Name": "ZVM R",
-          "Network Name": "VM Network"
-        },
-        {
-          "ID": 3,
-          "Recovery ZVM Site Name": "ZVM R",
-          "Network Name": "vRA Network"
-        },
-        {
-          "ID": 4,
-          "Recovery ZVM Site Name": "ZVM L",
-          "Network Name": "Remote"
-        },
-        {
           "ID": 5,
-          "Recovery ZVM Site Name": "ZVM L",
+          "Recovery ZVM Site Name": "Zerto - Left",
           "Network Name": "VM Network"
         },
         {
           "ID": 6,
-          "Recovery ZVM Site Name": "ZVM L",
+          "Recovery ZVM Site Name": "Zerto - Left",
           "Network Name": "vRA Network"
         }
       ]
@@ -1114,8 +655,8 @@
   },
   "resolved_api_candidate_payloads": {
     "default_vpg_settings": {
-      "protected_site": "ZVM L",
-      "recovery_site": "ZVM R",
+      "protected_site": "Zerto - Right",
+      "recovery_site": "Zerto - Left",
       "vpg_type": "Remote DR and Continuous Backup",
       "priority": "Medium",
       "journal_history": {
@@ -1167,84 +708,26 @@
       "extended_journal_retry_count": 3,
       "extended_journal_wait_between_retries_minutes": 10
     },
-    "recovery_zvm_sites": [],
-    "vpgs": [
+    "recovery_zvm_sites": [
       {
         "ID": 1,
-        "VPG Name": "U L2R",
-        "Recovery ZVM Site Name": null,
+        "Recovery ZVM Site Name": "Zerto - Left",
         "VPG Type": "Remote DR and Continuous Backup",
-        "Boot Order Meta Group Name": null,
-        "Recovery Host Name": "192.168.222.2",
-        "Recovery Datastore Name": "DS_VM_Right",
-        "Journal History Value": 1,
-        "Journal History Unit": "Days",
-        "Target RPO Alert Value": 5,
-        "Target RPO Alert Unit": "Minutes",
-        "Test Reminder": "6 Months",
-        "Journal Datastore Name": "DS_VM_Right",
-        "Scratch Journal Datastore Name": "DS_VM_Right",
-        "Failover Live / Move - Network Name": "VM Network",
-        "Failover Test - Network Name": "vRA Network",
-        "Recovery Folder Name": "/",
-        "Protected Site Name": "ZVM L",
-        "Recovery Site Name": "ZVM R",
-        "Effective Protected ZVM Site Name": "ZVM L",
-        "Effective Recovery ZVM Site Name": "ZVM R",
         "Priority": "Medium",
-        "Journal Size Hard Limit Value": 150,
-        "Journal Size Hard Limit Unit": "GiB",
-        "Journal Size Warning Threshold Value": 112.5,
-        "Journal Size Warning Threshold Unit": "GiB",
-        "Scratch Journal Size Hard Limit Value": 300,
-        "Scratch Journal Size Hard Limit Unit": "GiB",
-        "Scratch Journal Size Warning Threshold Value": 225,
-        "Scratch Journal Size Warning Threshold Unit": "GiB",
-        "Enable WAN Traffic Compression": "Yes",
-        "Disk Provisioning Override": "As-is",
-        "Volume Sync Type": "Continuous Sync",
-        "Pre-Recovery Script Name": null,
-        "Pre-Recovery Script Execution Timeout (Seconds)": 300,
-        "Post-Recovery Script Name": null,
-        "Post-Recovery Script Execution Timeout (Seconds)": 300,
-        "Failover Live / Move - Create new MAC address": "No",
-        "Failover Live / Move - Change vNIC IP Config": "No",
-        "Failover Live / Move - Subnet Mask": "255.255.255.0",
-        "Failover Live / Move - Default Gateway": "192.168.0.254",
-        "Failover Live / Move - Preferred DNS Server": "1.1.1.1",
-        "Failover Live / Move - Alternate DNS Server": "8.8.8.8",
-        "Failover Live / Move - DNS Suffix": null,
-        "Failover Test - Create new MAC address": "No",
-        "Failover Test - Change vNIC IP Config": "No",
-        "Failover Test - Subnet Mask": "255.255.254.0",
-        "Failover Test - Default Gateway": "192.168.1.254",
-        "Failover Test - Preferred DNS Server": "2.2.2.2",
-        "Failover Test - Alternate DNS Server": "9.9.9.9",
-        "Failover Test - DNS Suffix": null
-      },
-      {
-        "ID": 2,
-        "VPG Name": "ZVM 2R",
-        "Recovery ZVM Site Name": null,
-        "VPG Type": "Remote DR and Continuous Backup",
-        "Boot Order Meta Group Name": "Test",
-        "Recovery Host Name": "192.168.222.2",
-        "Recovery Datastore Name": "DS_VM_Right",
-        "Journal History Value": 1,
-        "Journal History Unit": "Days",
-        "Target RPO Alert Value": 5,
-        "Target RPO Alert Unit": "Minutes",
-        "Test Reminder": "6 Months",
-        "Journal Datastore Name": "DS_VM_Right",
-        "Scratch Journal Datastore Name": "DS_VM_Right",
+        "Recovery Host Name": "192.168.111.1",
+        "Recovery Datastore Name": "DS_VM_Left",
+        "Journal Datastore Name": "DS_VM_Left",
+        "Scratch Journal Datastore Name": "DS_VM_Left",
         "Failover Live / Move - Network Name": "VM Network",
         "Failover Test - Network Name": "VM Network",
         "Recovery Folder Name": "/",
-        "Protected Site Name": "ZVM L",
-        "Recovery Site Name": "ZVM R",
-        "Effective Protected ZVM Site Name": "ZVM L",
-        "Effective Recovery ZVM Site Name": "ZVM R",
-        "Priority": "Medium",
+        "Recovery Site Name": "Zerto - Left",
+        "Effective Recovery ZVM Site Name": "Zerto - Left",
+        "Journal History Value": 1,
+        "Journal History Unit": "Days",
+        "Target RPO Alert Value": 5,
+        "Target RPO Alert Unit": "Minutes",
+        "Test Reminder": "6 Months",
         "Journal Size Hard Limit Value": 150,
         "Journal Size Hard Limit Unit": "GiB",
         "Journal Size Warning Threshold Value": 112.5,
@@ -1255,10 +738,7 @@
         "Scratch Journal Size Warning Threshold Unit": "GiB",
         "Enable WAN Traffic Compression": "Yes",
         "Disk Provisioning Override": "As-is",
-        "Volume Sync Type": "Continuous Sync",
-        "Pre-Recovery Script Name": null,
         "Pre-Recovery Script Execution Timeout (Seconds)": 300,
-        "Post-Recovery Script Name": null,
         "Post-Recovery Script Execution Timeout (Seconds)": 300,
         "Failover Live / Move - Create new MAC address": "No",
         "Failover Live / Move - Change vNIC IP Config": "No",
@@ -1274,15 +754,19 @@
         "Failover Test - Preferred DNS Server": "2.2.2.2",
         "Failover Test - Alternate DNS Server": "9.9.9.9",
         "Failover Test - DNS Suffix": null
-      },
+      }
+    ],
+    "vpgs": [
       {
-        "ID": 3,
-        "VPG Name": "U Local",
-        "Recovery ZVM Site Name": "ZVM L",
-        "VPG Type": "Local Continuous Backup",
-        "Boot Order Meta Group Name": null,
-        "Recovery Host Name": null,
-        "Recovery Datastore Name": null,
+        "ID": 1,
+        "VPG Name": "vik_vpg",
+        "Protected ZVM Site Name": "Zerto - Right",
+        "Recovery ZVM Site Name": "Zerto - Left",
+        "VPG Type": "Remote DR and Continuous Backup",
+        "Priority": "Medium",
+        "Boot Order Meta Group Name": "Test",
+        "Recovery Host Name": "192.168.111.1",
+        "Recovery Datastore Name": "DS_VM_Left",
         "Journal History Value": 1,
         "Journal History Unit": "Days",
         "Target RPO Alert Value": 5,
@@ -1290,14 +774,13 @@
         "Test Reminder": "6 Months",
         "Journal Datastore Name": "DS_VM_Left",
         "Scratch Journal Datastore Name": "DS_VM_Left",
-        "Failover Live / Move - Network Name": null,
-        "Failover Test - Network Name": null,
+        "Failover Live / Move - Network Name": "VM Network",
+        "Failover Test - Network Name": "vRA Network",
         "Recovery Folder Name": "/",
-        "Protected Site Name": "ZVM L",
-        "Recovery Site Name": "ZVM L",
-        "Effective Protected ZVM Site Name": "ZVM L",
-        "Effective Recovery ZVM Site Name": "ZVM L",
-        "Priority": "Medium",
+        "Protected Site Name": "Zerto - Right",
+        "Recovery Site Name": "Zerto - Left",
+        "Effective Protected ZVM Site Name": "Zerto - Right",
+        "Effective Recovery ZVM Site Name": "Zerto - Left",
         "Journal Size Hard Limit Value": 150,
         "Journal Size Hard Limit Unit": "GiB",
         "Journal Size Warning Threshold Value": 112.5,
@@ -1332,90 +815,18 @@
     "vm_replication": [
       {
         "ID": 1,
-        "VPG Name": "U L2R",
+        "VPG Name": "vik_vpg",
         "VM Name": "Ubuntu 22.4",
-        "Boot Order Group Name": null,
-        "Protected Site Name": "ZVM L",
-        "Recovery Site Name": "ZVM R",
-        "Boot Order Meta Group Name": null,
-        "Effective Protected ZVM Site Name": "ZVM L",
-        "Effective Recovery ZVM Site Name": "ZVM R",
-        "Recovery Host Name": "192.168.222.2",
-        "Recovery Datastore Name": "DS_VM_Right",
-        "Recovery Folder Name": "/",
-        "Journal Datastore Name": "DS_VM_Right",
-        "Journal Size Hard Limit Value": 150,
-        "Journal Size Hard Limit Unit": "GiB",
-        "Journal Size Warning Threshold Value": 112.5,
-        "Journal Size Warning Threshold Unit": "GiB",
-        "Scratch Journal Datastore Name": "DS_VM_Right",
-        "Scratch Journal Size Hard Limit Value": 300,
-        "Scratch Journal Size Hard Limit Unit": "GiB",
-        "Scratch Journal Size Warning Threshold Value": 225,
-        "Scratch Journal Size Warning Threshold Unit": "GiB"
-      },
-      {
-        "ID": 2,
-        "VPG Name": "ZVM 2R",
-        "VM Name": "ZVM-Left",
         "Boot Order Group Name": "New_Group_1",
-        "Protected Site Name": "ZVM L",
-        "Recovery Site Name": "ZVM R",
-        "Boot Order Meta Group Name": "Test",
-        "Effective Protected ZVM Site Name": "ZVM L",
-        "Effective Recovery ZVM Site Name": "ZVM R",
-        "Recovery Host Name": "192.168.222.2",
-        "Recovery Datastore Name": "DS_VM_Right",
-        "Recovery Folder Name": "/",
-        "Journal Datastore Name": "DS_VM_Right",
-        "Journal Size Hard Limit Value": 150,
-        "Journal Size Hard Limit Unit": "GiB",
-        "Journal Size Warning Threshold Value": 112.5,
-        "Journal Size Warning Threshold Unit": "GiB",
-        "Scratch Journal Datastore Name": "DS_VM_Right",
-        "Scratch Journal Size Hard Limit Value": 300,
-        "Scratch Journal Size Hard Limit Unit": "GiB",
-        "Scratch Journal Size Warning Threshold Value": 225,
-        "Scratch Journal Size Warning Threshold Unit": "GiB"
-      },
-      {
-        "ID": 3,
-        "VPG Name": "ZVM 2R",
-        "VM Name": "Microsoft 2022",
-        "Boot Order Group Name": "Default",
-        "Protected Site Name": "ZVM L",
-        "Recovery Site Name": "ZVM R",
-        "Boot Order Meta Group Name": "Test",
-        "Effective Protected ZVM Site Name": "ZVM L",
-        "Effective Recovery ZVM Site Name": "ZVM R",
-        "Recovery Host Name": "192.168.222.2",
-        "Recovery Datastore Name": "DS_VM_Right",
-        "Recovery Folder Name": "/",
-        "Journal Datastore Name": "DS_VM_Right",
-        "Journal Size Hard Limit Value": 150,
-        "Journal Size Hard Limit Unit": "GiB",
-        "Journal Size Warning Threshold Value": 112.5,
-        "Journal Size Warning Threshold Unit": "GiB",
-        "Scratch Journal Datastore Name": "DS_VM_Right",
-        "Scratch Journal Size Hard Limit Value": 300,
-        "Scratch Journal Size Hard Limit Unit": "GiB",
-        "Scratch Journal Size Warning Threshold Value": 225,
-        "Scratch Journal Size Warning Threshold Unit": "GiB"
-      },
-      {
-        "ID": 4,
-        "VPG Name": "U Local",
-        "VM Name": "Ubuntu 22.4",
-        "Boot Order Group Name": null,
-        "Protected Site Name": "ZVM L",
-        "Recovery Site Name": "ZVM L",
-        "Boot Order Meta Group Name": null,
-        "Effective Protected ZVM Site Name": "ZVM L",
-        "Effective Recovery ZVM Site Name": "ZVM L",
-        "Recovery Host Name": null,
-        "Recovery Datastore Name": null,
-        "Recovery Folder Name": "/",
         "Journal Datastore Name": "DS_VM_Left",
+        "Protected Site Name": "Zerto - Right",
+        "Recovery Site Name": "Zerto - Left",
+        "Boot Order Meta Group Name": "Test",
+        "Effective Protected ZVM Site Name": "Zerto - Right",
+        "Effective Recovery ZVM Site Name": "Zerto - Left",
+        "Recovery Host Name": "192.168.111.1",
+        "Recovery Datastore Name": "DS_VM_Left",
+        "Recovery Folder Name": "/",
         "Journal Size Hard Limit Value": 150,
         "Journal Size Hard Limit Unit": "GiB",
         "Journal Size Warning Threshold Value": 112.5,
@@ -1430,65 +841,18 @@
     "vm_storage": [
       {
         "ID": 1,
-        "VPG Name": "U L2R",
+        "VPG Name": "vik_vpg",
         "VM Name": "Ubuntu 22.4",
         "Protected Volume Location": "[DS_VM_Left] Ubuntu 22.4/Ubuntu 22.4-000001.vmdk",
+        "SCSI ID": "scsi:0:0",
         "Size (GiB)": 16,
         "Volume Source": "Datastore",
-        "Datastore Name": "Dunno",
-        "Protected Site Name": "ZVM L",
-        "Recovery Site Name": "ZVM R",
-        "Protected ZVM Site Name | VM Name": "ZVM L|Ubuntu 22.4",
-        "Effective Protected ZVM Site Name": "ZVM L",
-        "Effective Recovery ZVM Site Name": "ZVM R",
-        "Disk Provisioning Override": "As-is",
-        "Volume Sync Type": "Continuous Sync"
-      },
-      {
-        "ID": 2,
-        "VPG Name": "ZVM 2R",
-        "VM Name": "ZVM-Left",
-        "Protected Volume Location": "[DS_VM_Left] ZVM-Left/ZVM-Left.vmdk",
-        "Size (GiB)": 10,
-        "Volume Source": "Datastore",
-        "Datastore Name": "Dunno",
-        "Protected Site Name": "ZVM L",
-        "Recovery Site Name": "ZVM R",
-        "Protected ZVM Site Name | VM Name": "ZVM L|ZVM-Left",
-        "Effective Protected ZVM Site Name": "ZVM L",
-        "Effective Recovery ZVM Site Name": "ZVM R",
-        "Disk Provisioning Override": "As-is",
-        "Volume Sync Type": "Continuous Sync"
-      },
-      {
-        "ID": 3,
-        "VPG Name": "ZVM 2R",
-        "VM Name": "Microsoft 2022",
-        "Protected Volume Location": "[DS_VM_Left] Microsoft 2022/Microsoft 2022.vmdk",
-        "Size (GiB)": 750,
-        "Volume Source": "Datastore",
-        "Datastore Name": "Dunno",
-        "Protected Site Name": "ZVM L",
-        "Recovery Site Name": "ZVM R",
-        "Protected ZVM Site Name | VM Name": "ZVM L|Microsoft 2022",
-        "Effective Protected ZVM Site Name": "ZVM L",
-        "Effective Recovery ZVM Site Name": "ZVM R",
-        "Disk Provisioning Override": "As-is",
-        "Volume Sync Type": "Continuous Sync"
-      },
-      {
-        "ID": 4,
-        "VPG Name": "U Local",
-        "VM Name": "Ubuntu 22.4",
-        "Protected Volume Location": "[DS_VM_Left] Ubuntu 22.4/Ubuntu 22.4-000001.vmdk",
-        "Size (GiB)": 16,
-        "Volume Source": "Datastore",
-        "Datastore Name": "Dunno",
-        "Protected Site Name": "ZVM L",
-        "Recovery Site Name": "ZVM L",
-        "Protected ZVM Site Name | VM Name": "ZVM L|Ubuntu 22.4",
-        "Effective Protected ZVM Site Name": "ZVM L",
-        "Effective Recovery ZVM Site Name": "ZVM L",
+        "Protected Site Name": "Zerto - Right",
+        "Recovery Site Name": "Zerto - Left",
+        "Protected ZVM Site Name | VM Name": "Zerto - Right|Ubuntu 22.4",
+        "Hypervisor_Data_Protected_ZVM_VM_Volumes ID": 7,
+        "Effective Protected ZVM Site Name": "Zerto - Right",
+        "Effective Recovery ZVM Site Name": "Zerto - Left",
         "Disk Provisioning Override": "As-is",
         "Volume Sync Type": "Continuous Sync"
       }
@@ -1496,15 +860,15 @@
     "vm_nics": [
       {
         "ID": 1,
-        "VPG Name": "U L2R",
+        "VPG Name": "vik_vpg",
         "VM Name": "Ubuntu 22.4",
         "NIC Name": "Network adapter 1",
         "Protected Network Name": "VM Network",
-        "Protected Site Name": "ZVM L",
-        "Recovery Site Name": "ZVM R",
-        "Protected Site Name|VM Name": "ZVM L|Ubuntu 22.4",
-        "Effective Protected ZVM Site Name": "ZVM L",
-        "Effective Recovery ZVM Site Name": "ZVM R",
+        "Protected Site Name": "Zerto - Right",
+        "Recovery Site Name": "Zerto - Left",
+        "Protected Site Name|VM Name": "Zerto - Right|Ubuntu 22.4",
+        "Effective Protected ZVM Site Name": "Zerto - Right",
+        "Effective Recovery ZVM Site Name": "Zerto - Left",
         "Failover Live / Move - Network Name": "VM Network",
         "Failover Live / Move - Create new MAC address": "No",
         "Failover Live / Move - Change vNIC IP Config": "No",
@@ -1514,140 +878,6 @@
         "Failover Live / Move - Alternate DNS Server": "8.8.8.8",
         "Failover Live / Move - DNS Suffix": null,
         "Failover Test - Network Name": "vRA Network",
-        "Failover Test - Create new MAC address": "No",
-        "Failover Test - Change vNIC IP Config": "No",
-        "Failover Test - Subnet Mask": "255.255.254.0",
-        "Failover Test - Default Gateway": "192.168.1.254",
-        "Failover Test - Preferred DNS Server": "2.2.2.2",
-        "Failover Test - Alternate DNS Server": "9.9.9.9",
-        "Failover Test - DNS Suffix": null
-      },
-      {
-        "ID": 2,
-        "VPG Name": "ZVM 2R",
-        "VM Name": "ZVM-Left",
-        "NIC Name": "Network adapter 1",
-        "Protected Network Name": "VM Network",
-        "Protected Site Name": "ZVM L",
-        "Recovery Site Name": "ZVM R",
-        "Protected Site Name|VM Name": "ZVM L|ZVM-Left",
-        "Effective Protected ZVM Site Name": "ZVM L",
-        "Effective Recovery ZVM Site Name": "ZVM R",
-        "Failover Live / Move - Network Name": "VM Network",
-        "Failover Live / Move - Create new MAC address": "No",
-        "Failover Live / Move - Change vNIC IP Config": "No",
-        "Failover Live / Move - Subnet Mask": "255.255.255.0",
-        "Failover Live / Move - Default Gateway": "192.168.0.254",
-        "Failover Live / Move - Preferred DNS Server": "1.1.1.1",
-        "Failover Live / Move - Alternate DNS Server": "8.8.8.8",
-        "Failover Live / Move - DNS Suffix": null,
-        "Failover Test - Network Name": "VM Network",
-        "Failover Test - Create new MAC address": "No",
-        "Failover Test - Change vNIC IP Config": "No",
-        "Failover Test - Subnet Mask": "255.255.254.0",
-        "Failover Test - Default Gateway": "192.168.1.254",
-        "Failover Test - Preferred DNS Server": "2.2.2.2",
-        "Failover Test - Alternate DNS Server": "9.9.9.9",
-        "Failover Test - DNS Suffix": null
-      },
-      {
-        "ID": 3,
-        "VPG Name": "ZVM 2R",
-        "VM Name": "Microsoft 2022",
-        "NIC Name": "Network adapter 1",
-        "Protected Network Name": "VM Network",
-        "Protected Site Name": "ZVM L",
-        "Recovery Site Name": "ZVM R",
-        "Protected Site Name|VM Name": "ZVM L|Microsoft 2022",
-        "Effective Protected ZVM Site Name": "ZVM L",
-        "Effective Recovery ZVM Site Name": "ZVM R",
-        "Failover Live / Move - Network Name": "VM Network",
-        "Failover Live / Move - Create new MAC address": "No",
-        "Failover Live / Move - Change vNIC IP Config": "No",
-        "Failover Live / Move - Subnet Mask": "255.255.255.0",
-        "Failover Live / Move - Default Gateway": "192.168.0.254",
-        "Failover Live / Move - Preferred DNS Server": "1.1.1.1",
-        "Failover Live / Move - Alternate DNS Server": "8.8.8.8",
-        "Failover Live / Move - DNS Suffix": null,
-        "Failover Test - Network Name": "VM Network",
-        "Failover Test - Create new MAC address": "No",
-        "Failover Test - Change vNIC IP Config": "No",
-        "Failover Test - Subnet Mask": "255.255.254.0",
-        "Failover Test - Default Gateway": "192.168.1.254",
-        "Failover Test - Preferred DNS Server": "2.2.2.2",
-        "Failover Test - Alternate DNS Server": "9.9.9.9",
-        "Failover Test - DNS Suffix": null
-      },
-      {
-        "VPG Name": "U L2R",
-        "VM Name": "Ubuntu 22.4",
-        "NIC Name": "vik-Network adapter 1",
-        "Protected Network Name": "VM Network",
-        "Protected Site Name": "ZVM L",
-        "Recovery Site Name": "ZVM R",
-        "Effective Protected ZVM Site Name": "ZVM L",
-        "Effective Recovery ZVM Site Name": "ZVM R",
-        "Failover Live / Move - Network Name": "VM Network",
-        "Failover Live / Move - Create new MAC address": "No",
-        "Failover Live / Move - Change vNIC IP Config": "No",
-        "Failover Live / Move - Subnet Mask": "255.255.255.0",
-        "Failover Live / Move - Default Gateway": "192.168.0.254",
-        "Failover Live / Move - Preferred DNS Server": "1.1.1.1",
-        "Failover Live / Move - Alternate DNS Server": "8.8.8.8",
-        "Failover Live / Move - DNS Suffix": null,
-        "Failover Test - Network Name": "vRA Network",
-        "Failover Test - Create new MAC address": "No",
-        "Failover Test - Change vNIC IP Config": "No",
-        "Failover Test - Subnet Mask": "255.255.254.0",
-        "Failover Test - Default Gateway": "192.168.1.254",
-        "Failover Test - Preferred DNS Server": "2.2.2.2",
-        "Failover Test - Alternate DNS Server": "9.9.9.9",
-        "Failover Test - DNS Suffix": null
-      },
-      {
-        "VPG Name": "U Local",
-        "VM Name": "Ubuntu 22.4",
-        "NIC Name": "Network adapter 1",
-        "Protected Network Name": "VM Network",
-        "Protected Site Name": "ZVM L",
-        "Recovery Site Name": "ZVM L",
-        "Effective Protected ZVM Site Name": "ZVM L",
-        "Effective Recovery ZVM Site Name": "ZVM L",
-        "Failover Live / Move - Network Name": null,
-        "Failover Live / Move - Create new MAC address": "No",
-        "Failover Live / Move - Change vNIC IP Config": "No",
-        "Failover Live / Move - Subnet Mask": "255.255.255.0",
-        "Failover Live / Move - Default Gateway": "192.168.0.254",
-        "Failover Live / Move - Preferred DNS Server": "1.1.1.1",
-        "Failover Live / Move - Alternate DNS Server": "8.8.8.8",
-        "Failover Live / Move - DNS Suffix": null,
-        "Failover Test - Network Name": null,
-        "Failover Test - Create new MAC address": "No",
-        "Failover Test - Change vNIC IP Config": "No",
-        "Failover Test - Subnet Mask": "255.255.254.0",
-        "Failover Test - Default Gateway": "192.168.1.254",
-        "Failover Test - Preferred DNS Server": "2.2.2.2",
-        "Failover Test - Alternate DNS Server": "9.9.9.9",
-        "Failover Test - DNS Suffix": null
-      },
-      {
-        "VPG Name": "U Local",
-        "VM Name": "Ubuntu 22.4",
-        "NIC Name": "vik-Network adapter 1",
-        "Protected Network Name": "VM Network",
-        "Protected Site Name": "ZVM L",
-        "Recovery Site Name": "ZVM L",
-        "Effective Protected ZVM Site Name": "ZVM L",
-        "Effective Recovery ZVM Site Name": "ZVM L",
-        "Failover Live / Move - Network Name": null,
-        "Failover Live / Move - Create new MAC address": "No",
-        "Failover Live / Move - Change vNIC IP Config": "No",
-        "Failover Live / Move - Subnet Mask": "255.255.255.0",
-        "Failover Live / Move - Default Gateway": "192.168.0.254",
-        "Failover Live / Move - Preferred DNS Server": "1.1.1.1",
-        "Failover Live / Move - Alternate DNS Server": "8.8.8.8",
-        "Failover Live / Move - DNS Suffix": null,
-        "Failover Test - Network Name": null,
         "Failover Test - Create new MAC address": "No",
         "Failover Test - Change vNIC IP Config": "No",
         "Failover Test - Subnet Mask": "255.255.254.0",
@@ -1677,8 +907,8 @@
   },
   "api_candidate_payloads": {
     "default_vpg_settings": {
-      "protected_site": "ZVM L",
-      "recovery_site": "ZVM R",
+      "protected_site": "Zerto - Right",
+      "recovery_site": "Zerto - Left",
       "vpg_type": "Remote DR and Continuous Backup",
       "priority": "Medium",
       "journal_history": {
@@ -1730,58 +960,33 @@
       "extended_journal_retry_count": 3,
       "extended_journal_wait_between_retries_minutes": 10
     },
-    "recovery_zvm_sites": [],
-    "vpgs": [
+    "recovery_zvm_sites": [
       {
         "ID": 1,
-        "VPG Name": "U L2R",
-        "Recovery ZVM Site Name": null,
-        "VPG Type": null,
-        "Boot Order Meta Group Name": null,
-        "Recovery Host Name": "192.168.222.2",
-        "Recovery Datastore Name": "DS_VM_Right",
-        "Journal History Value": 1,
-        "Journal History Unit": "Days",
-        "Target RPO Alert Value": 5,
-        "Target RPO Alert Unit": "Minutes",
-        "Test Reminder": "6 Months",
-        "Journal Datastore Name": "DS_VM_Right",
-        "Scratch Journal Datastore Name": "DS_VM_Right",
-        "Failover Live / Move - Network Name": "VM Network",
-        "Failover Test - Network Name": "vRA Network",
-        "Recovery Folder Name": "/",
-        "Protected Site Name": "ZVM L",
-        "Recovery Site Name": "ZVM R"
-      },
-      {
-        "ID": 2,
-        "VPG Name": "ZVM 2R",
-        "Recovery ZVM Site Name": null,
-        "VPG Type": null,
-        "Boot Order Meta Group Name": "Test",
-        "Recovery Host Name": "192.168.222.2",
-        "Recovery Datastore Name": "DS_VM_Right",
-        "Journal History Value": 1,
-        "Journal History Unit": "Days",
-        "Target RPO Alert Value": 5,
-        "Target RPO Alert Unit": "Minutes",
-        "Test Reminder": "6 Months",
-        "Journal Datastore Name": "DS_VM_Right",
-        "Scratch Journal Datastore Name": "DS_VM_Right",
+        "Recovery ZVM Site Name": "Zerto - Left",
+        "VPG Type": "Remote DR and Continuous Backup",
+        "Priority": "Medium",
+        "Recovery Host Name": "192.168.111.1",
+        "Recovery Datastore Name": "DS_VM_Left",
+        "Journal Datastore Name": "DS_VM_Left",
+        "Scratch Journal Datastore Name": "DS_VM_Left",
         "Failover Live / Move - Network Name": "VM Network",
         "Failover Test - Network Name": "VM Network",
         "Recovery Folder Name": "/",
-        "Protected Site Name": "ZVM L",
-        "Recovery Site Name": "ZVM R"
-      },
+        "Recovery Site Name": "Zerto - Left"
+      }
+    ],
+    "vpgs": [
       {
-        "ID": 3,
-        "VPG Name": "U Local",
-        "Recovery ZVM Site Name": "ZVM L",
-        "VPG Type": "Local Continuous Backup",
-        "Boot Order Meta Group Name": null,
-        "Recovery Host Name": null,
-        "Recovery Datastore Name": null,
+        "ID": 1,
+        "VPG Name": "vik_vpg",
+        "Protected ZVM Site Name": "Zerto - Right",
+        "Recovery ZVM Site Name": "Zerto - Left",
+        "VPG Type": "Remote DR and Continuous Backup",
+        "Priority": "Medium",
+        "Boot Order Meta Group Name": "Test",
+        "Recovery Host Name": "192.168.111.1",
+        "Recovery Datastore Name": "DS_VM_Left",
         "Journal History Value": 1,
         "Journal History Unit": "Days",
         "Target RPO Alert Value": 5,
@@ -1789,131 +994,50 @@
         "Test Reminder": "6 Months",
         "Journal Datastore Name": "DS_VM_Left",
         "Scratch Journal Datastore Name": "DS_VM_Left",
-        "Failover Live / Move - Network Name": null,
-        "Failover Test - Network Name": null,
+        "Failover Live / Move - Network Name": "VM Network",
+        "Failover Test - Network Name": "vRA Network",
         "Recovery Folder Name": "/",
-        "Protected Site Name": "ZVM L",
-        "Recovery Site Name": "ZVM L"
+        "Protected Site Name": "Zerto - Right",
+        "Recovery Site Name": "Zerto - Left"
       }
     ],
     "vm_replication": [
       {
         "ID": 1,
-        "VPG Name": "U L2R",
+        "VPG Name": "vik_vpg",
         "VM Name": "Ubuntu 22.4",
-        "Boot Order Group Name": null,
-        "Protected Site Name": "ZVM L",
-        "Recovery Site Name": "ZVM R",
-        "Boot Order Meta Group Name": null
-      },
-      {
-        "ID": 2,
-        "VPG Name": "ZVM 2R",
-        "VM Name": "ZVM-Left",
         "Boot Order Group Name": "New_Group_1",
-        "Protected Site Name": "ZVM L",
-        "Recovery Site Name": "ZVM R",
+        "Journal Datastore Name": "DS_VM_Left",
+        "Protected Site Name": "Zerto - Right",
+        "Recovery Site Name": "Zerto - Left",
         "Boot Order Meta Group Name": "Test"
-      },
-      {
-        "ID": 3,
-        "VPG Name": "ZVM 2R",
-        "VM Name": "Microsoft 2022",
-        "Boot Order Group Name": "Default",
-        "Protected Site Name": "ZVM L",
-        "Recovery Site Name": "ZVM R",
-        "Boot Order Meta Group Name": "Test"
-      },
-      {
-        "ID": 4,
-        "VPG Name": "U Local",
-        "VM Name": "Ubuntu 22.4",
-        "Boot Order Group Name": null,
-        "Protected Site Name": "ZVM L",
-        "Recovery Site Name": "ZVM L",
-        "Boot Order Meta Group Name": null
       }
     ],
     "vm_storage": [
       {
         "ID": 1,
-        "VPG Name": "U L2R",
+        "VPG Name": "vik_vpg",
         "VM Name": "Ubuntu 22.4",
         "Protected Volume Location": "[DS_VM_Left] Ubuntu 22.4/Ubuntu 22.4-000001.vmdk",
+        "SCSI ID": "scsi:0:0",
         "Size (GiB)": 16,
         "Volume Source": "Datastore",
-        "Datastore Name": "Dunno",
-        "Protected Site Name": "ZVM L",
-        "Recovery Site Name": "ZVM R",
-        "Protected ZVM Site Name | VM Name": "ZVM L|Ubuntu 22.4"
-      },
-      {
-        "ID": 2,
-        "VPG Name": "ZVM 2R",
-        "VM Name": "ZVM-Left",
-        "Protected Volume Location": "[DS_VM_Left] ZVM-Left/ZVM-Left.vmdk",
-        "Size (GiB)": 10,
-        "Volume Source": "Datastore",
-        "Datastore Name": "Dunno",
-        "Protected Site Name": "ZVM L",
-        "Recovery Site Name": "ZVM R",
-        "Protected ZVM Site Name | VM Name": "ZVM L|ZVM-Left"
-      },
-      {
-        "ID": 3,
-        "VPG Name": "ZVM 2R",
-        "VM Name": "Microsoft 2022",
-        "Protected Volume Location": "[DS_VM_Left] Microsoft 2022/Microsoft 2022.vmdk",
-        "Size (GiB)": 750,
-        "Volume Source": "Datastore",
-        "Datastore Name": "Dunno",
-        "Protected Site Name": "ZVM L",
-        "Recovery Site Name": "ZVM R",
-        "Protected ZVM Site Name | VM Name": "ZVM L|Microsoft 2022"
-      },
-      {
-        "ID": 4,
-        "VPG Name": "U Local",
-        "VM Name": "Ubuntu 22.4",
-        "Protected Volume Location": "[DS_VM_Left] Ubuntu 22.4/Ubuntu 22.4-000001.vmdk",
-        "Size (GiB)": 16,
-        "Volume Source": "Datastore",
-        "Datastore Name": "Dunno",
-        "Protected Site Name": "ZVM L",
-        "Recovery Site Name": "ZVM L",
-        "Protected ZVM Site Name | VM Name": "ZVM L|Ubuntu 22.4"
+        "Protected Site Name": "Zerto - Right",
+        "Recovery Site Name": "Zerto - Left",
+        "Protected ZVM Site Name | VM Name": "Zerto - Right|Ubuntu 22.4",
+        "Hypervisor_Data_Protected_ZVM_VM_Volumes ID": 7
       }
     ],
     "vm_nics": [
       {
         "ID": 1,
-        "VPG Name": "U L2R",
+        "VPG Name": "vik_vpg",
         "VM Name": "Ubuntu 22.4",
         "NIC Name": "Network adapter 1",
         "Protected Network Name": "VM Network",
-        "Protected Site Name": "ZVM L",
-        "Recovery Site Name": "ZVM R",
-        "Protected Site Name|VM Name": "ZVM L|Ubuntu 22.4"
-      },
-      {
-        "ID": 2,
-        "VPG Name": "ZVM 2R",
-        "VM Name": "ZVM-Left",
-        "NIC Name": "Network adapter 1",
-        "Protected Network Name": "VM Network",
-        "Protected Site Name": "ZVM L",
-        "Recovery Site Name": "ZVM R",
-        "Protected Site Name|VM Name": "ZVM L|ZVM-Left"
-      },
-      {
-        "ID": 3,
-        "VPG Name": "ZVM 2R",
-        "VM Name": "Microsoft 2022",
-        "NIC Name": "Network adapter 1",
-        "Protected Network Name": "VM Network",
-        "Protected Site Name": "ZVM L",
-        "Recovery Site Name": "ZVM R",
-        "Protected Site Name|VM Name": "ZVM L|Microsoft 2022"
+        "Protected Site Name": "Zerto - Right",
+        "Recovery Site Name": "Zerto - Left",
+        "Protected Site Name|VM Name": "Zerto - Right|Ubuntu 22.4"
       }
     ],
     "extended_journal": [

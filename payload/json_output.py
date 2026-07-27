@@ -783,6 +783,7 @@ def build_default_vm_storage_row(replication_row: dict, volume: dict) -> dict:
         "VPG Name": replication_row.get("VPG Name"),
         "VM Name": replication_row.get("VM Name"),
         "Protected Volume Location": volume.get("Volume Location"),
+        "SCSI ID": volume.get("SCSI ID"),
         "Size (GiB)": volume.get("Provisioned Size (GiB)"),
         "Provisioning": volume.get("Provisioning"),
         "Protected Site Name": replication_row.get("Protected Site Name"),

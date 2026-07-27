@@ -35,6 +35,10 @@ class VMStorage(BaseModel):
         default=None,
         validation_alias="Protected Volume Location",
     )
+    scsi_id: str | None = Field(
+        default=None,
+        validation_alias="SCSI ID",
+    )
     size_gib: Any | None = Field(
         default=None,
         validation_alias="Size (GiB)",
