@@ -5,7 +5,7 @@ VCA Check reads a VCA Excel workbook, checks the data, and writes JSON files tha
 The main handoff file for VCA Run is:
 
 ```text
-outputs/vca_run_manifest.json
+outputs/VCA.json
 ```
 
 VCA Run is expected to take that manifest, resolve workbook names to real platform identifiers, and then prepare the final payload used to create objects in Zerto.
@@ -82,28 +82,38 @@ pip install -r requirements.txt
 
 ## Run
 
+Supply the workbook with the required `--input-file` option:
+
 ```bash
-python3 main.py
+python3 main.py --input-file "files/your-workbook.xlsx"
 ```
+
+You can also supply just a filename (which is resolved inside `files/`) or an
+absolute path:
+
+```bash
+python3 main.py --input-file "VCA Data - v0.111.xlsx"
+python3 main.py --input-file "/path/to/VCA Data.xlsx"
+```
+
+The `--input-file` option is required. Use `python3 main.py --help` to show the
+command-line usage. If the selected workbook does not exist, the program reports
+the resolved path and exits before validation starts.
 
 If validation passes, the program writes:
 
 ```text
 outputs/vca_check_dump.json
-outputs/vca_run_manifest.json
+outputs/VCA.json
 ```
 
 If validation fails, the program prints the failed section and stops. The JSON output files are not regenerated from invalid data.
 
 ## Workbook File
 
-The workbook path is set in `main.py`:
-
-```python
-excel_file = "files/API Sample - VCA Data - Master.xlsx"
-```
-
-Change that value if you want to run VCA Check against a different workbook.
+VCA Check takes its workbook only from the required `--input-file` option. Supply
+either a filename in the `files` folder or a relative or absolute path; no
+source-code change is required.
 
 ## Output Files
 
@@ -122,7 +132,7 @@ It includes:
 
 The resolved data is important because some workbook fields can be blank and still have an effective value inherited from another sheet.
 
-### `outputs/vca_run_manifest.json`
+### `outputs/VCA.json`
 
 This is the VCA Run manifest. It uses PascalCase section names and is written as a list of VPG definitions.
 

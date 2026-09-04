@@ -7,6 +7,10 @@ REQUIRED_SHEETS = [
     "Hypervisor Data",
     "Default VPG Settings",
     "Recovery ZVM Sites",
+    "VPGs",
+    "VM Replication",
+    "VM Storage",
+    "VM NICs",
 ]
 
 

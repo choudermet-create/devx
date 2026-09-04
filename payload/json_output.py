@@ -109,10 +109,10 @@ def test_reminder_to_minutes(value) -> int | None:
         return None
 
     reminder_minutes = {
-        "1 Month": 44640,
+        "1 Month": 43200,
         "3 Months": 131040,
         "6 Months": 262080,
-        "9 Months": 393120,
+        "9 Months": 394560,
         "12 Months": 525600,
     }
     return reminder_minutes.get(cleaned_value)

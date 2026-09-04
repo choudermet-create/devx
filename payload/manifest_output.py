@@ -17,7 +17,7 @@ from payload.json_output import (
 )
 
 
-MANIFEST_OUTPUT_FILE = "outputs/vca_run_manifest.json"
+MANIFEST_OUTPUT_FILE = "outputs/VCA.json"
 
 
 class ManifestValidationError(ValueError):

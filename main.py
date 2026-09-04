@@ -1,5 +1,7 @@
+import argparse
 import logging
 import traceback
+from pathlib import Path
 
 from pydantic import ValidationError
 
@@ -30,10 +32,36 @@ def raw_log(label: str, value=None) -> None:
     return
 
 
-def main():
+def resolve_workbook_path(value: str) -> Path:
+    workbook_path = Path(value).expanduser()
+    if workbook_path.parent == Path("."):
+        workbook_path = Path("files") / workbook_path
+
+    return workbook_path
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Validate a VCA Excel workbook and generate JSON output.",
+    )
+    parser.add_argument(
+        "--input-file",
+        required=True,
+        metavar="WORKBOOK",
+        help="workbook path, or a filename in the files folder",
+    )
+    args = parser.parse_args()
+    args.input_file = resolve_workbook_path(args.input_file)
+    if not args.input_file.is_file():
+        parser.error(f"workbook not found: {args.input_file}")
+
+    return args
+
+
+def main(excel_file: str | Path):
     setup_logging()
 
-    excel_file = "files/manifest_ready_VCA Data - v0.111.xlsx"
+    excel_file = str(excel_file)
     raw_log("run_started", {"source_file": excel_file})
     logging.info("Starting VCA workbook validation run")
     logging.info("Source workbook: %s", excel_file)
@@ -944,7 +972,8 @@ def format_display_value(value) -> str:
 
 if __name__ == "__main__":
     try:
-        main()
+        arguments = parse_args()
+        main(arguments.input_file)
     except Exception:
         raw_log("unhandled_exception", traceback.format_exc())
         raise
