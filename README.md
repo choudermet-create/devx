@@ -62,25 +62,41 @@ outputs/      generated files
 
 ## Setup
 
-Create a virtual environment:
+### Linux
+
+Create and activate a virtual environment:
 
 ```bash
 python3 -m venv .venv
-```
-
-Activate it:
-
-```bash
 source .venv/bin/activate
 ```
 
-Install the dependencies:
+Install dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
+### Windows
+
+Install Python if it is not already installed, then open PowerShell in the project directory.
+
+Create and activate a virtual environment:
+
+```powershell
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+
+Install dependencies:
+
+```powershell
+py -m pip install -r requirements.txt
+```
+
 ## Run
+
+### Linux
 
 Supply the workbook with the required `--input-file` option:
 
@@ -88,17 +104,32 @@ Supply the workbook with the required `--input-file` option:
 python3 main.py --input-file "files/your-workbook.xlsx"
 ```
 
-You can also supply just a filename (which is resolved inside `files/`) or an
-absolute path:
+You can also supply just a filename or an absolute path:
 
 ```bash
 python3 main.py --input-file "VCA Data - v0.111.xlsx"
 python3 main.py --input-file "/path/to/VCA Data.xlsx"
 ```
 
-The `--input-file` option is required. Use `python3 main.py --help` to show the
-command-line usage. If the selected workbook does not exist, the program reports
-the resolved path and exits before validation starts.
+### Windows
+
+Supply the workbook with the required `--input-file` option:
+
+```powershell
+py main.py --input-file "files\your-workbook.xlsx"
+```
+
+You can also supply just a filename or an absolute path:
+
+```powershell
+py main.py --input-file "VCA Data - v0.111.xlsx"
+py main.py --input-file "C:\path\to\VCA Data.xlsx"
+```
+
+The `--input-file` option is required. Use `python3 main.py --help` on Linux or
+`py main.py --help` on Windows to show the command-line usage. If the selected
+workbook does not exist, the program reports the resolved path and exits before
+validation starts.
 
 If validation passes, the program writes:
 
