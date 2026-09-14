@@ -60,6 +60,14 @@ payload/      JSON output builders
 outputs/      generated files
 ```
 
+## Python Version
+
+This project is developed and tested with:
+
+```text
+Python 3.14.3
+```
+
 ## Setup
 
 ### Linux
@@ -138,7 +146,9 @@ outputs/vca_check_dump.json
 outputs/VCA.json
 ```
 
-If validation fails, the program prints the failed section and stops. The JSON output files are not regenerated from invalid data.
+The generated JSON files are removed at the beginning of every run. If validation
+fails, the program prints the failed section and stops without leaving output from
+a previous run.
 
 ## Workbook File
 

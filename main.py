@@ -22,6 +22,7 @@ from validation.vm_storage import validate_vm_storage
 from validation.vm_nics import validate_vm_nics
 from validation.error_formatting import WorkbookValidationError, format_validation_errors
 from payload.json_output import (
+    OUTPUT_FILE,
     make_json_safe,
     write_zerto_json_dump,
 )
@@ -58,8 +59,20 @@ def parse_args() -> argparse.Namespace:
     return args
 
 
+def clear_generated_output_files(output_files: tuple[str | Path, ...]) -> None:
+    for output_file in output_files:
+        output_path = Path(output_file)
+        try:
+            output_path.unlink()
+        except FileNotFoundError:
+            continue
+
+        logging.info("Removed output from previous run: %s", output_path)
+
+
 def main(excel_file: str | Path):
     setup_logging()
+    clear_generated_output_files((OUTPUT_FILE, MANIFEST_OUTPUT_FILE))
 
     excel_file = str(excel_file)
     raw_log("run_started", {"source_file": excel_file})
