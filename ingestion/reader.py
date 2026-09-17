@@ -11,6 +11,7 @@ REQUIRED_SHEETS = [
     "VM Replication",
     "VM Storage",
     "VM NICs",
+    "Site Settings",
 ]
 
 

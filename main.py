@@ -10,6 +10,7 @@ from extraction.zerto_data import extract_zerto_data
 from extraction.hypervisor import extract_hypervisor_data
 from extraction.vpg_settings import extract_default_vpg_settings
 from extraction.recovery_zvm_sites import extract_recovery_zvm_sites
+from extraction.site_settings import extract_site_settings
 from extraction.tables import extract_sheet_table
 from extraction.vpgs import extract_vpgs
 from validation.default_vpg_settings import validate_default_vpg_settings
@@ -27,6 +28,10 @@ from payload.json_output import (
     write_zerto_json_dump,
 )
 from payload.manifest_output import MANIFEST_OUTPUT_FILE, ManifestValidationError
+from payload.site_settings import (
+    SITE_SETTINGS_FILE,
+    write_site_settings_json,
+)
 
 
 def raw_log(label: str, value=None) -> None:
@@ -72,7 +77,9 @@ def clear_generated_output_files(output_files: tuple[str | Path, ...]) -> None:
 
 def main(excel_file: str | Path):
     setup_logging()
-    clear_generated_output_files((OUTPUT_FILE, MANIFEST_OUTPUT_FILE))
+    clear_generated_output_files(
+        (OUTPUT_FILE, MANIFEST_OUTPUT_FILE, SITE_SETTINGS_FILE),
+    )
 
     excel_file = str(excel_file)
     raw_log("run_started", {"source_file": excel_file})
@@ -88,6 +95,8 @@ def main(excel_file: str | Path):
     logging.info("Workbook loaded successfully")
 
     logging.info("Extracting workbook data")
+    site_settings = extract_site_settings(workbook)
+    raw_log("extracted.site_settings", site_settings)
     zerto_data = extract_zerto_data(excel_file)
     raw_log("extracted.zerto_data", {
         "columns": zerto_data.get("columns"),
@@ -416,6 +425,7 @@ def main(excel_file: str | Path):
             extended_journal=extended_journal,
             validations=validations,
         )
+        site_settings_path = write_site_settings_json(site_settings)
     except ManifestValidationError as error:
         print("\nVCA Run manifest validation failed")
         print("----------------------------------")
@@ -430,11 +440,14 @@ def main(excel_file: str | Path):
     raw_log("outputs", {
         "diagnostic_output_file": str(output_path),
         "manifest_output_file": MANIFEST_OUTPUT_FILE,
+        "site_settings_file": str(site_settings_path),
     })
     print(f"\nDiagnostic dump written to {output_path}")
     print(f"VCA Run manifest written to {MANIFEST_OUTPUT_FILE}")
+    print(f"Site Settings written to {site_settings_path}")
     logging.info("JSON output written to %s", output_path)
     logging.info("VCA Run manifest written to %s", MANIFEST_OUTPUT_FILE)
+    logging.info("Site Settings written to %s", site_settings_path)
     logging.info("Run complete")
 
 
