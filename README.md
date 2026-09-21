@@ -152,6 +152,20 @@ fails, the program prints the failed section, writes the same error details to
 `outputs/validation_errors.json`, and stops without leaving successful output from
 a previous run.
 
+## Log File
+
+Every run writes a timestamped log file in the dedicated `files/logs` folder,
+which is created automatically. For example:
+
+```text
+files/logs/VCA Data_2026-09-21-14-55-57.log
+```
+
+Logging is fully enabled by default. The file records `TRACE`, `DEBUG`, `INFO`,
+`WARNING`, and `ERROR` messages when those events occur; no log-level option is
+required. It includes the workbook-reading, data-extraction, inheritance,
+validation, and output-generation steps, along with validation failures.
+
 ## Workbook File
 
 VCA Check takes its workbook only from the required `--input-file` option. Supply

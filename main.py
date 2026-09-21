@@ -5,6 +5,7 @@ from pathlib import Path
 
 from pydantic import ValidationError
 
+from logging_config import setup_logging, trace
 from ingestion.reader import load_excel_workbook, validate_required_sheets
 from extraction.zerto_data import extract_zerto_data
 from extraction.hypervisor import extract_hypervisor_data
@@ -39,7 +40,11 @@ from payload.validation_errors import (
 
 
 def raw_log(label: str, value=None) -> None:
-    return
+    if value is None:
+        trace("%s", label)
+        return
+
+    trace("%s: %r", label, value)
 
 
 def resolve_workbook_path(value: str) -> Path:
@@ -80,7 +85,9 @@ def clear_generated_output_files(output_files: tuple[str | Path, ...]) -> None:
 
 
 def main(excel_file: str | Path):
-    setup_logging()
+    log_path = setup_logging(excel_file)
+    print(f"Log file: {log_path}")
+
     clear_generated_output_files(
         (
             OUTPUT_FILE,
@@ -94,6 +101,7 @@ def main(excel_file: str | Path):
     raw_log("run_started", {"source_file": excel_file})
     logging.info("Starting VCA workbook validation run")
     logging.info("Source workbook: %s", excel_file)
+    logging.info("Log file: %s", log_path)
 
     logging.info("Loading workbook")
     workbook = load_excel_workbook(excel_file)
@@ -104,22 +112,29 @@ def main(excel_file: str | Path):
     logging.info("Workbook loaded successfully")
 
     logging.info("Extracting workbook data")
+    logging.info("Extracting Site Settings")
     site_settings = extract_site_settings(workbook)
     raw_log("extracted.site_settings", site_settings)
+    logging.info("Extracting Zerto Data")
     zerto_data = extract_zerto_data(excel_file)
     raw_log("extracted.zerto_data", {
         "columns": zerto_data.get("columns"),
         "summary": zerto_data.get("summary"),
         "records": zerto_data.get("records"),
     })
+    logging.info("Extracting Hypervisor Data")
     hypervisor_data = extract_hypervisor_data(excel_file)
     raw_log("extracted.hypervisor_data", hypervisor_data)
+    logging.info("Extracting Default VPG Settings")
     vpg_settings = extract_default_vpg_settings(excel_file, print_output=False)
     raw_log("extracted.default_vpg_settings", vpg_settings)
+    logging.info("Extracting Recovery ZVM Sites")
     recovery_zvm_sites = extract_recovery_zvm_sites(excel_file)
     raw_log("extracted.recovery_zvm_sites", recovery_zvm_sites)
+    logging.info("Extracting VPGs")
     vpgs = extract_vpgs(excel_file)
     raw_log("extracted.vpgs", vpgs)
+    logging.info("Extracting VM Replication")
     vm_replication = extract_sheet_table(
         excel_file,
         "VM Replication",
@@ -127,11 +142,13 @@ def main(excel_file: str | Path):
         table_name="VM_Replication",
     )
     raw_log("extracted.vm_replication", vm_replication)
+    logging.info("Extracting VM Storage")
     vm_storage = extract_sheet_table(
         excel_file,
         "VM Storage", "VPG Name", table_name="VM_Storage",
     )
     raw_log("extracted.vm_storage", vm_storage)
+    logging.info("Extracting VM NICs")
     vm_nics = extract_sheet_table(
         excel_file,
         "VM NICs",
@@ -139,6 +156,7 @@ def main(excel_file: str | Path):
         table_name="VM_NICs",
     )
     raw_log("extracted.vm_nics", vm_nics)
+    logging.info("Extracting Extended Journal")
     extended_journal = extract_sheet_table(
         excel_file,
         "Extended Journal",
@@ -157,6 +175,7 @@ def main(excel_file: str | Path):
     )
     validations = {}
 
+    log_validation_started("Zerto Data")
     try:
         result = validate_zerto_data(zerto_data)
         validations["zerto_data"] = validation_passed(result)
@@ -175,6 +194,7 @@ def main(excel_file: str | Path):
         stop_after_validation_failure("Zerto Data")
         return
 
+    log_validation_started("Hypervisor Data")
     try:
         result = validate_hypervisor_data(hypervisor_data)
         validations["hypervisor_data"] = validation_passed(result)
@@ -217,6 +237,7 @@ def main(excel_file: str | Path):
         stop_after_validation_failure("Hypervisor Data")
         return
 
+    log_validation_started("Default VPG Settings")
     try:
         result = validate_default_vpg_settings(vpg_settings)
         validations["default_vpg_settings"] = validation_passed(result)
@@ -245,6 +266,7 @@ def main(excel_file: str | Path):
         stop_after_validation_failure("Default VPG Settings")
         return
 
+    log_validation_started("Recovery ZVM Sites")
     try:
         result = validate_recovery_zvm_sites(recovery_zvm_sites, vpg_settings)
         validations["recovery_zvm_sites"] = validation_passed(result)
@@ -286,6 +308,8 @@ def main(excel_file: str | Path):
         stop_after_validation_failure("Recovery ZVM Sites")
         return
 
+    log_validation_started("VPGs")
+    logging.info("Resolving inherited and default VPG values")
     try:
         result = validate_vpgs(vpgs, vpg_settings, recovery_zvm_sites)
         validations["vpgs"] = validation_passed(result)
@@ -318,6 +342,7 @@ def main(excel_file: str | Path):
         stop_after_validation_failure("VPGs")
         return
 
+    log_validation_started("VM Replication")
     try:
         result = validate_vm_replication(vm_replication)
         validations["vm_replication"] = validation_passed(result)
@@ -350,6 +375,7 @@ def main(excel_file: str | Path):
         stop_after_validation_failure("VM Replication")
         return
 
+    log_validation_started("VM Storage")
     try:
         result = validate_vm_storage(vm_storage)
         validations["vm_storage"] = validation_passed(result)
@@ -382,6 +408,7 @@ def main(excel_file: str | Path):
         stop_after_validation_failure("VM Storage")
         return
 
+    log_validation_started("VM NICs")
     try:
         result = validate_vm_nics(
             vm_nics,
@@ -420,6 +447,7 @@ def main(excel_file: str | Path):
         return
 
     logging.info("Generating JSON output")
+    log_validation_started("VCA Run manifest")
     try:
         output_path = write_zerto_json_dump(
             excel_file=excel_file,
@@ -559,10 +587,6 @@ def print_topic_heading(title: str) -> None:
     print(f"\n{title}\n")
 
 
-def setup_logging() -> None:
-    logging.disable(logging.CRITICAL)
-
-
 def log_extraction_summary(
     zerto_data: dict,
     hypervisor_data: dict,
@@ -601,14 +625,20 @@ def log_validation_passed(section_name: str) -> None:
     logging.info("%s validation passed", section_name)
 
 
+def log_validation_started(section_name: str) -> None:
+    logging.info("Validating %s", section_name)
+
+
 def log_validation_failed(section_name: str, messages: list[str]) -> None:
     error_path = write_validation_errors(section_name, messages)
     print(f"\nValidation error report written to {error_path}")
 
-    logging.warning("%s validation failed with %s error(s)", section_name, len(messages))
+    logging.error("%s validation failed with %s error(s)", section_name, len(messages))
 
     for message in messages:
-        logging.warning("%s validation error:\n%s", section_name, message)
+        logging.error("%s validation error:\n%s", section_name, message)
+
+    logging.info("Validation error report written to %s", error_path)
 
 
 def print_named_list(label: str, values: list) -> None:
