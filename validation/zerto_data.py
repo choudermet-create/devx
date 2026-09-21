@@ -94,7 +94,15 @@ def validate_zvm_sites(records: list[dict]) -> list[str]:
             ))
 
         zerto_version = row.get("Zerto Version")
-        if zerto_version is not None and str(zerto_version) not in ZERTO_VERSION_VALUES:
+        if zerto_version is None:
+            messages.append(build_error(
+                row,
+                "Zerto_Data_ZVM_Site_Names",
+                "Zerto Version",
+                None,
+                "This value is mandatory.",
+            ))
+        elif str(zerto_version) not in ZERTO_VERSION_VALUES:
             messages.append(build_error(
                 row,
                 "Zerto_Data_ZVM_Site_Names",

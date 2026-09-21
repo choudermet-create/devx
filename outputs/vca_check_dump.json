@@ -8,7 +8,7 @@
         "zvm_sites": [
           {
             "site_name": "Zerto - Left",
-            "zerto_version": null,
+            "zerto_version": 10.8,
             "protected": "No",
             "recovery": "Yes"
           },
@@ -16,7 +16,7 @@
             "site_name": "Zerto - Right",
             "zerto_version": 10.9,
             "protected": "Yes",
-            "recovery": "No"
+            "recovery": "Yes"
           }
         ],
         "labels": {
@@ -192,6 +192,10 @@
           {
             "recovery_zvm_site_name": "Zerto - Left",
             "folder_name": "/"
+          },
+          {
+            "recovery_zvm_site_name": "Zerto - Right",
+            "folder_name": "/Right_Folder"
           }
         ],
         "recovery_networks": [
@@ -240,7 +244,7 @@
         },
         "wan_compression": "Yes",
         "disk_provisioning_override": "As-is",
-        "recovery_folder_name": "/",
+        "recovery_folder_name": "/Right_Folder",
         "volume_sync_type": "Continuous Sync",
         "pre_recovery_script_execution_timeout_seconds": 300,
         "post_recovery_script_execution_timeout_seconds": 300,
@@ -291,7 +295,7 @@
           "disk_provisioning_override": null,
           "failover_live_move_network_name": null,
           "failover_test_network_name": null,
-          "recovery_folder_name": "/",
+          "recovery_folder_name": null,
           "pre_recovery_script_name": null,
           "pre_recovery_script_parameters": null,
           "pre_recovery_script_execution_timeout_seconds": null,
@@ -441,7 +445,7 @@
     "zvm_sites": [
       {
         "site_name": "Zerto - Left",
-        "zerto_version": null,
+        "zerto_version": 10.8,
         "protected": "No",
         "recovery": "Yes"
       },
@@ -449,7 +453,7 @@
         "site_name": "Zerto - Right",
         "zerto_version": 10.9,
         "protected": "Yes",
-        "recovery": "No"
+        "recovery": "Yes"
       }
     ],
     "labels": {
@@ -637,6 +641,11 @@
           "ID": 3,
           "Recovery ZVM Site Name": "Zerto - Left",
           "Folder Name": "/"
+        },
+        {
+          "ID": 4,
+          "Recovery ZVM Site Name": "Zerto - Right",
+          "Folder Name": "/Right_Folder"
         }
       ],
       "recovery_networks": [
@@ -686,7 +695,7 @@
       },
       "wan_compression": "Yes",
       "disk_provisioning_override": "As-is",
-      "recovery_folder_name": "/",
+      "recovery_folder_name": "/Right_Folder",
       "volume_sync_type": "Continuous Sync",
       "pre_recovery_script_execution_timeout_seconds": 300,
       "post_recovery_script_execution_timeout_seconds": 300,
@@ -720,7 +729,6 @@
         "Scratch Journal Datastore Name": "DS_VM_Left",
         "Failover Live / Move - Network Name": "VM Network",
         "Failover Test - Network Name": "VM Network",
-        "Recovery Folder Name": "/",
         "Recovery Site Name": "Zerto - Left",
         "Effective Recovery ZVM Site Name": "Zerto - Left",
         "Journal History Value": 1,
@@ -738,6 +746,7 @@
         "Scratch Journal Size Warning Threshold Unit": "GiB",
         "Enable WAN Traffic Compression": "Yes",
         "Disk Provisioning Override": "As-is",
+        "Recovery Folder Name": "/Right_Folder",
         "Pre-Recovery Script Execution Timeout (Seconds)": 300,
         "Post-Recovery Script Execution Timeout (Seconds)": 300,
         "Failover Live / Move - Create new MAC address": "No",
@@ -938,7 +947,7 @@
       },
       "wan_compression": "Yes",
       "disk_provisioning_override": "As-is",
-      "recovery_folder_name": "/",
+      "recovery_folder_name": "/Right_Folder",
       "volume_sync_type": "Continuous Sync",
       "pre_recovery_script_execution_timeout_seconds": 300,
       "post_recovery_script_execution_timeout_seconds": 300,
@@ -972,7 +981,6 @@
         "Scratch Journal Datastore Name": "DS_VM_Left",
         "Failover Live / Move - Network Name": "VM Network",
         "Failover Test - Network Name": "VM Network",
-        "Recovery Folder Name": "/",
         "Recovery Site Name": "Zerto - Left"
       }
     ],

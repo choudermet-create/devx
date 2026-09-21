@@ -32,6 +32,10 @@ from payload.site_settings import (
     SITE_SETTINGS_FILE,
     write_site_settings_json,
 )
+from payload.validation_errors import (
+    VALIDATION_ERRORS_FILE,
+    write_validation_errors,
+)
 
 
 def raw_log(label: str, value=None) -> None:
@@ -78,7 +82,12 @@ def clear_generated_output_files(output_files: tuple[str | Path, ...]) -> None:
 def main(excel_file: str | Path):
     setup_logging()
     clear_generated_output_files(
-        (OUTPUT_FILE, MANIFEST_OUTPUT_FILE, SITE_SETTINGS_FILE),
+        (
+            OUTPUT_FILE,
+            MANIFEST_OUTPUT_FILE,
+            SITE_SETTINGS_FILE,
+            VALIDATION_ERRORS_FILE,
+        ),
     )
 
     excel_file = str(excel_file)
@@ -593,6 +602,9 @@ def log_validation_passed(section_name: str) -> None:
 
 
 def log_validation_failed(section_name: str, messages: list[str]) -> None:
+    error_path = write_validation_errors(section_name, messages)
+    print(f"\nValidation error report written to {error_path}")
+
     logging.warning("%s validation failed with %s error(s)", section_name, len(messages))
 
     for message in messages:

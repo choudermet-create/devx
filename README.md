@@ -144,10 +144,12 @@ If validation passes, the program writes:
 ```text
 outputs/vca_check_dump.json
 outputs/VCA.json
+outputs/site_settings.json
 ```
 
 The generated JSON files are removed at the beginning of every run. If validation
-fails, the program prints the failed section and stops without leaving output from
+fails, the program prints the failed section, writes the same error details to
+`outputs/validation_errors.json`, and stops without leaving successful output from
 a previous run.
 
 ## Workbook File
@@ -157,6 +159,11 @@ either a filename in the `files` folder or a relative or absolute path; no
 source-code change is required.
 
 ## Output Files
+
+### `outputs/validation_errors.json`
+
+This file is written when worksheet or manifest validation fails. It records the
+failed section and the same error messages displayed in the terminal.
 
 ### `outputs/vca_check_dump.json`
 
