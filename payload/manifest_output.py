@@ -17,7 +17,8 @@ from payload.json_output import (
 )
 
 
-MANIFEST_OUTPUT_FILE = "outputs/VCA.json"
+def build_manifest_output_file(excel_file: str | Path) -> Path:
+    return Path("outputs") / f"{Path(excel_file).stem}_VCA.json"
 
 
 class ManifestValidationError(ValueError):
@@ -27,9 +28,10 @@ class ManifestValidationError(ValueError):
 
 
 def write_vca_run_manifest(
+    excel_file: str | Path,
     resolved_api_candidate_payloads: dict,
     boot_order_groups: list[dict],
-    output_file: str = MANIFEST_OUTPUT_FILE,
+    output_file: str | Path | None = None,
 ) -> Path:
     manifest = build_vca_run_manifest(
         resolved_api_candidate_payloads,
@@ -38,7 +40,11 @@ def write_vca_run_manifest(
     validate_manifest_required_values(manifest)
     output_manifest = pascalize_manifest_keys(manifest)
 
-    output_path = Path(output_file)
+    output_path = (
+        Path(output_file)
+        if output_file
+        else build_manifest_output_file(excel_file)
+    )
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(
         json.dumps(
@@ -218,6 +224,7 @@ def build_manifest_vpg(
 ) -> dict:
     return {
         "Basic": build_manifest_basic(row),
+        "Labels": build_manifest_labels(row),
         "BootGroup": build_manifest_boot_group(
             boot_order_groups,
             row.get("Boot Order Meta Group Name"),
@@ -228,6 +235,16 @@ def build_manifest_vpg(
         "Scratch": build_manifest_scratch(row),
         "Networks": build_manifest_networks(row),
         "VMs": build_manifest_vms(vm_replication, vm_storage, vm_nics),
+    }
+
+
+def build_manifest_labels(row: dict) -> dict:
+    return {
+        "Label1": row.get("Label 1"),
+        "Label2": row.get("Label 2"),
+        "Label3": row.get("Label 3"),
+        "Label4": row.get("Label 4"),
+        "Label5": row.get("Label 5"),
     }
 
 

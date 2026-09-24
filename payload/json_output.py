@@ -3,7 +3,8 @@ from pathlib import Path
 
 from extraction.tables import clean_value
 
-OUTPUT_FILE = "outputs/vca_check_dump.json"
+def build_output_file(excel_file: str | Path) -> Path:
+    return Path("outputs") / f"{Path(excel_file).stem}_vca_check_dump.json"
 
 
 def write_zerto_json_dump(
@@ -18,7 +19,7 @@ def write_zerto_json_dump(
     vm_nics: list[dict],
     extended_journal: list[dict],
     validations: dict,
-    output_file: str = OUTPUT_FILE,
+    output_file: str | Path | None = None,
 ) -> Path:
     from payload.manifest_output import write_vca_run_manifest
 
@@ -57,13 +58,14 @@ def write_zerto_json_dump(
         },
     }
 
-    output_path = Path(output_file)
+    output_path = Path(output_file) if output_file else build_output_file(excel_file)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(
         json.dumps(make_json_safe(payload), indent=2),
         encoding="utf-8",
     )
     write_vca_run_manifest(
+        excel_file,
         resolved_api_candidate_payloads,
         zerto_data["summary"]["boot_order_groups"],
     )

@@ -5,7 +5,7 @@ VCA Check reads a VCA Excel workbook, checks the data, and writes JSON files tha
 The main handoff file for VCA Run is:
 
 ```text
-outputs/VCA.json
+outputs/VCA Data_VCA.json
 ```
 
 VCA Run is expected to take that manifest, resolve workbook names to real platform identifiers, and then prepare the final payload used to create objects in Zerto.
@@ -142,15 +142,16 @@ validation starts.
 If validation passes, the program writes:
 
 ```text
-outputs/vca_check_dump.json
-outputs/VCA.json
-outputs/site_settings.json
+outputs/<input-name>_vca_check_dump.json
+outputs/<input-name>_VCA.json
+outputs/<input-name>_site_settings.json
 ```
 
-The generated JSON files are removed at the beginning of every run. If validation
-fails, the program prints the failed section, writes the same error details to
-`outputs/validation_errors.json`, and stops without leaving successful output from
-a previous run.
+`<input-name>` is the workbook filename without `.xlsx`. The generated JSON files
+for that workbook are removed at the beginning of every run. If validation fails,
+the program prints the failed section, writes the same error details to
+`outputs/<input-name>_validation_errors.json`, and stops without leaving successful
+output from a previous run.
 
 ## Log File
 
@@ -162,8 +163,7 @@ files/logs/VCA Data_2026-09-21-14-55-57.log
 ```
 
 Logging is fully enabled by default. The file records `TRACE`, `DEBUG`, `INFO`,
-`WARNING`, and `ERROR` messages when those events occur; no log-level option is
-required. It includes the workbook-reading, data-extraction, inheritance,
+`WARNING`, and `ERROR` messages when those events occur. It includes the workbook-reading, data-extraction, inheritance,
 validation, and output-generation steps, along with validation failures.
 
 ## Workbook File
@@ -174,12 +174,12 @@ source-code change is required.
 
 ## Output Files
 
-### `outputs/validation_errors.json`
+### `outputs/<input-name>_validation_errors.json`
 
 This file is written when worksheet or manifest validation fails. It records the
 failed section and the same error messages displayed in the terminal.
 
-### `outputs/vca_check_dump.json`
+### `outputs/<input-name>_vca_check_dump.json`
 
 This is the diagnostic dump. It is useful when you need to understand what the program extracted and how defaults were applied.
 
@@ -194,7 +194,7 @@ It includes:
 
 The resolved data is important because some workbook fields can be blank and still have an effective value inherited from another sheet.
 
-### `outputs/VCA.json`
+### `outputs/<input-name>_VCA.json`
 
 This is the VCA Run manifest. It uses PascalCase section names and is written as a list of VPG definitions.
 
@@ -202,6 +202,7 @@ Example section names:
 
 ```text
 Basic
+Labels
 BootGroup
 Scripting
 Recovery
@@ -215,24 +216,30 @@ This is the file VCA Run should consume. It contains the validated VPG definitio
 
 ## Defaults and Effective Values
 
-Some sheets allow values to be inherited.
+Some workbook values can be inherited.
 
-For example, a VPG row may inherit defaults from:
+For example, a VPG may inherit values from:
 
 ```text
 Recovery ZVM Sites
 Default VPG Settings
 ```
 
-VM-level rows can also inherit values from the VPG they belong to.
+VM-level rows may also inherit values from the VPG they belong to.
 
-That means a validation error may sometimes appear for a row even when the visible cell on that sheet is blank. In that case, check:
+VCA Check validates the workbook in inheritance order, starting with the source
+and default values before validating the sheets that use them. Therefore, any
+invalid inherited value will already have been reported against the sheet where
+it was originally defined.
+
+After validation succeeds, the resolved candidate payload in:
 
 ```text
-outputs/vca_check_dump.json
+outputs/<input-name>_vca_check_dump.json
 ```
 
-Look at the resolved candidate payload section first, then trace the value back to the workbook default row it came from.
+can be used to see the effective values produced after defaults and inherited
+values have been applied.
 
 ## Notes
 

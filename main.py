@@ -24,17 +24,20 @@ from validation.vm_storage import validate_vm_storage
 from validation.vm_nics import validate_vm_nics
 from validation.error_formatting import WorkbookValidationError, format_validation_errors
 from payload.json_output import (
-    OUTPUT_FILE,
+    build_output_file,
     make_json_safe,
     write_zerto_json_dump,
 )
-from payload.manifest_output import MANIFEST_OUTPUT_FILE, ManifestValidationError
+from payload.manifest_output import (
+    ManifestValidationError,
+    build_manifest_output_file,
+)
 from payload.site_settings import (
-    SITE_SETTINGS_FILE,
+    build_site_settings_file,
     write_site_settings_json,
 )
 from payload.validation_errors import (
-    VALIDATION_ERRORS_FILE,
+    build_validation_errors_file,
     write_validation_errors,
 )
 
@@ -88,12 +91,17 @@ def main(excel_file: str | Path):
     log_path = setup_logging(excel_file)
     print(f"Log file: {log_path}")
 
+    output_path = build_output_file(excel_file)
+    manifest_output_path = build_manifest_output_file(excel_file)
+    site_settings_output_path = build_site_settings_file(excel_file)
+    validation_errors_path = build_validation_errors_file(excel_file)
+
     clear_generated_output_files(
         (
-            OUTPUT_FILE,
-            MANIFEST_OUTPUT_FILE,
-            SITE_SETTINGS_FILE,
-            VALIDATION_ERRORS_FILE,
+            output_path,
+            manifest_output_path,
+            site_settings_output_path,
+            validation_errors_path,
         ),
     )
 
@@ -188,7 +196,7 @@ def main(excel_file: str | Path):
         print("\nZerto Data validation failed")
         print("----------------------------")
         print_validation_messages(error.messages)
-        log_validation_failed("Zerto Data", error.messages)
+        log_validation_failed("Zerto Data", error.messages, excel_file)
         validations["zerto_data"] = validation_failed(error.messages)
         raw_log("validation.zerto_data", validations["zerto_data"])
         stop_after_validation_failure("Zerto Data")
@@ -207,7 +215,7 @@ def main(excel_file: str | Path):
         print("\nHypervisor Data validation failed")
         print("---------------------------------")
         print_validation_messages(error.messages)
-        log_validation_failed("Hypervisor Data", error.messages)
+        log_validation_failed("Hypervisor Data", error.messages, excel_file)
         validations["hypervisor_data"] = validation_failed(error.messages)
         raw_log("validation.hypervisor_data", validations["hypervisor_data"])
         stop_after_validation_failure("Hypervisor Data")
@@ -218,7 +226,7 @@ def main(excel_file: str | Path):
         print("\nHypervisor Data validation failed")
         print("---------------------------------")
         print_validation_messages(messages)
-        log_validation_failed("Hypervisor Data", messages)
+        log_validation_failed("Hypervisor Data", messages, excel_file)
         validations["hypervisor_data"] = validation_failed(
             messages,
             error.errors(include_url=False),
@@ -231,7 +239,7 @@ def main(excel_file: str | Path):
         print("\nHypervisor Data validation failed")
         print("---------------------------------")
         print(f"- {error}")
-        log_validation_failed("Hypervisor Data", [str(error)])
+        log_validation_failed("Hypervisor Data", [str(error)], excel_file)
         validations["hypervisor_data"] = validation_failed([str(error)])
         raw_log("validation.hypervisor_data", validations["hypervisor_data"])
         stop_after_validation_failure("Hypervisor Data")
@@ -254,7 +262,7 @@ def main(excel_file: str | Path):
         print("\nDefault VPG Settings validation failed")
         print("--------------------------------------")
         print_validation_messages(messages)
-        log_validation_failed("Default VPG Settings", messages)
+        log_validation_failed("Default VPG Settings", messages, excel_file)
         validations["default_vpg_settings"] = validation_failed(
             messages,
             error.errors(include_url=False),
@@ -282,7 +290,7 @@ def main(excel_file: str | Path):
         print("\nRecovery ZVM Sites validation failed")
         print("------------------------------------")
         print_validation_messages(error.messages)
-        log_validation_failed("Recovery ZVM Sites", error.messages)
+        log_validation_failed("Recovery ZVM Sites", error.messages, excel_file)
         validations["recovery_zvm_sites"] = validation_failed(error.messages)
         raw_log(
             "validation.recovery_zvm_sites",
@@ -296,7 +304,7 @@ def main(excel_file: str | Path):
         print("\nRecovery ZVM Sites validation failed")
         print("------------------------------------")
         print_validation_messages(messages)
-        log_validation_failed("Recovery ZVM Sites", messages)
+        log_validation_failed("Recovery ZVM Sites", messages, excel_file)
         validations["recovery_zvm_sites"] = validation_failed(
             messages,
             error.errors(include_url=False),
@@ -322,7 +330,7 @@ def main(excel_file: str | Path):
         print("\nVPGs validation failed")
         print("----------------------")
         print_validation_messages(error.messages)
-        log_validation_failed("VPGs", error.messages)
+        log_validation_failed("VPGs", error.messages, excel_file)
         validations["vpgs"] = validation_failed(error.messages)
         raw_log("validation.vpgs", validations["vpgs"])
         stop_after_validation_failure("VPGs")
@@ -333,7 +341,7 @@ def main(excel_file: str | Path):
         print("\nVPGs validation failed")
         print("----------------------")
         print_validation_messages(messages)
-        log_validation_failed("VPGs", messages)
+        log_validation_failed("VPGs", messages, excel_file)
         validations["vpgs"] = validation_failed(
             messages,
             error.errors(include_url=False),
@@ -355,7 +363,7 @@ def main(excel_file: str | Path):
         print("\nVM Replication validation failed")
         print("--------------------------------")
         print_validation_messages(error.messages)
-        log_validation_failed("VM Replication", error.messages)
+        log_validation_failed("VM Replication", error.messages, excel_file)
         validations["vm_replication"] = validation_failed(error.messages)
         raw_log("validation.vm_replication", validations["vm_replication"])
         stop_after_validation_failure("VM Replication")
@@ -366,7 +374,7 @@ def main(excel_file: str | Path):
         print("\nVM Replication validation failed")
         print("--------------------------------")
         print_validation_messages(messages)
-        log_validation_failed("VM Replication", messages)
+        log_validation_failed("VM Replication", messages, excel_file)
         validations["vm_replication"] = validation_failed(
             messages,
             error.errors(include_url=False),
@@ -388,7 +396,7 @@ def main(excel_file: str | Path):
         print("\nVM Storage validation failed")
         print("----------------------------")
         print_validation_messages(error.messages)
-        log_validation_failed("VM Storage", error.messages)
+        log_validation_failed("VM Storage", error.messages, excel_file)
         validations["vm_storage"] = validation_failed(error.messages)
         raw_log("validation.vm_storage", validations["vm_storage"])
         stop_after_validation_failure("VM Storage")
@@ -399,7 +407,7 @@ def main(excel_file: str | Path):
         print("\nVM Storage validation failed")
         print("----------------------------")
         print_validation_messages(messages)
-        log_validation_failed("VM Storage", messages)
+        log_validation_failed("VM Storage", messages, excel_file)
         validations["vm_storage"] = validation_failed(
             messages,
             error.errors(include_url=False),
@@ -426,7 +434,7 @@ def main(excel_file: str | Path):
         print("\nVM NICs validation failed")
         print("-------------------------")
         print_validation_messages(error.messages)
-        log_validation_failed("VM NICs", error.messages)
+        log_validation_failed("VM NICs", error.messages, excel_file)
         validations["vm_nics"] = validation_failed(error.messages)
         raw_log("validation.vm_nics", validations["vm_nics"])
         stop_after_validation_failure("VM NICs")
@@ -437,7 +445,7 @@ def main(excel_file: str | Path):
         print("\nVM NICs validation failed")
         print("-------------------------")
         print_validation_messages(messages)
-        log_validation_failed("VM NICs", messages)
+        log_validation_failed("VM NICs", messages, excel_file)
         validations["vm_nics"] = validation_failed(
             messages,
             error.errors(include_url=False),
@@ -462,12 +470,12 @@ def main(excel_file: str | Path):
             extended_journal=extended_journal,
             validations=validations,
         )
-        site_settings_path = write_site_settings_json(site_settings)
+        site_settings_path = write_site_settings_json(site_settings, excel_file)
     except ManifestValidationError as error:
         print("\nVCA Run manifest validation failed")
         print("----------------------------------")
         print_manifest_validation_messages(error.messages)
-        log_validation_failed("VCA Run manifest", error.messages)
+        log_validation_failed("VCA Run manifest", error.messages, excel_file)
         raw_log("validation.vca_run_manifest", {
             "status": "failed",
             "errors": error.messages,
@@ -476,14 +484,14 @@ def main(excel_file: str | Path):
 
     raw_log("outputs", {
         "diagnostic_output_file": str(output_path),
-        "manifest_output_file": MANIFEST_OUTPUT_FILE,
+        "manifest_output_file": str(manifest_output_path),
         "site_settings_file": str(site_settings_path),
     })
     print(f"\nDiagnostic dump written to {output_path}")
-    print(f"VCA Run manifest written to {MANIFEST_OUTPUT_FILE}")
+    print(f"VCA Run manifest written to {manifest_output_path}")
     print(f"Site Settings written to {site_settings_path}")
     logging.info("JSON output written to %s", output_path)
-    logging.info("VCA Run manifest written to %s", MANIFEST_OUTPUT_FILE)
+    logging.info("VCA Run manifest written to %s", manifest_output_path)
     logging.info("Site Settings written to %s", site_settings_path)
     logging.info("Run complete")
 
@@ -629,8 +637,12 @@ def log_validation_started(section_name: str) -> None:
     logging.info("Validating %s", section_name)
 
 
-def log_validation_failed(section_name: str, messages: list[str]) -> None:
-    error_path = write_validation_errors(section_name, messages)
+def log_validation_failed(
+    section_name: str,
+    messages: list[str],
+    excel_file: str | Path,
+) -> None:
+    error_path = write_validation_errors(section_name, messages, excel_file)
     print(f"\nValidation error report written to {error_path}")
 
     logging.error("%s validation failed with %s error(s)", section_name, len(messages))

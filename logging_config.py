@@ -33,7 +33,7 @@ def setup_logging(workbook_path: str | Path) -> Path:
     file_handler.setLevel(TRACE_LEVEL)
     file_handler.setFormatter(logging.Formatter(
         "%(asctime)s %(levelname)s %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S",
+        datefmt="%d-%m-%Y %H:%M:%S",
     ))
 
     root_logger = logging.getLogger()
