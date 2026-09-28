@@ -235,6 +235,14 @@ def build_manifest_vpg(
         "Scratch": build_manifest_scratch(row),
         "Networks": build_manifest_networks(row),
         "VMs": build_manifest_vms(vm_replication, vm_storage, vm_nics),
+        "Protected": build_manifest_protected(),
+        "Generation": 0,
+    }
+
+
+def build_manifest_protected() -> dict:
+    return {
+        "vcd": None,
     }
 
 

@@ -180,6 +180,10 @@
           }
         ]
       }
-    ]
+    ],
+    "Protected": {
+      "VCD": null
+    },
+    "Generation": 0
   }
 ]
