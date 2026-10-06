@@ -265,4 +265,6 @@ values have been applied.
 - Validation is the gate before JSON generation.
 - `payload/manifest_output.py` builds the VCA Run manifest.
 - `payload/json_output.py` builds the diagnostic dump.
+- `payload/site_settings.py` writes the Site Settings JSON.
+- `payload/validation_errors.py` writes the error report when validation fails.
 - The project currently checks workbook readiness and prepares handoff JSON. Creating objects in Zerto belongs to the VCA Run side.
