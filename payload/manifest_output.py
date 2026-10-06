@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 from pathlib import Path
 
 from extraction.tables import clean_value
@@ -17,8 +18,13 @@ from payload.json_output import (
 )
 
 
+RUN_TIMESTAMP = datetime.now().strftime("%Y-%m-%d %H-%M-%S")
+
+
 def build_manifest_output_file(excel_file: str | Path) -> Path:
-    return Path("outputs") / f"{Path(excel_file).stem}_VCA.json"
+    return Path("outputs") / (
+        f"{Path(excel_file).stem}_VCA_{RUN_TIMESTAMP}.json"
+    )
 
 
 class ManifestValidationError(ValueError):

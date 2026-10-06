@@ -1,11 +1,17 @@
 import json
+from datetime import datetime
 from pathlib import Path
 
 from payload.json_output import make_json_safe
 
 
+RUN_TIMESTAMP = datetime.now().strftime("%Y-%m-%d %H-%M-%S")
+
+
 def build_site_settings_file(excel_file: str | Path) -> Path:
-    return Path("outputs") / f"{Path(excel_file).stem}_site_settings.json"
+    return Path("outputs") / (
+        f"{Path(excel_file).stem}_site_settings_{RUN_TIMESTAMP}.json"
+    )
 
 
 def write_site_settings_json(

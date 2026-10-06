@@ -1,9 +1,15 @@
 import json
+from datetime import datetime
 from pathlib import Path
 
 
+RUN_TIMESTAMP = datetime.now().strftime("%Y-%m-%d %H-%M-%S")
+
+
 def build_validation_errors_file(excel_file: str | Path) -> Path:
-    return Path("outputs") / f"{Path(excel_file).stem}_validation_errors.json"
+    return Path("outputs") / (
+        f"{Path(excel_file).stem}_validation_errors_{RUN_TIMESTAMP}.json"
+    )
 
 
 def write_validation_errors(

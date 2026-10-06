@@ -1,10 +1,16 @@
 import json
+from datetime import datetime
 from pathlib import Path
 
 from extraction.tables import clean_value
 
+RUN_TIMESTAMP = datetime.now().strftime("%Y-%m-%d %H-%M-%S")
+
+
 def build_output_file(excel_file: str | Path) -> Path:
-    return Path("outputs") / f"{Path(excel_file).stem}_vca_check_dump.json"
+    return Path("outputs") / (
+        f"{Path(excel_file).stem}_vca_check_dump_{RUN_TIMESTAMP}.json"
+    )
 
 
 def write_zerto_json_dump(
