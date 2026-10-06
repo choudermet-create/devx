@@ -74,7 +74,7 @@ def validate_zvm_sites(records: list[dict]) -> list[str]:
                 "Zerto_Data_ZVM_Site_Names",
                 column_name,
                 value,
-                "Valid values are: 'Yes', 'No'.",
+                f"Valid values are: {', '.join(repr(value) for value in YES_NO_VALUES)}.",
             ))
 
         protected = row.get("Protected?")
@@ -108,7 +108,7 @@ def validate_zvm_sites(records: list[dict]) -> list[str]:
                 "Zerto_Data_ZVM_Site_Names",
                 "Zerto Version",
                 zerto_version,
-                "Valid values are: '10.9', '10.8', '10.0U7'.",
+                f"Valid values are: {', '.join(repr(value) for value in ZERTO_VERSION_VALUES)}.",
             ))
 
     return messages
